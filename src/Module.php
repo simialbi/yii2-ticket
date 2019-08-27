@@ -13,5 +13,14 @@ namespace simialbi\yii2\ticket;
  */
 class Module extends \simialbi\yii2\base\Module
 {
+    /**
+     * {@inheritDoc}
+     * @throws \ReflectionException
+     */
+    public function init()
+    {
+        $this->registerTranslations();
 
+        parent::init();
+    }
 }

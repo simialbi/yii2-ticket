@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Created At"
+msgstr "Erstellt am"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Mime Type"
+msgstr "Mime Typ"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Path"
+msgstr "Pfad"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Size"
+msgstr "Grösse"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Ticket ID"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Updated At"
+msgstr "Bearbeitet am"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Updated By"
+msgstr "Bearbeitet von"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Created At"
+msgstr "Erstellt am"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Text"
+msgstr "Text"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Ticket ID"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Created At"
+msgstr "Erstellt am"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Updated At"
+msgstr "Bearbeitet am"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Updated By"
+msgstr "Bearbeitet von"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Assigned To"
+msgstr "Zugewiesen an"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Closed At"
+msgstr "Geschlossen am"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Closed By"
+msgstr "Geschlossen von"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Created At"
+msgstr "Erstellt am"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Description"
+msgstr "Beschreibung"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Due Date"
+msgstr "Fälligkeitsdatum"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Priority"
+msgstr "Priorität"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Source ID"
+msgstr "Qulle"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Status"
+msgstr "Status"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Subject"
+msgstr "Betreff"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Topic ID"
+msgstr "Thema"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Updated At"
+msgstr "Bearbeitet am"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Updated By"
+msgstr "Bearbeitet von"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Created At"
+msgstr "Erstellt am"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "New Ticket Assign To"
+msgstr "Auto-Zuweisung neuer Tickets an"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "New Ticket Status"
+msgstr "Neue Tickets Status"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Status"
+msgstr "Status"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Updated At"
+msgstr "Bearbeitet am"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Updated By"
+msgstr "Bearbeitet von"
+

@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket\migrations;
 
+use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\rbac\AssigneeRule;
 use simialbi\yii2\ticket\rbac\AuthorRule;
 use Yii;
@@ -30,14 +31,14 @@ class m199722_110712_init extends Migration
             'subject' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),
             'due_date' => $this->integer()->unsigned()->null()->defaultValue(null),
-            'status' => $this->tinyInteger()->unsigned()->notNull()->defaultValue(5),
+            'status' => $this->tinyInteger()->unsigned()->notNull()->defaultValue(Ticket::STATUS_OPEN),
             'priority' => $this->tinyInteger()->unsigned()->notNull()->defaultValue(2),
             'created_by' => $this->string(64)->null()->defaultValue(null),
             'updated_by' => $this->string(64)->null()->defaultValue(null),
             'closed_by' => $this->string(64)->null()->defaultValue(null),
             'created_at' => $this->integer()->unsigned()->notNull(),
             'updated_at' => $this->integer()->unsigned()->notNull(),
-            'closed_at' => $this->integer()->unsigned()->notNull()
+            'closed_at' => $this->integer()->unsigned()->null()->defaultValue(null)
         ]);
         $this->createTable('{{%ticket_source}}', [
             'id' => $this->primaryKey()->unsigned(),
@@ -51,7 +52,7 @@ class m199722_110712_init extends Migration
             'id' => $this->primaryKey()->unsigned(),
             'name' => $this->string(255)->notNull(),
             'new_ticket_assign_to' => $this->string(64)->null()->defaultValue(null),
-            'new_ticket_status' => $this->tinyInteger()->unsigned()->notNull()->defaultValue(5),
+            'new_ticket_status' => $this->tinyInteger()->unsigned()->notNull()->defaultValue(Ticket::STATUS_OPEN),
             'status' => $this->boolean()->notNull()->defaultValue(1),
             'created_by' => $this->string(64)->null()->defaultValue(null),
             'updated_by' => $this->string(64)->null()->defaultValue(null),
@@ -161,7 +162,6 @@ class m199722_110712_init extends Migration
             $auth->add($administrateTicket);
 
             $auth->addChild($administrateTicket, $updateTicket);
-            $auth->addChild($agent, $administrateTicket);
             $auth->addChild($administrateTicket, $closeTicket);
             $auth->addChild($agent, $administrateTicket);
 
