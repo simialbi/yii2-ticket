@@ -15,6 +15,11 @@ class Module extends \simialbi\yii2\base\Module
 {
     /**
      * {@inheritDoc}
+     */
+    public $defaultRoute = 'ticket';
+
+    /**
+     * {@inheritDoc}
      * @throws \ReflectionException
      */
     public function init()
