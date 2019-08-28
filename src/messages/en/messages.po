@@ -132,7 +132,7 @@ msgstr "Priority"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Source ID"
-msgstr "Source ID"
+msgstr "Source"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Status"
@@ -144,7 +144,7 @@ msgstr "Subject"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Topic ID"
-msgstr "Topic ID"
+msgstr "Topic"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Updated At"

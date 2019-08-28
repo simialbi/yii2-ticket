@@ -116,6 +116,14 @@ class m199722_110712_init extends Migration
             'CASCADE'
         );
 
+        $now = Yii::$app->formatter->asTimestamp('now');
+        $this->batchInsert('{{%ticket_source}}', ['name', 'created_at', 'updated_at'], [
+            [Yii::t('simialbi/ticket/source', 'Ticket'), $now, $now],
+            [Yii::t('simialbi/ticket/source', 'Phone'), $now, $now],
+            [Yii::t('simialbi/ticket/source', 'Email'), $now, $now],
+            [Yii::t('simialbi/ticket/source', 'Other'), $now, $now]
+        ]);
+
         if ($auth) {
             $createTicket = $auth->createPermission('createTicket');
             $createTicket->description = 'Create a ticket';

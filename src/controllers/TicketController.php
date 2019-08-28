@@ -9,6 +9,8 @@ namespace simialbi\yii2\ticket\controllers;
 
 use simialbi\yii2\ticket\models\SearchTicket;
 use simialbi\yii2\ticket\models\Ticket;
+use simialbi\yii2\ticket\models\Topic;
+use simialbi\yii2\ticket\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,16 +63,32 @@ class TicketController extends Controller
         ]);
     }
 
+    /**
+     * Create a new ticket
+     * @return string|\yii\web\Response
+     */
     public function actionCreate()
     {
-        $model = new Ticket();
+        $model = new Ticket([
+            'source_id' => 1,
+            'priority' => Ticket::PRIORITY_NORMAL
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
 
+        $topics = Topic::find()->select([
+            'name',
+            'id'
+        ])->orderBy([
+            'name' => SORT_ASC
+        ])->indexBy('id')->column();
+
         return $this->render('create', [
-            'model' => $model
+            'model' => $model,
+            'topics' => $topics,
+            'priorities' => Module::getPriorities()
         ]);
     }
 }

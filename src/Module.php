@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket;
 
+use simialbi\yii2\ticket\models\Ticket;
 use Yii;
 
 /**
@@ -41,5 +42,20 @@ class Module extends \simialbi\yii2\base\Module
         }
 
         parent::init();
+    }
+
+    /**
+     * Get ticket priorities
+     *
+     * @return array
+     */
+    public static function getPriorities()
+    {
+        return [
+            Ticket::PRIORITY_LOW => Yii::t('simialbi/ticket/priority', 'Low'),
+            Ticket::PRIORITY_NORMAL => Yii::t('simialbi/ticket/priority', 'Normal'),
+            Ticket::PRIORITY_HIGH => Yii::t('simialbi/ticket/priority', 'High'),
+            Ticket::PRIORITY_EMERGENCY => Yii::t('simialbi/ticket/priority', 'Emergency')
+        ];
     }
 }

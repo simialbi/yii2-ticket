@@ -86,7 +86,10 @@ CdnFreeAssetBundle::register($this);
             'subject',
             'created_by',
             'priority',
-            'assigned_to'
+            'assigned_to',
+            [
+                'class' => 'kartik\grid\ActionColumn'
+            ]
         ],
     ]); ?>
 </div>
