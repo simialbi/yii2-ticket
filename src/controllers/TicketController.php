@@ -8,6 +8,7 @@
 namespace simialbi\yii2\ticket\controllers;
 
 use simialbi\yii2\ticket\models\SearchTicket;
+use simialbi\yii2\ticket\models\Ticket;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -31,6 +32,11 @@ class TicketController extends Controller
                         'allow' => true,
                         'actions' => ['index'],
                         'roles' => ['@']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['createTicket']
                     ]
                 ]
             ]
@@ -52,6 +58,19 @@ class TicketController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Ticket();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('create', [
+            'model' => $model
         ]);
     }
 }
