@@ -84,9 +84,15 @@ CdnFreeAssetBundle::register($this);
             ],
             'updated_at:datetime',
             'subject',
-            'created_by',
+            [
+                'attribute' => 'created_by',
+                'value' => 'author.name'
+            ],
             'priority',
-            'assigned_to',
+            [
+                'attribute' => 'assigned_to',
+                'value' => 'agent.name'
+            ],
             [
                 'class' => 'kartik\grid\ActionColumn'
             ]

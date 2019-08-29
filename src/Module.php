@@ -7,8 +7,10 @@
 
 namespace simialbi\yii2\ticket;
 
+use simialbi\yii2\models\UserInterface;
 use simialbi\yii2\ticket\models\Ticket;
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Module
@@ -24,11 +26,16 @@ class Module extends \simialbi\yii2\base\Module
     /**
      * {@inheritDoc}
      * @throws \ReflectionException
+     * @throws InvalidConfigException
      */
     public function init()
     {
         $this->registerTranslations();
 
+        $identity = new Yii::$app->user->identityClass;
+        if (!($identity instanceof UserInterface)) {
+            throw new InvalidConfigException('The "identityClass" must extend "simialbi\yii2\models\UserInterface"');
+        }
         if (!Yii::$app->hasModule('gridview')) {
             $this->setModule('gridview', [
                 'class' => 'kartik\grid\Module',

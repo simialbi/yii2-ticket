@@ -6,6 +6,7 @@ use Yii;
 use yii\base\ModelEvent;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\db\AfterSaveEvent;
 
 /**
@@ -27,12 +28,14 @@ use yii\db\AfterSaveEvent;
  * @property integer|string $updated_at
  * @property integer|string $closed_at
  *
+ * @property-read \simialbi\yii2\models\UserInterface $author
+ * @property-read \simialbi\yii2\models\UserInterface $agent
  * @property-read Attachment[] $attachments
  * @property-read Comment[] $comments
  * @property-read Source $source
  * @property-read Topic $topic
  */
-class Ticket extends \yii\db\ActiveRecord
+class Ticket extends ActiveRecord
 {
     const EVENT_BEFORE_CLOSE = 'beforeClose';
     const EVENT_AFTER_CLOSE = 'afterClose';
@@ -202,6 +205,24 @@ class Ticket extends \yii\db\ActiveRecord
             ]));
         }
         parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * Get author
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getAuthor()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->created_by);
+    }
+
+    /**
+     * Get responsible agent
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getAgent()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->assigned_to);
     }
 
     /**
