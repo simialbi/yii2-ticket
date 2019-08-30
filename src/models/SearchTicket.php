@@ -23,7 +23,17 @@ class SearchTicket extends Ticket
     {
         return [
             [
-                ['source_id', 'topic_id', 'due_date', 'status', 'priority', 'created_by', 'updated_by', 'closed_by'],
+                [
+                    'id',
+                    'source_id',
+                    'topic_id',
+                    'due_date',
+                    'status',
+                    'priority',
+                    'created_by',
+                    'updated_by',
+                    'closed_by'
+                ],
                 'integer'
             ],
             ['description', 'string'],
@@ -48,6 +58,9 @@ class SearchTicket extends Ticket
                 'in',
                 'range' => [self::PRIORITY_LOW, self::PRIORITY_NORMAL, self::PRIORITY_HIGH, self::PRIORITY_EMERGENCY]
             ],
+            ['created_at', 'datetime', 'timestampAttribute' => 'created_at'],
+            ['updated_at', 'datetime', 'timestampAttribute' => 'updated_at'],
+            ['closed_at', 'datetime', 'timestampAttribute' => 'closed_at'],
             [
                 'status',
                 'in',

@@ -2,7 +2,11 @@
 
 namespace simialbi\yii2\ticket\models;
 
+use simialbi\yii2\models\UserInterface;
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%ticket_topic}}".
@@ -17,10 +21,13 @@ use Yii;
  * @property integer|string $created_at
  * @property integer|string $updated_at
  *
+ * @property-read UserInterface[] $agents
  * @property-read Ticket[] $tickets
  */
-class Topic extends \yii\db\ActiveRecord
+class Topic extends ActiveRecord
 {
+    private $_agents;
+
     /**
      * {@inheritDoc}
      */
@@ -63,6 +70,26 @@ class Topic extends \yii\db\ActiveRecord
             'created_at' => Yii::t('simialbi/ticket/model/topic', 'Created At'),
             'updated_at' => Yii::t('simialbi/ticket/model/topic', 'Updated At'),
         ];
+    }
+
+    /**
+     * Get assigned agents
+     * @return UserInterface[]
+     */
+    public function getAgents()
+    {
+        if (!$this->_agents) {
+            $users = ArrayHelper::index(call_user_func([Yii::$app->user->identity, 'findIdentities']), 'id');
+            $query = new Query();
+            $query
+                ->select(['agent_id'])
+                ->from('{{%ticket_topic_agent}}')
+                ->where(['topic_id' => $this->id]);
+
+            $ids = $query->column();
+            $this->_agents = ArrayHelper::filter($users, ['id' => $ids]);
+        }
+        return $this->_agents;
     }
 
     /**

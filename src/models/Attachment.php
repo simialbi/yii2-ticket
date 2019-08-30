@@ -5,6 +5,7 @@ namespace simialbi\yii2\ticket\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\FileHelper;
 
 /**
  * This is the model class for table "{{%ticket_attachment}}".
@@ -20,6 +21,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer|string $created_at
  * @property integer|string $updated_at
  *
+ * @property-read string $localPath
  * @property-read Ticket $ticket
  */
 class Attachment extends \yii\db\ActiveRecord
@@ -93,6 +95,33 @@ class Attachment extends \yii\db\ActiveRecord
             'created_at' => Yii::t('simialbi/ticket/model/attachment', 'Created At'),
             'updated_at' => Yii::t('simialbi/ticket/model/attachment', 'Updated At'),
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeDelete()
+    {
+        if (file_exists($this->localPath)) {
+            FileHelper::unlink($this->localPath);
+        }
+
+        return parent::beforeDelete();
+    }
+
+    /**
+     * Get local file path of file
+     * @return string
+     */
+    public function getLocalPath()
+    {
+        $web = Yii::getAlias('@web');
+        $webRoot = Yii::getAlias('@webroot');
+        if (empty($web)) {
+            return str_replace('/', DIRECTORY_SEPARATOR, $webRoot . $this->path);
+        }
+
+        return str_replace([$web, '/'], [$webRoot, DIRECTORY_SEPARATOR], $this->path);
     }
 
     /**

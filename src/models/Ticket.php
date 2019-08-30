@@ -39,6 +39,10 @@ class Ticket extends ActiveRecord
 {
     const EVENT_BEFORE_CLOSE = 'beforeClose';
     const EVENT_AFTER_CLOSE = 'afterClose';
+    const EVENT_BEFORE_ASSIGN = 'beforeAssign';
+    const EVENT_AFTER_ASSIGN = 'afterAssign';
+
+    const SCENARIO_ASSIGN = 'assign';
 
     const STATUS_RESOLVED = 0;
     const STATUS_IN_PROGRESS = 3;
@@ -105,6 +109,7 @@ class Ticket extends ActiveRecord
             ['priority', 'default', 'value' => self::PRIORITY_NORMAL],
 
             [['source_id', 'topic_id', 'subject', 'description'], 'required'],
+            ['assigned_to', 'required', 'on' => self::SCENARIO_ASSIGN]
         ];
     }
 
@@ -119,6 +124,7 @@ class Ticket extends ActiveRecord
                 'attributes' => [
                     self::EVENT_BEFORE_INSERT => ['created_by', 'updated_by'],
                     self::EVENT_BEFORE_UPDATE => 'updated_by',
+                    self::EVENT_BEFORE_ASSIGN => 'assigned_by',
                     self::EVENT_BEFORE_CLOSE => 'closed_by'
                 ]
             ],
@@ -127,6 +133,7 @@ class Ticket extends ActiveRecord
                 'attributes' => [
                     self::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     self::EVENT_BEFORE_UPDATE => 'updated_at',
+                    self::EVENT_BEFORE_ASSIGN => 'assigned_at',
                     self::EVENT_BEFORE_CLOSE => 'closed_at'
                 ]
             ]
@@ -158,40 +165,28 @@ class Ticket extends ActiveRecord
     }
 
     /**
-     * Closes a ticket and saves the changes to this ticket into the associated database table.
-     *
-     * Only the [[dirtyAttributes|changed attribute values]] will be saved into database.
-     *
-     * For example, to close a ticket:
-     *
-     * ```php
-     * $ticket = Ticket::findOne($id);
-     * $ticket->close();
-     * ```
-     *
-     * @param boolean $runValidation whether to perform validation (calling [[validate()]])
-     * before saving the record. Defaults to `true`. If the validation fails, the record
-     * will not be saved to the database and this method will return `false`.
-     * @param array $attributeNames list of attributes that need to be saved. Defaults to `null`,
-     * meaning all attributes that are loaded from DB will be saved.
-     * @return integer|false the number of rows affected, or false if validation fails
-     * or [[beforeSave()]] stops the updating process.
-     * @throws \yii\db\StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
-     * being updated is outdated.
-     * @throws \Exception|\Throwable in case update failed.
+     * {@inheritDoc}
      */
-    public function close($runValidation = true, $attributeNames = [])
+    public function beforeSave($insert)
     {
-        $event = new ModelEvent();
-        $this->trigger(self::EVENT_BEFORE_CLOSE, $event);
+        if ($this->isAttributeChanged('status') && $this->status === self::STATUS_RESOLVED) {
+            $event = new ModelEvent();
+            $this->trigger(self::EVENT_BEFORE_CLOSE, $event);
 
-        if (!$event->isValid) {
-            return false;
+            if (!$event->isValid) {
+                return false;
+            }
+        }
+        if ($this->isAttributeChanged('assigned_to')) {
+            $event = new ModelEvent();
+            $this->trigger(self::EVENT_BEFORE_ASSIGN, $event);
+
+            if (!$event->isValid) {
+                return false;
+            }
         }
 
-        $this->status = self::STATUS_RESOLVED;
-
-        return $this->update($runValidation, $attributeNames);
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -201,6 +196,11 @@ class Ticket extends ActiveRecord
     {
         if (isset($changedAttributes['status']) && $changedAttributes['status'] === self::STATUS_RESOLVED) {
             $this->trigger(self::EVENT_AFTER_CLOSE, new AfterSaveEvent([
+                'changedAttributes' => $changedAttributes,
+            ]));
+        }
+        if (isset($changedAttributes['assigned_to'])) {
+            $this->trigger(self::EVENT_AFTER_ASSIGN, new AfterSaveEvent([
                 'changedAttributes' => $changedAttributes,
             ]));
         }
@@ -231,7 +231,10 @@ class Ticket extends ActiveRecord
      */
     public function getAttachments()
     {
-        return $this->hasMany(Attachment::class, ['ticket_id' => 'id']);
+        return $this->hasMany(Attachment::class, ['ticket_id' => 'id'])->orderBy([
+            'created_at' => SORT_ASC,
+            'name' => SORT_ASC
+        ]);
     }
 
     /**
@@ -240,7 +243,9 @@ class Ticket extends ActiveRecord
      */
     public function getComments()
     {
-        return $this->hasMany(Comment::class, ['ticket_id' => 'id']);
+        return $this->hasMany(Comment::class, ['ticket_id' => 'id'])->orderBy([
+            'created_at' => SORT_ASC
+        ]);
     }
 
     /**
