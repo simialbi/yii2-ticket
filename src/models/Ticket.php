@@ -108,6 +108,8 @@ class Ticket extends ActiveRecord
             ['status', 'default', 'value' => $this->topic ? $this->topic->new_ticket_status : self::STATUS_OPEN],
             ['priority', 'default', 'value' => self::PRIORITY_NORMAL],
 
+            ['created_by', 'safe'],
+
             [['source_id', 'topic_id', 'subject', 'description'], 'required'],
             ['assigned_to', 'required', 'on' => self::SCENARIO_ASSIGN]
         ];
@@ -122,11 +124,18 @@ class Ticket extends ActiveRecord
             'blameable' => [
                 'class' => BlameableBehavior::class,
                 'attributes' => [
-                    self::EVENT_BEFORE_INSERT => ['created_by', 'updated_by'],
+                    self::EVENT_BEFORE_INSERT => ['created_by', 'updated_by']
+                ],
+                'preserveNonEmptyValues' => true
+            ],
+            'blameable2' => [
+                'class' => BlameableBehavior::class,
+                'attributes' => [
                     self::EVENT_BEFORE_UPDATE => 'updated_by',
                     self::EVENT_BEFORE_ASSIGN => 'assigned_by',
                     self::EVENT_BEFORE_CLOSE => 'closed_by'
-                ]
+                ],
+                'preserveNonEmptyValues' => false
             ],
             'timestamp' => [
                 'class' => TimestampBehavior::class,
@@ -244,7 +253,7 @@ class Ticket extends ActiveRecord
     public function getComments()
     {
         return $this->hasMany(Comment::class, ['ticket_id' => 'id'])->orderBy([
-            'created_at' => SORT_ASC
+            'created_at' => SORT_DESC
         ]);
     }
 

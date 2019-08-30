@@ -25,9 +25,11 @@ Pjax::begin([
             ]); ?>
         </div>
 
+        <?php $i = 0; ?>
         <?php foreach ($ticket->comments as $comment): ?>
             <?= $this->render('_comment', [
-                'model' => $comment
+                'model' => $comment,
+                'index' => $i++
             ]); ?>
         <?php endforeach; ?>
     </div>

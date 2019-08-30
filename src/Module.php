@@ -65,4 +65,20 @@ class Module extends \simialbi\yii2\base\Module
             Ticket::PRIORITY_EMERGENCY => Yii::t('simialbi/ticket/priority', 'Emergency')
         ];
     }
+
+    /**
+     * Get ticket priorities
+     *
+     * @return array
+     */
+    public static function getStatuses()
+    {
+        return [
+            Ticket::STATUS_RESOLVED => Yii::t('simialbi/ticket/status', 'Resolved'),
+            Ticket::STATUS_IN_PROGRESS => Yii::t('simialbi/ticket/status', 'In progress'),
+            Ticket::STATUS_ASSIGNED => Yii::t('simialbi/ticket/status', 'Assigned'),
+            Ticket::STATUS_OPEN => Yii::t('simialbi/ticket/status', 'Open'),
+            Ticket::STATUS_LATE => Yii::t('simialbi/ticket/status', 'Late'),
+        ];
+    }
 }

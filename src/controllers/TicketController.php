@@ -78,11 +78,18 @@ class TicketController extends Controller
     {
         $searchModel = new SearchTicket();
         $userId = null;
-        if (!Yii::$app->user->can('administrateTicket')) {
+        $defaultFilter = [];
+        if (!Yii::$app->user->can('ticketAgent')) {
             $userId = Yii::$app->user->id;
+        } else {
+            $defaultFilter = [
+                'SearchTicket' => ['assigned_to' => (string)Yii::$app->user->id]
+            ];
         }
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $userId);
-
+        $dataProvider = $searchModel->search(
+            ArrayHelper::merge($defaultFilter, Yii::$app->request->queryParams),
+            $userId
+        );
 
         $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
         $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
@@ -92,6 +99,7 @@ class TicketController extends Controller
             'dataProvider' => $dataProvider,
             'topics' => $topics,
             'users' => $users,
+            'statuses' => Module::getStatuses(),
             'priorities' => Module::getPriorities()
         ]);
     }
@@ -156,10 +164,12 @@ class TicketController extends Controller
         ])->orderBy([
             'name' => SORT_ASC
         ])->indexBy('id')->column();
+        $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
 
         return $this->render('create', [
             'model' => $model,
             'topics' => $topics,
+            'users' => $users,
             'priorities' => Module::getPriorities()
         ]);
     }

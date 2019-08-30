@@ -45,15 +45,19 @@ CdnFreeAssetBundle::register($this);
                 </div>
                 <div class="card-body">
                     <h4 class="card-title"><?= Html::encode($model->subject); ?></h4>
-                    <p class="card-text"><?= Html::encode($model->description); ?></p>
+                    <?= str_replace(
+                        '<p>',
+                        '<p class="card-text">',
+                        Yii::$app->formatter->asParagraphs($model->description)
+                    ); ?>
                 </div>
             </div>
         </div>
         <div class="col-12 col-lg-4 mt-3 mt-lg-0">
             <div class="card">
                 <div class="card-header d-flex align-items-center text-gray">
-                    <?= FAS::i('file', ['class' => 'h1 mb-0', 'style' => ['height' => '50px']]); ?>
-                    <span class="h3 mb-0 ml-3"><?= Yii::t('simialbi/ticket', 'Attachments'); ?></span>
+                    <?= FAS::i('file', ['class' => 'mb-0', 'style' => ['font-size' => '20px', 'height' => '20px']]); ?>
+                    <span class="h5 mb-0 ml-3"><?= Yii::t('simialbi/ticket', 'Attachments'); ?></span>
                 </div>
                 <?php if ($model->attachments): ?>
                     <div class="list-group list-group-flush">

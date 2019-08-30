@@ -5,6 +5,7 @@ namespace simialbi\yii2\ticket\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%ticket_comment}}".
@@ -15,9 +16,10 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_by
  * @property integer|string $created_at
  *
+ * @property-read \simialbi\yii2\models\UserInterface $author
  * @property-read Ticket $ticket
  */
-class Comment extends \yii\db\ActiveRecord
+class Comment extends ActiveRecord
 {
     /**
      * {@inheritDoc}
@@ -80,6 +82,15 @@ class Comment extends \yii\db\ActiveRecord
             'created_by' => Yii::t('simialbi/ticket/model/comment', 'Created By'),
             'created_at' => Yii::t('simialbi/ticket/model/comment', 'Created At'),
         ];
+    }
+
+    /**
+     * Get author
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getAuthor()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->created_by);
     }
 
     /**

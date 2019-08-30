@@ -93,7 +93,7 @@ class SearchTicket extends Ticket
      */
     public function search($params, $userId = null)
     {
-        $query = Ticket::find();
+        $query = Ticket::find()->andFilterWhere(['not', ['status' => Ticket::STATUS_RESOLVED]]);
 
         if ($userId) {
             $query->where([
@@ -102,7 +102,12 @@ class SearchTicket extends Ticket
         }
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);

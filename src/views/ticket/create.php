@@ -11,6 +11,7 @@ use yii\bootstrap4\Html;
 /* @var $model \simialbi\yii2\ticket\models\Ticket */
 /* @var $topics array */
 /* @var $priorities array */
+/* @var $users array */
 
 $this->title = Yii::t('simialbi/ticket', 'Create ticket');
 $this->params['breadcrumbs'] = [
@@ -22,6 +23,8 @@ $this->params['breadcrumbs'] = [
 ];
 
 CdnFreeAssetBundle::register($this);
+
+$isAgent = Yii::$app->user->can('ticketAgent');
 
 ?>
 <div class="sa-ticket-ticket-create">
@@ -38,7 +41,7 @@ CdnFreeAssetBundle::register($this);
             <div class="form-row">
                 <?= $form->field($model, 'topic_id', [
                     'options' => [
-                        'class' => ['form-group', 'col-12', 'col-sm-6']
+                        'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
                     ]
                 ])->widget(Select2::class, [
                     'data' => $topics,
@@ -50,7 +53,7 @@ CdnFreeAssetBundle::register($this);
                 ]); ?>
                 <?= $form->field($model, 'priority', [
                     'options' => [
-                        'class' => ['form-group', 'col-12', 'col-sm-6']
+                        'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
                     ]
                 ])->widget(Select2::class, [
                     'data' => $priorities,
@@ -60,6 +63,20 @@ CdnFreeAssetBundle::register($this);
                         'allowClear' => false
                     ]
                 ]); ?>
+                <?php if ($isAgent): ?>
+                    <?= $form->field($model, 'created_by', [
+                        'options' => [
+                            'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
+                        ]
+                    ])->widget(Select2::class, [
+                        'data' => $users,
+                        'theme' => Select2::THEME_KRAJEE_BS4,
+                        'bsVersion' => 4,
+                        'pluginOptions' => [
+                            'allowClear' => false
+                        ]
+                    ]); ?>
+                <?php endif; ?>
             </div>
             <div class="form-row">
                 <?= $form->field($model, 'subject', [

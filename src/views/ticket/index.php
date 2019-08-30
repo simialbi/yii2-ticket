@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 /* @var $topics array */
 /* @var $users array */
+/* @var $statuses array */
 /* @var $priorities array */
 
 $this->title = Yii::t('simialbi/ticket', 'My tickets');
@@ -100,6 +101,7 @@ CdnFreeAssetBundle::register($this);
                 'format' => [
                     'image',
                     [
+                        'class' => ['rounded-circle'],
                         'style' => [
                             'height' => '50px',
                             'width' => '50px',
@@ -191,6 +193,27 @@ CdnFreeAssetBundle::register($this);
                 'value' => 'agent.name',
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter' => $users,
+                'filterWidgetOptions' => [
+                    'theme' => Select2::THEME_KRAJEE_BS4,
+                    'bsVersion' => 4,
+                    'options' => [
+                        'placeholder' => ''
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ]
+                ],
+                'vAlign' => GridView::ALIGN_MIDDLE
+            ],
+            [
+                'class' => 'kartik\grid\DataColumn',
+                'attribute' => 'status',
+                'value' => function ($model, $key, $index, $column) use ($statuses) {
+                    /* @var $column \kartik\grid\DataColumn */
+                    return ArrayHelper::getValue($statuses, $model->{$column->attribute});
+                },
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => $statuses,
                 'filterWidgetOptions' => [
                     'theme' => Select2::THEME_KRAJEE_BS4,
                     'bsVersion' => 4,
