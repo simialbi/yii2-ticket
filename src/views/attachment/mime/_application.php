@@ -7,7 +7,7 @@ use yii\bootstrap4\Html;
 
 echo Html::tag('iframe', '', [
     'src' => $model->path,
-    'class' => ['d-block'],
+    'class' => ['d-block', 'border-0', 'w-100'],
     'style' => [
         'height' => '60vh'
     ]

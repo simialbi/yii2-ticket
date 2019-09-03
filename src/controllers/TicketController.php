@@ -147,25 +147,12 @@ class TicketController extends Controller
             if (!empty($model->dirtyAttributes)) {
                 $model->save();
             }
-            $attachments = UploadedFile::getInstancesByName('attachments');
+            $attachments = Yii::$app->request->getBodyParam('attachments', []);
 
             if (!empty($attachments)) {
-                $path = Yii::getAlias('@webroot/uploads');
-                if (FileHelper::createDirectory($path)) {
-                    foreach ($attachments as $uploadedFile) {
-                        $filePath = $path . DIRECTORY_SEPARATOR . $uploadedFile->baseName . '.' . $uploadedFile->extension;
-                        if (!$uploadedFile->saveAs($filePath)) {
-                            continue;
-                        }
-                        $attachment = new Attachment([
-                            'ticket_id' => $model->id,
-                            'name' => $uploadedFile->name,
-                            'mime_type' => $uploadedFile->type,
-                            'size' => $uploadedFile->size,
-                            'path' => Yii::getAlias('@web/uploads/' . $uploadedFile->baseName . '.' . $uploadedFile->extension)
-                        ]);
-                        $attachment->save();
-                    }
+                foreach ($attachments as $attachmentId) {
+                    $attachment = Attachment::findOne(['unique_id' => $attachmentId]);
+                    $model->link('attachments', $attachment);
                 }
             }
 

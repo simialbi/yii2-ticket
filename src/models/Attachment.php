@@ -11,7 +11,9 @@ use yii\helpers\FileHelper;
  * This is the model class for table "{{%ticket_attachment}}".
  *
  * @property integer $id
+ * @property string $unique_id
  * @property integer $ticket_id
+ * @property string $comment_id
  * @property string $name
  * @property string $path
  * @property string $mime_type
@@ -40,18 +42,34 @@ class Attachment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ticket_id', 'size'], 'integer'],
-            [['name', 'mime_type'], 'string', 'max' => 255],
+            [['ticket_id', 'comment_id', 'size'], 'integer'],
+            [['name', 'mime_type', 'unique_id'], 'string', 'max' => 255],
             ['path', 'string', 'max' => 512],
+            ['unique_id', 'unique'],
+            ['unique_id', 'default', 'value' => function ($model) {
+                /* @var $model static */
+                return sprintf(
+                    '%s-%s',
+                    $model->size,
+                    preg_replace('/[^0-9a-zA-Z_-]/i', '', $model->name)
+                );
+            }],
             [
-                ['ticket_id'],
+                'ticket_id',
                 'exist',
                 'skipOnError' => true,
                 'targetClass' => Ticket::class,
                 'targetAttribute' => ['ticket_id' => 'id']
             ],
+            [
+                'comment_id',
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Comment::class,
+                'targetAttribute' => ['comment_id' => 'id']
+            ],
 
-            [['ticket_id', 'name', 'path', 'mime_type', 'size'], 'required']
+            [['unique_id', 'name', 'path', 'mime_type', 'size'], 'required']
         ];
     }
 

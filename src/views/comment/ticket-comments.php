@@ -16,12 +16,14 @@ Pjax::begin([
 ]);
 ?>
     <div class="sa-ticket-ticket-comments">
-        <div class="sa-comment-create">
-            <?= $this->render('_form', [
-                'ticket' => $ticket,
-                'model' => $newComment
-            ]); ?>
-        </div>
+        <?php if (Yii::$app->user->can('updateTicket', ['ticket' => $ticket])): ?>
+            <div class="sa-comment-create">
+                <?= $this->render('_form', [
+                    'ticket' => $ticket,
+                    'model' => $newComment
+                ]); ?>
+            </div>
+        <?php endif; ?>
 
         <?php $i = 0; ?>
         <?php foreach ($ticket->comments as $comment): ?>

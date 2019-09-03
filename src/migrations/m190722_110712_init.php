@@ -14,7 +14,7 @@ use simialbi\yii2\ticket\rbac\TopicRule;
 use Yii;
 use yii\db\Migration;
 
-class m199722_110712_init extends Migration
+class m190722_110712_init extends Migration
 {
     /**
      * {@inheritDoc}

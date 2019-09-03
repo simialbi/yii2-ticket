@@ -87,7 +87,7 @@ class Topic extends ActiveRecord
                 ->where(['topic_id' => $this->id]);
 
             $ids = $query->column();
-            $this->_agents = ArrayHelper::filter($users, ['id' => $ids]);
+            $this->_agents = ArrayHelper::filter($users, $ids);
         }
         return $this->_agents;
     }

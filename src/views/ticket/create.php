@@ -25,9 +25,7 @@ $isAgent = Yii::$app->user->can('ticketAgent');
 ?>
 <div class="sa-ticket-ticket-create">
     <?php $form = ActiveForm::begin([
-        'options' => [
-            'enctype' => 'multipart/form-data'
-        ]
+        'id' => 'createTicketForm'
     ]); ?>
 
     <?= $form->errorSummary($model); ?>
@@ -86,12 +84,20 @@ $isAgent = Yii::$app->user->can('ticketAgent');
         ])->textarea(['rows' => 5]); ?>
     </div>
     <div class="form-row">
-        <div class="col-12 form-group d-flex">
+        <div class="col-12 form-group d-flex align-items-center">
             <?= Html::submitButton(FAS::i('save') . ' ' . Yii::t('simialbi/ticket', 'Create ticket'), [
                 'class' => ['btn', 'btn-primary', 'btn-sm']
             ]); ?>
-            <a href="javascript:;" id="file-upload"><?= FAS::i('paperclip'); ?></a>
+            <a href="javascript:;" id="file-upload" class="ml-3 btn btn-outline-secondary btn-sm">
+                <?= FAS::i('paperclip'); ?>
+            </a>
         </div>
     </div>
+    <div class="form-row" id="file-placeholder"></div>
     <?php ActiveForm::end(); ?>
 </div>
+
+<?= $this->render('/attachment/_resumable', [
+    'filePlaceholder' => 'file-placeholder',
+    'browseButton' => 'file-upload'
+]); ?>
