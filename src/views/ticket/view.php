@@ -1,6 +1,5 @@
 <?php
 
-use rmrevin\yii\fontawesome\CdnFreeAssetBundle;
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
@@ -16,8 +15,6 @@ $this->params['breadcrumbs'] = [
     ],
     $this->title
 ];
-
-CdnFreeAssetBundle::register($this);
 
 ?>
 
@@ -79,6 +76,37 @@ CdnFreeAssetBundle::register($this);
             </div>
         </div>
     </div>
+
+    <?php if ($model->solution): ?>
+        <div class="sa-ticket-solution card card-info text-white">
+            <div class="card-header">
+                <figure class="img m-0 d-flex align-items-center">
+                    <?php if ($model->solution->author->image): ?>
+                        <img src="<?= $model->solution->author->image; ?>" class="rounded-circle"
+                             alt="<?= Html::encode($model->solution->author->name); ?>"
+                             style="height: 50px; width: 50px;">
+                    <?php endif; ?>
+                    <figcaption class="meta ml-4">
+                        <strong><?= Html::encode($model->agent->name); ?></strong>
+                        <br>
+                        <time datetime="<?= Yii::$app->formatter->asDatetime(
+                            $model->solution->created_at,
+                            'yyyy-MM-dd hh:mm'
+                        ); ?>">
+                            <?= Yii::$app->formatter->asRelativeTime($model->solution->created_at); ?>
+                        </time>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="card-body">
+                <?= str_replace(
+                    '<p>',
+                    '<p class="card-text">',
+                    Yii::$app->formatter->asParagraphs($model->solution->text)
+                ); ?>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <hr>
 

@@ -2,7 +2,6 @@
 
 use kartik\grid\GridView;
 use kartik\select2\Select2;
-use rmrevin\yii\fontawesome\CdnFreeAssetBundle;
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
@@ -18,8 +17,6 @@ use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('simialbi/ticket', 'My tickets');
 $this->params['breadcrumbs'] = [$this->title];
-
-CdnFreeAssetBundle::register($this);
 
 ?>
 <div class="sa-ticket-ticket-index">

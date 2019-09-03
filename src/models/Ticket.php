@@ -23,13 +23,17 @@ use yii\db\AfterSaveEvent;
  * @property integer $priority
  * @property string $created_by
  * @property string $updated_by
+ * @property string $assigned_by
  * @property string $closed_by
  * @property integer|string $created_at
  * @property integer|string $updated_at
+ * @property integer|string $assigned_at
  * @property integer|string $closed_at
  *
  * @property-read \simialbi\yii2\models\UserInterface $author
  * @property-read \simialbi\yii2\models\UserInterface $agent
+ * @property-read \simialbi\yii2\models\UserInterface $referrer
+ * @property-read Comment $solution
  * @property-read Attachment[] $attachments
  * @property-read Comment[] $comments
  * @property-read Source $source
@@ -232,6 +236,36 @@ class Ticket extends ActiveRecord
     public function getAgent()
     {
         return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->assigned_to);
+    }
+
+    /**
+     * Get responsible referrer
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getReferrer()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->assigned_by);
+    }
+
+    /**
+     * Get solution
+     * @return Comment|null
+     */
+    public function getSolution()
+    {
+        if ($this->status !== self::STATUS_RESOLVED) {
+            return null;
+        }
+
+        $solution = null;
+        foreach ($this->comments as $comment) {
+            if ($comment->created_by === $this->assigned_to) {
+                $solution = $comment;
+                break;
+            }
+        }
+
+        return $solution;
     }
 
     /**

@@ -24,6 +24,11 @@ class Module extends \simialbi\yii2\base\Module
     public $defaultRoute = 'ticket';
 
     /**
+     * @var boolean Send mails if something happens with tickets
+     */
+    public $sendMails = true;
+
+    /**
      * {@inheritDoc}
      * @throws \ReflectionException
      * @throws InvalidConfigException

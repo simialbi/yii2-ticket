@@ -22,7 +22,8 @@ use yii\web\UploadedFile;
 
 /**
  * Class TicketController
- * @package simialbi\yii2\ticket\controllers
+ *
+ * @property-read Module $module
  */
 class TicketController extends Controller
 {
@@ -83,7 +84,11 @@ class TicketController extends Controller
             $userId = Yii::$app->user->id;
         } else {
             $defaultFilter = [
-                'SearchTicket' => ['assigned_to' => (string)Yii::$app->user->id]
+                'SearchTicket' => [
+                    'or',
+                    ['assigned_to' => (string)Yii::$app->user->id],
+                    ['created_by' => (string)Yii::$app->user->id]
+                ]
             ];
         }
         $dataProvider = $searchModel->search(
@@ -133,6 +138,15 @@ class TicketController extends Controller
         ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->topic->new_ticket_assign_to) {
+                $model->assigned_to = $model->topic->new_ticket_assign_to;
+            }
+            if ($model->topic->new_ticket_status) {
+                $model->status = $model->topic->new_ticket_status;
+            }
+            if (!empty($model->dirtyAttributes)) {
+                $model->save();
+            }
             $attachments = UploadedFile::getInstancesByName('attachments');
 
             if (!empty($attachments)) {
@@ -153,6 +167,42 @@ class TicketController extends Controller
                         $attachment->save();
                     }
                 }
+            }
+
+            if ($this->module->sendMails && Yii::$app->mailer) {
+                $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
+                $users = ArrayHelper::map(
+                    call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
+                    'id',
+                    'name'
+                );
+                $from = ArrayHelper::getValue(
+                    Yii::$app->params,
+                    'senderEmail',
+                    ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
+                );
+                $recipients = [];
+                foreach ($model->topic->agents as $agent) {
+                    $recipients[$agent->email] = $agent->name;
+                }
+
+                Yii::$app->mailer->compose([
+                    'html' => '@simialbi/yii2/ticket/mail/new-ticket-html',
+                    'text' => '@simialbi/yii2/ticket/mail/new-ticket-text'
+                ], [
+                    'model' => $model,
+                    'topics' => $topics,
+                    'users' => $users,
+                    'statuses' => Module::getStatuses(),
+                    'priorities' => Module::getPriorities()
+                ])
+                    ->setFrom($from)
+                    ->setTo($recipients)
+                    ->setSubject(Yii::t('simialbi/ticket/mail', 'New Ticket: {id} {subject}', [
+                        'id' => $model->id,
+                        'subject' => $model->subject
+                    ]))
+                    ->send();
             }
 
             return $this->redirect(['index']);
@@ -185,6 +235,36 @@ class TicketController extends Controller
         $model->scenario = $model::SCENARIO_ASSIGN;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($this->module->sendMails && Yii::$app->mailer) {
+                $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
+                $users = ArrayHelper::map(
+                    call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
+                    'id',
+                    'name'
+                );
+                $from = ArrayHelper::getValue(
+                    Yii::$app->params,
+                    'senderEmail',
+                    ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
+                );
+                Yii::$app->mailer->compose([
+                    'html' => '@simialbi/yii2/ticket/mail/you-were-assigned-html',
+                    'text' => '@simialbi/yii2/ticket/mail/you-were-assigned-text'
+                ], [
+                    'model' => $model,
+                    'topics' => $topics,
+                    'users' => $users,
+                    'statuses' => Module::getStatuses(),
+                    'priorities' => Module::getPriorities()
+                ])
+                    ->setFrom($from)
+                    ->setTo([$model->agent->email => $model->agent->name])
+                    ->setSubject(Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
+                        'id' => $model->id,
+                        'subject' => $model->subject
+                    ]))
+                    ->send();
+            }
             return $this->redirect(['index']);
         }
 

@@ -1,14 +1,11 @@
 <?php
 
-use rmrevin\yii\fontawesome\CdnFreeAssetBundle;
 use rmrevin\yii\fontawesome\FAS;
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $model \simialbi\yii2\ticket\models\Attachment */
 /* @var $template string */
-
-CdnFreeAssetBundle::register($this);
 
 ?>
 

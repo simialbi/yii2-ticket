@@ -1,8 +1,6 @@
 <?php
 
-use kartik\file\FileInput;
 use kartik\select2\Select2;
-use rmrevin\yii\fontawesome\CdnFreeAssetBundle;
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
@@ -22,8 +20,6 @@ $this->params['breadcrumbs'] = [
     $this->title
 ];
 
-CdnFreeAssetBundle::register($this);
-
 $isAgent = Yii::$app->user->can('ticketAgent');
 
 ?>
@@ -35,88 +31,66 @@ $isAgent = Yii::$app->user->can('ticketAgent');
     ]); ?>
 
     <?= $form->errorSummary($model); ?>
-
-    <div class="row">
-        <div class="col-12 col-lg-6">
-            <div class="form-row">
-                <?= $form->field($model, 'topic_id', [
-                    'options' => [
-                        'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
-                    ]
-                ])->widget(Select2::class, [
-                    'data' => $topics,
-                    'theme' => Select2::THEME_KRAJEE_BS4,
-                    'bsVersion' => 4,
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ]
-                ]); ?>
-                <?= $form->field($model, 'priority', [
-                    'options' => [
-                        'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
-                    ]
-                ])->widget(Select2::class, [
-                    'data' => $priorities,
-                    'theme' => Select2::THEME_KRAJEE_BS4,
-                    'bsVersion' => 4,
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ]
-                ]); ?>
-                <?php if ($isAgent): ?>
-                    <?= $form->field($model, 'created_by', [
-                        'options' => [
-                            'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
-                        ]
-                    ])->widget(Select2::class, [
-                        'data' => $users,
-                        'theme' => Select2::THEME_KRAJEE_BS4,
-                        'bsVersion' => 4,
-                        'pluginOptions' => [
-                            'allowClear' => false
-                        ]
-                    ]); ?>
-                <?php endif; ?>
-            </div>
-            <div class="form-row">
-                <?= $form->field($model, 'subject', [
-                    'options' => [
-                        'class' => ['form-group', 'col-12']
-                    ]
-                ])->textInput(); ?>
-            </div>
-            <div class="form-row">
-                <?= $form->field($model, 'description', [
-                    'options' => [
-                        'class' => ['form-group', 'col-12']
-                    ]
-                ])->textarea(['rows' => 5]); ?>
-            </div>
-            <div class="form-row">
-                <div class="col-12 form-group">
-                    <?= Html::submitButton(FAS::i('save') . ' ' . Yii::t('simialbi/ticket', 'Create ticket'), [
-                        'class' => ['btn', 'btn-primary']
-                    ]); ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="form-group">
-                <?= Html::label(Yii::t('simialbi/ticket', 'Attachments'), 'ticket-attachments', [
-                    'class' => ['col-form-label-sm', 'py-0']
-                ]); ?>
-                <?= FileInput::widget([
-                    'name' => 'attachments[]',
-                    'options' => [
-                        'id' => 'ticket-attachments',
-                        'multiple' => true
-                    ],
-                    'pluginOptions' => [
-                        'showUpload' => false
-                    ],
-                    'bsVersion' => '4'
-                ]); ?>
-            </div>
+    <div class="form-row">
+        <?= $form->field($model, 'topic_id', [
+            'options' => [
+                'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
+            ]
+        ])->widget(Select2::class, [
+            'data' => $topics,
+            'theme' => Select2::THEME_KRAJEE_BS4,
+            'bsVersion' => 4,
+            'pluginOptions' => [
+                'allowClear' => false
+            ]
+        ]); ?>
+        <?= $form->field($model, 'priority', [
+            'options' => [
+                'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
+            ]
+        ])->widget(Select2::class, [
+            'data' => $priorities,
+            'theme' => Select2::THEME_KRAJEE_BS4,
+            'bsVersion' => 4,
+            'pluginOptions' => [
+                'allowClear' => false
+            ]
+        ]); ?>
+        <?php if ($isAgent): ?>
+            <?= $form->field($model, 'created_by', [
+                'options' => [
+                    'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
+                ]
+            ])->widget(Select2::class, [
+                'data' => $users,
+                'theme' => Select2::THEME_KRAJEE_BS4,
+                'bsVersion' => 4,
+                'pluginOptions' => [
+                    'allowClear' => false
+                ]
+            ]); ?>
+        <?php endif; ?>
+    </div>
+    <div class="form-row">
+        <?= $form->field($model, 'subject', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->textInput(); ?>
+    </div>
+    <div class="form-row">
+        <?= $form->field($model, 'description', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->textarea(['rows' => 5]); ?>
+    </div>
+    <div class="form-row">
+        <div class="col-12 form-group d-flex">
+            <?= Html::submitButton(FAS::i('save') . ' ' . Yii::t('simialbi/ticket', 'Create ticket'), [
+                'class' => ['btn', 'btn-primary', 'btn-sm']
+            ]); ?>
+            <a href="javascript:;" id="file-upload"><?= FAS::i('paperclip'); ?></a>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
