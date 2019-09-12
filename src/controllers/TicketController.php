@@ -15,10 +15,8 @@ use simialbi\yii2\ticket\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\UploadedFile;
 
 /**
  * Class TicketController
@@ -77,24 +75,18 @@ class TicketController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchTicket();
+        $statuses = Module::getStatuses();
+        unset($statuses[Ticket::STATUS_RESOLVED]);
+        $searchModel = new SearchTicket([
+            'status' => array_keys($statuses)
+        ]);
         $userId = null;
-        $defaultFilter = [];
         if (!Yii::$app->user->can('ticketAgent')) {
             $userId = Yii::$app->user->id;
         } else {
-            $defaultFilter = [
-                'SearchTicket' => [
-                    'or',
-                    ['assigned_to' => (string)Yii::$app->user->id],
-                    ['created_by' => (string)Yii::$app->user->id]
-                ]
-            ];
+            $searchModel->assigned_to = (string)Yii::$app->user->id;
         }
-        $dataProvider = $searchModel->search(
-            ArrayHelper::merge($defaultFilter, Yii::$app->request->queryParams),
-            $userId
-        );
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $userId);
 
         $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
         $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');

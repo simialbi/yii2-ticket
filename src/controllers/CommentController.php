@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\Ticket;
 use Yii;
@@ -45,6 +46,20 @@ class CommentController extends Controller
         $model = new Comment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $ticket = $model->ticket;
+            $ticket->setScenario(Ticket::SCENARIO_COMMENT);
+            $attachments = Yii::$app->request->getBodyParam('attachments', []);
+
+            $ticket->load(Yii::$app->request->post());
+            $ticket->save();
+
+            if (!empty($attachments)) {
+                foreach ($attachments as $attachmentId) {
+                    $attachment = Attachment::findOne(['unique_id' => $attachmentId]);
+                    $model->link('attachments', $attachment);
+                }
+            }
+
             return $this->renderAjax('ticket-comments', [
                 'ticket' => $model->ticket,
                 'newComment' => new Comment([

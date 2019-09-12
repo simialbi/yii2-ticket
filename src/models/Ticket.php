@@ -47,6 +47,7 @@ class Ticket extends ActiveRecord
     const EVENT_AFTER_ASSIGN = 'afterAssign';
 
     const SCENARIO_ASSIGN = 'assign';
+    const SCENARIO_COMMENT = 'comment';
 
     const STATUS_RESOLVED = 0;
     const STATUS_IN_PROGRESS = 3;
@@ -111,11 +112,13 @@ class Ticket extends ActiveRecord
             [['assigned_to', 'due_date'], 'default'],
             ['status', 'default', 'value' => $this->topic ? $this->topic->new_ticket_status : self::STATUS_OPEN],
             ['priority', 'default', 'value' => self::PRIORITY_NORMAL],
+            ['status', 'default', 'value' => self::STATUS_IN_PROGRESS, 'on' => self::SCENARIO_COMMENT],
 
             ['created_by', 'safe'],
 
             [['source_id', 'topic_id', 'subject', 'description'], 'required'],
-            ['assigned_to', 'required', 'on' => self::SCENARIO_ASSIGN]
+            ['assigned_to', 'required', 'on' => self::SCENARIO_ASSIGN],
+            ['status', 'required', 'on' => self::SCENARIO_COMMENT]
         ];
     }
 

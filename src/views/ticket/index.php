@@ -215,7 +215,8 @@ $this->params['breadcrumbs'] = [$this->title];
                     'theme' => Select2::THEME_KRAJEE_BS4,
                     'bsVersion' => 4,
                     'options' => [
-                        'placeholder' => ''
+                        'placeholder' => '',
+                        'multiple' => true
                     ],
                     'pluginOptions' => [
                         'allowClear' => true

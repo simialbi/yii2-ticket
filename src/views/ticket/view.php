@@ -78,7 +78,7 @@ $this->params['breadcrumbs'] = [
     </div>
 
     <?php if ($model->solution): ?>
-        <div class="sa-ticket-solution card card-info text-white">
+        <div class="sa-ticket-solution mt-3 card bg-info text-white">
             <div class="card-header">
                 <figure class="img m-0 d-flex align-items-center">
                     <?php if ($model->solution->author->image): ?>

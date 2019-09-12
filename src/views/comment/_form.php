@@ -1,8 +1,10 @@
 <?php
 
 use rmrevin\yii\fontawesome\FAS;
+use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\widgets\CommentInput;
 use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
 /* @var $this \yii\web\View */
@@ -14,8 +16,49 @@ $form = ActiveForm::begin([
     'action' => ['comment/create', 'ticketId' => $model->ticket_id]
 ]);
 
+$icon = FAS::i('paperclip');
+$close = '';
+if (Yii::$app->user->can('closeTicket', ['ticket' => $ticket])) {
+    $close = Html::beginTag('div', ['class' => 'input-group-prepend']);
+    $close .= $form->field($ticket, 'status', [
+        'options' => [
+            'class' => 'input-group-text'
+        ]
+    ])->checkbox([
+        'value' => Ticket::STATUS_RESOLVED,
+        'uncheck' => Ticket::STATUS_IN_PROGRESS,
+        'label' => Html::label(
+            Yii::t('simialbi/ticket', 'Resolve'),
+            Html::getInputId($ticket, 'status'),
+            [
+                'class' => 'custom-control-label'
+            ]
+        )
+    ]);
+    $close .= Html::endTag('div');
+} else {
+    $close = $form->field($ticket, 'status', [
+        'options' => [
+            'class' => ''
+        ]
+    ])->hiddenInput(['value' => Ticket::STATUS_IN_PROGRESS])->label(false);
+}
+$template = <<<HTML
+{beginWrapper}
+    {image}
+    $close
+    {input}
+    <div class="input-group-append">
+        <button id="file-upload" class="btn btn-secondary">$icon</button>
+    </div>
+    {submit}
+{endWrapper}
+HTML;
+
+
 echo $form->field($model, 'ticket_id', ['options' => ['class' => ['m-0']]])->hiddenInput()->label(false);
 ?>
+    <div class="form-row" id="file-placeholder"></div>
     <div class="form-row">
         <?= $form->field($model, 'text', [
             'labelOptions' => [
@@ -23,6 +66,7 @@ echo $form->field($model, 'ticket_id', ['options' => ['class' => ['m-0']]])->hid
             ],
             'options' => ['class' => ['form-group', 'col-12']]
         ])->widget(CommentInput::class, [
+            'template' => $template,
             'image' => ArrayHelper::getValue(Yii::$app->user->identity, 'image'),
             'imageOptions' => [
                 'class' => ['mr-3', 'rounded-circle'],
@@ -44,6 +88,11 @@ echo $form->field($model, 'ticket_id', ['options' => ['class' => ['m-0']]])->hid
             ]
         ]); ?>
     </div>
+
+<?= $this->render('/attachment/_resumable', [
+    'filePlaceholder' => 'file-placeholder',
+    'browseButton' => 'file-upload'
+]); ?>
 <?php
 ActiveForm::end();
 

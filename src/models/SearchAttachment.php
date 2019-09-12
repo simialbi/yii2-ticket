@@ -7,7 +7,6 @@
 
 namespace simialbi\yii2\ticket\models;
 
-
 class SearchAttachment extends Attachment
 {
 

@@ -1,5 +1,6 @@
 <?php
 
+use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 
 /* @var $this \yii\web\View */
@@ -22,5 +23,30 @@ use yii\bootstrap4\Html;
         </time>
 
         <?= Yii::$app->formatter->asParagraphs($model->text); ?>
+        <?php if ($model->attachments): ?>
+            <div class="sa-ticket-comment-attachments d-flex align-items-center">
+                <?php foreach ($model->attachments as $attachment): ?>
+                    <?= Html::a(
+                        FAS::i($attachment->icon) . ' ' . $attachment->name,
+                        ['attachment/view', 'id' => $attachment->id],
+                        [
+                            'class' => [
+                                'sa-ticket-comment-attachment',
+                                'mr-2',
+                                'px-2',
+                                'py-1',
+                                'border',
+                                'rounded-pill',
+                                'text-reset'
+                            ],
+                            'data' => [
+                                'toggle' => 'modal',
+                                'target' => '#ticketPreviewModal'
+                            ]
+                        ]
+                    ); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

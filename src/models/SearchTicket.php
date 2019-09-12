@@ -7,7 +7,6 @@
 
 namespace simialbi\yii2\ticket\models;
 
-
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -23,17 +22,7 @@ class SearchTicket extends Ticket
     {
         return [
             [
-                [
-                    'id',
-                    'source_id',
-                    'topic_id',
-                    'due_date',
-                    'status',
-                    'priority',
-                    'created_by',
-                    'updated_by',
-                    'closed_by'
-                ],
+                ['id', 'source_id', 'topic_id', 'due_date', 'priority', 'created_by', 'updated_by', 'closed_by'],
                 'integer'
             ],
             ['description', 'string'],
@@ -63,13 +52,16 @@ class SearchTicket extends Ticket
             ['closed_at', 'datetime', 'timestampAttribute' => 'closed_at'],
             [
                 'status',
-                'in',
-                'range' => [
-                    self::STATUS_LATE,
-                    self::STATUS_OPEN,
-                    self::STATUS_ASSIGNED,
-                    self::STATUS_IN_PROGRESS,
-                    self::STATUS_RESOLVED
+                'each',
+                'rule' => [
+                    'in',
+                    'range' => [
+                        self::STATUS_LATE,
+                        self::STATUS_OPEN,
+                        self::STATUS_ASSIGNED,
+                        self::STATUS_IN_PROGRESS,
+                        self::STATUS_RESOLVED
+                    ]
                 ]
             ]
         ];
@@ -93,7 +85,7 @@ class SearchTicket extends Ticket
      */
     public function search($params, $userId = null)
     {
-        $query = Ticket::find()->andFilterWhere(['not', ['status' => Ticket::STATUS_RESOLVED]]);
+        $query = Ticket::find();
 
         if ($userId) {
             $query->where([

@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property integer|string $created_at
  *
  * @property-read \simialbi\yii2\models\UserInterface $author
+ * @property-read Attachment[] $attachments
  * @property-read Ticket $ticket
  */
 class Comment extends ActiveRecord
@@ -91,6 +92,18 @@ class Comment extends ActiveRecord
     public function getAuthor()
     {
         return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->created_by);
+    }
+
+    /**
+     * Get associated attachments
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttachments()
+    {
+        return $this->hasMany(Attachment::class, ['comment_id' => 'id'])->orderBy([
+            'created_at' => SORT_ASC,
+            'name' => SORT_ASC
+        ]);
     }
 
     /**
