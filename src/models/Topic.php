@@ -22,6 +22,7 @@ use yii\helpers\ArrayHelper;
  * @property integer|string $updated_at
  *
  * @property-read UserInterface[] $agents
+ * @property-read UserInterface $newTicketAgent
  * @property-read Ticket[] $tickets
  */
 class Topic extends ActiveRecord
@@ -90,6 +91,15 @@ class Topic extends ActiveRecord
             $this->_agents = ArrayHelper::filter($users, $ids);
         }
         return $this->_agents;
+    }
+
+    /**
+     * Get assigned new ticket agent
+     * @return UserInterface
+     */
+    public function getNewTicketAgent()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->new_ticket_assign_to);
     }
 
     /**

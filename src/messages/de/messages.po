@@ -10,6 +10,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgctxt "simialbi/ticket"
+msgid "Assign ticket"
+msgstr "Ticket zuweisen"
+
+msgctxt "simialbi/ticket"
+msgid "Attachments"
+msgstr "Anhänge"
+
+msgctxt "simialbi/ticket"
+msgid "Close"
+msgstr "Schliessen"
+
+msgctxt "simialbi/ticket"
+msgid "Close ticket"
+msgstr "Ticket schliessen"
+
+msgctxt "simialbi/ticket"
+msgid "Create ticket"
+msgstr "Ticket erstellen"
+
+msgctxt "simialbi/ticket"
+msgid "My tickets"
+msgstr "Meine Tickets"
+
+msgctxt "simialbi/ticket"
+msgid "Resolve"
+msgstr "Schliessen"
+
+msgctxt "simialbi/ticket"
+msgid "Save"
+msgstr "Speichern"
+
+msgctxt "simialbi/ticket"
+msgid "Select user"
+msgstr "Wählen Sie einen Benutzer"
+
+msgctxt "simialbi/ticket"
+msgid "Take ticket"
+msgstr "Ticket übernehmen"
+
 msgctxt "simialbi/ticket/mail"
 msgid "Link to ticket <b>{id}</b>"
 msgstr "Link zum Ticket <b>{id}</b>"
@@ -214,6 +254,10 @@ msgctxt "simialbi/ticket/model/topic"
 msgid "Updated By"
 msgstr "Bearbeitet von"
 
+msgctxt "simialbi/ticket/notification"
+msgid "Topic <b>{topic}</b> deleted"
+msgstr "Thema <b>{topic}</b> wurde gelöscht"
+
 msgctxt "simialbi/ticket/priority"
 msgid "Emergency"
 msgstr "Notfall"
@@ -266,39 +310,15 @@ msgctxt "simialbi/ticket/status"
 msgid "Resolved"
 msgstr "Gelöst"
 
-msgctxt "simialbi/ticket"
-msgid "Assign ticket"
-msgstr "Ticket zuweisen"
+msgctxt "simialbi/ticket/topic"
+msgid "Create topic"
+msgstr "Thema erstellen"
 
-msgctxt "simialbi/ticket"
-msgid "Attachments"
-msgstr "Anhänge"
+msgctxt "simialbi/ticket/topic"
+msgid "Topics"
+msgstr "Themen"
 
-msgctxt "simialbi/ticket"
-msgid "Close"
-msgstr "Schliessen"
-
-msgctxt "simialbi/ticket"
-msgid "Close ticket"
-msgstr "Ticket schliessen"
-
-msgctxt "simialbi/ticket"
-msgid "Create ticket"
-msgstr "Ticket erstellen"
-
-msgctxt "simialbi/ticket"
-msgid "My tickets"
-msgstr "Meine Tickets"
-
-msgctxt "simialbi/ticket"
-msgid "Resolve"
-msgstr "Schliessen"
-
-msgctxt "simialbi/ticket"
-msgid "Save"
-msgstr "Speichern"
-
-msgctxt "simialbi/ticket"
-msgid "Take ticket"
-msgstr "Ticket übernehmen"
+msgctxt "simialbi/ticket/topic"
+msgid "Update topic"
+msgstr "Thema bearbeiten"
 

@@ -21,12 +21,9 @@ class SearchTicket extends Ticket
     public function rules()
     {
         return [
-            [
-                ['id', 'source_id', 'topic_id', 'due_date', 'priority', 'created_by', 'updated_by', 'closed_by'],
-                'integer'
-            ],
+            [['id', 'source_id', 'topic_id', 'due_date', 'priority'], 'integer'],
             ['description', 'string'],
-            ['assigned_to', 'string', 'max' => 64],
+            [['assigned_to', 'created_by', 'updated_by', 'closed_by'], 'string', 'max' => 64],
             ['subject', 'string', 'max' => 255],
             [
                 ['source_id'],

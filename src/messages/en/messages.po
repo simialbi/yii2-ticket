@@ -10,6 +10,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgctxt "simialbi/ticket"
+msgid "Assign ticket"
+msgstr "Assign ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Attachments"
+msgstr "Attachments"
+
+msgctxt "simialbi/ticket"
+msgid "Close"
+msgstr "Close"
+
+msgctxt "simialbi/ticket"
+msgid "Close ticket"
+msgstr "Close ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Create ticket"
+msgstr "Create ticket"
+
+msgctxt "simialbi/ticket"
+msgid "My tickets"
+msgstr "My tickets"
+
+msgctxt "simialbi/ticket"
+msgid "Resolve"
+msgstr "Resolve"
+
+msgctxt "simialbi/ticket"
+msgid "Save"
+msgstr "Save"
+
+msgctxt "simialbi/ticket"
+msgid "Select user"
+msgstr "Select user"
+
+msgctxt "simialbi/ticket"
+msgid "Take ticket"
+msgstr "Take ticket"
+
 msgctxt "simialbi/ticket/mail"
 msgid "Link to ticket <b>{id}</b>"
 msgstr "Link to ticket <b>{id}</b>"
@@ -214,6 +254,10 @@ msgctxt "simialbi/ticket/model/topic"
 msgid "Updated By"
 msgstr "Updated By"
 
+msgctxt "simialbi/ticket/notification"
+msgid "Topic <b>{topic}</b> deleted"
+msgstr "Topic <b>{topic}</b> deleted"
+
 msgctxt "simialbi/ticket/priority"
 msgid "Emergency"
 msgstr "Emergency"
@@ -266,39 +310,15 @@ msgctxt "simialbi/ticket/status"
 msgid "Resolved"
 msgstr "Resolved"
 
-msgctxt "simialbi/ticket"
-msgid "Assign ticket"
-msgstr "Assign ticket"
+msgctxt "simialbi/ticket/topic"
+msgid "Create topic"
+msgstr "Create topic"
 
-msgctxt "simialbi/ticket"
-msgid "Attachments"
-msgstr "Attachments"
+msgctxt "simialbi/ticket/topic"
+msgid "Topics"
+msgstr "Topics"
 
-msgctxt "simialbi/ticket"
-msgid "Close"
-msgstr "Close"
-
-msgctxt "simialbi/ticket"
-msgid "Close ticket"
-msgstr "Close ticket"
-
-msgctxt "simialbi/ticket"
-msgid "Create ticket"
-msgstr "Create ticket"
-
-msgctxt "simialbi/ticket"
-msgid "My tickets"
-msgstr "My tickets"
-
-msgctxt "simialbi/ticket"
-msgid "Resolve"
-msgstr "Resolve"
-
-msgctxt "simialbi/ticket"
-msgid "Save"
-msgstr "Save"
-
-msgctxt "simialbi/ticket"
-msgid "Take ticket"
-msgstr "Take ticket"
+msgctxt "simialbi/ticket/topic"
+msgid "Update topic"
+msgstr "Update topic"
 
