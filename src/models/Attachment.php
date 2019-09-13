@@ -13,8 +13,6 @@ use yii\helpers\FileHelper;
  *
  * @property integer $id
  * @property string $unique_id
- * @property integer $ticket_id
- * @property string $comment_id
  * @property string $name
  * @property string $path
  * @property string $mime_type
@@ -26,7 +24,8 @@ use yii\helpers\FileHelper;
  *
  * @property-read string $icon
  * @property-read string $localPath
- * @property-read Ticket $ticket
+ * @property-read Ticket[] $tickets
+ * @property-read Comment[] $comments
  */
 class Attachment extends ActiveRecord
 {
@@ -44,7 +43,7 @@ class Attachment extends ActiveRecord
     public function rules()
     {
         return [
-            [['ticket_id', 'comment_id', 'size'], 'integer'],
+            [[ 'size'], 'integer'],
             [['name', 'mime_type', 'unique_id'], 'string', 'max' => 255],
             ['path', 'string', 'max' => 512],
             ['unique_id', 'unique'],
@@ -56,20 +55,6 @@ class Attachment extends ActiveRecord
                     preg_replace('/[^0-9a-zA-Z_-]/i', '', $model->name)
                 );
             }],
-            [
-                'ticket_id',
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Ticket::class,
-                'targetAttribute' => ['ticket_id' => 'id']
-            ],
-            [
-                'comment_id',
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Comment::class,
-                'targetAttribute' => ['comment_id' => 'id']
-            ],
 
             [['unique_id', 'name', 'path', 'mime_type', 'size'], 'required']
         ];
@@ -212,9 +197,22 @@ class Attachment extends ActiveRecord
     /**
      * Get associated tickets
      * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getTicket()
+    public function getTickets()
     {
-        return $this->hasOne(Ticket::class, ['id' => 'ticket_id']);
+        return $this->hasMany(Ticket::class, ['id' => 'ticket_id'])
+            ->viaTable('{{%ticket_attachment_ticket}}', ['attachment_id' => 'id']);
+    }
+
+    /**
+     * Get associated comments
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class, ['id' => 'comment_id'])
+            ->viaTable('{{%ticket_attachment_comment}}', ['attachment_id' => 'id']);
     }
 }

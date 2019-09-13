@@ -83,7 +83,7 @@ class m190722_110712_init extends Migration
         ]);
         $this->createTable('{{%ticket_topic_agent}}', [
             'topic_id' => $this->integer()->unsigned()->notNull(),
-            'agent_id' => $this->string(64)->null()->defaultValue(null),
+            'agent_id' => $this->string(64)->notNull(),
             'PRIMARY KEY ([[topic_id]], [[agent_id]])'
         ]);
 
