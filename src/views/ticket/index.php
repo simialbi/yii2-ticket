@@ -78,7 +78,10 @@ $this->params['breadcrumbs'] = [$this->title];
         'toolbar' => [
             [
                 'content' => Html::a(FAS::i('plus'), ['ticket/create'], [
-                    'class' => ['btn', 'btn-primary']
+                    'class' => ['btn', 'btn-primary'],
+                    'data' => [
+                        'pjax' => '0'
+                    ]
                 ])
             ]
         ],
