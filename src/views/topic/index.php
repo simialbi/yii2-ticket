@@ -129,7 +129,7 @@ $this->params['breadcrumbs'] = [$this->title];
                     'bsVersion' => 4,
                     'options' => [
                         'placeholder' => '',
-                        'multiple' => true
+                        'multiple' => false
                     ],
                     'pluginOptions' => [
                         'allowClear' => true
