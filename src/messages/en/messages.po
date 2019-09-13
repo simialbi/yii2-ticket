@@ -10,6 +10,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgctxt "simialbi/ticket/mail"
+msgid "Link to ticket <b>{id}</b>"
+msgstr "Link to ticket <b>{id}</b>"
+
+msgctxt "simialbi/ticket/mail"
+msgid "New Ticket: {id} {subject}"
+msgstr "New Ticket: {id} {subject}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "There is a new ticket <i>{id}</i>"
+msgstr "There is a new ticket <i>{id}</i>"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Ticket notification for {id}"
+msgstr "Ticket notification for {id}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "You've been assigned to a ticket: {id} {subject}"
+msgstr "You've been assigned to a ticket: {id} {subject}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "You've been assigned to the ticket <b>{subject}</b> by <b>{user}</b>"
+msgstr "You've been assigned to the ticket <b>{subject}</b> by <b>{user}</b>"
+
 msgctxt "simialbi/ticket/model/attachment"
 msgid "Created At"
 msgstr "Created At"
@@ -189,4 +213,92 @@ msgstr "Updated At"
 msgctxt "simialbi/ticket/model/topic"
 msgid "Updated By"
 msgstr "Updated By"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Emergency"
+msgstr "Emergency"
+
+msgctxt "simialbi/ticket/priority"
+msgid "High"
+msgstr "High"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Low"
+msgstr "Low"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Normal"
+msgstr "Normal"
+
+msgctxt "simialbi/ticket/source"
+msgid "Email"
+msgstr "Email"
+
+msgctxt "simialbi/ticket/source"
+msgid "Other"
+msgstr "Other"
+
+msgctxt "simialbi/ticket/source"
+msgid "Phone"
+msgstr "Phone"
+
+msgctxt "simialbi/ticket/source"
+msgid "Ticket"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/status"
+msgid "Assigned"
+msgstr "Assigned"
+
+msgctxt "simialbi/ticket/status"
+msgid "In progress"
+msgstr "In progress"
+
+msgctxt "simialbi/ticket/status"
+msgid "Late"
+msgstr "Late"
+
+msgctxt "simialbi/ticket/status"
+msgid "Open"
+msgstr "Open"
+
+msgctxt "simialbi/ticket/status"
+msgid "Resolved"
+msgstr "Resolved"
+
+msgctxt "simialbi/ticket"
+msgid "Assign ticket"
+msgstr "Assign ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Attachments"
+msgstr "Attachments"
+
+msgctxt "simialbi/ticket"
+msgid "Close"
+msgstr "Close"
+
+msgctxt "simialbi/ticket"
+msgid "Close ticket"
+msgstr "Close ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Create ticket"
+msgstr "Create ticket"
+
+msgctxt "simialbi/ticket"
+msgid "My tickets"
+msgstr "My tickets"
+
+msgctxt "simialbi/ticket"
+msgid "Resolve"
+msgstr "Resolve"
+
+msgctxt "simialbi/ticket"
+msgid "Save"
+msgstr "Save"
+
+msgctxt "simialbi/ticket"
+msgid "Take ticket"
+msgstr "Take ticket"
 
