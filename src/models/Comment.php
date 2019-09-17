@@ -102,11 +102,7 @@ class Comment extends ActiveRecord
     public function getAttachments()
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
-            ->viaTable('{{%ticket_attachment_comment}}', ['comment_id' => 'id'])
-            ->orderBy([
-                'created_at' => SORT_ASC,
-                'name' => SORT_ASC
-            ]);
+            ->viaTable('{{%ticket_attachment_comment}}', ['comment_id' => 'id']);
     }
 
     /**
