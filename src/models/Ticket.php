@@ -282,9 +282,9 @@ class Ticket extends ActiveRecord
             ->viaTable('{{%ticket_attachment_ticket}}', ['ticket_id' => 'id'])
             ->union(
                 $this->getComments()
+                    ->orderBy(null)
                     ->innerJoinWith('attachments a2')
                     ->select('{{a2}}.*')
-                    ->orderBy(null)
             );
     }
 
