@@ -18,6 +18,11 @@ use yii\base\InvalidConfigException;
  */
 class Module extends \simialbi\yii2\base\Module
 {
+    const EVENT_TICKET_CREATED = 'ticketCreated';
+    const EVENT_TICKET_ASSIGNED = 'ticketAssigned';
+    const EVENT_TICKET_RESOLVED = 'ticketResolved';
+    const EVENT_TICKET_COMMENTED = 'ticketCommented';
+
     /**
      * {@inheritDoc}
      */

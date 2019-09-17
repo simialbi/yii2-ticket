@@ -12,6 +12,7 @@ use simialbi\yii2\ticket\models\SearchTicket;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
 use simialbi\yii2\ticket\Module;
+use simialbi\yii2\ticket\TicketEvent;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -148,6 +149,11 @@ class TicketController extends Controller
                 }
             }
 
+            $this->module->trigger(Module::EVENT_TICKET_CREATED, new TicketEvent([
+                'ticket' => $model,
+                'user' => $model->author
+            ]));
+
             if ($this->module->sendMails && Yii::$app->mailer) {
                 $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
                 $users = ArrayHelper::map(
@@ -214,6 +220,11 @@ class TicketController extends Controller
         $model->scenario = $model::SCENARIO_ASSIGN;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->module->trigger(Module::EVENT_TICKET_ASSIGNED, new TicketEvent([
+                'ticket' => $model,
+                'user' => $model->agent
+            ]));
+
             if ($this->module->sendMails && Yii::$app->mailer) {
                 $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
                 $users = ArrayHelper::map(
@@ -267,6 +278,11 @@ class TicketController extends Controller
 
         $model->assigned_to = (string)Yii::$app->user->id;
         $model->save();
+
+        $this->module->trigger(Module::EVENT_TICKET_ASSIGNED, new TicketEvent([
+            'ticket' => $model,
+            'user' => $model->agent
+        ]));
 
         return $this->redirect(['index']);
     }

@@ -59,12 +59,20 @@ msgid "New Ticket: {id} {subject}"
 msgstr "New Ticket: {id} {subject}"
 
 msgctxt "simialbi/ticket/mail"
+msgid "There is a new comment in ticket <i>{id}</i>"
+msgstr "There is a new comment in ticket <i>{id}</i>"
+
+msgctxt "simialbi/ticket/mail"
 msgid "There is a new ticket <i>{id}</i>"
 msgstr "There is a new ticket <i>{id}</i>"
 
 msgctxt "simialbi/ticket/mail"
 msgid "Ticket notification for {id}"
 msgstr "Ticket notification for {id}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Ticket updated: {id} {subject}"
+msgstr "Ticket updated: {id} {subject}"
 
 msgctxt "simialbi/ticket/mail"
 msgid "You've been assigned to a ticket: {id} {subject}"

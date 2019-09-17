@@ -4,6 +4,8 @@ namespace simialbi\yii2\ticket\models;
 
 use simialbi\yii2\models\UserInterface;
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -52,6 +54,30 @@ class Topic extends ActiveRecord
             ['status', 'default', 'value' => true],
 
             ['name', 'required'],
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'blameable' => [
+                'class' => BlameableBehavior::class,
+                'attributes' => [
+                    self::EVENT_BEFORE_INSERT => ['created_by', 'updated_by'],
+                    self::EVENT_BEFORE_UPDATE => 'updated_by',
+                ],
+                'preserveNonEmptyValues' => true
+            ],
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    self::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    self::EVENT_BEFORE_UPDATE => 'updated_at'
+                ]
+            ]
         ];
     }
 

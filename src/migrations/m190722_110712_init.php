@@ -179,6 +179,7 @@ class m190722_110712_init extends Migration
             $auth->add($agent);
             $auth->addChild($agent, $createTicket);
             $auth->addChild($agent, $viewTicket);
+            $auth->addChild($agent, $author);
 
             $administrator = $auth->createRole('ticketAdministrator');
             $administrator->description = 'Ticket administrator (an agent with more permissions)';

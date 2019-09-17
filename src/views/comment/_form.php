@@ -49,7 +49,7 @@ $template = <<<HTML
     $close
     {input}
     <div class="input-group-append">
-        <button id="file-upload" class="btn btn-secondary">$icon</button>
+        <a href="javascript:;" id="file-upload" class="btn btn-secondary">$icon</a>
     </div>
     {submit}
 {endWrapper}
