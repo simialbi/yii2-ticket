@@ -1,6 +1,8 @@
 <?php
 
 use kartik\select2\Select2;
+use yii\bootstrap4\Html;
+use yii\helpers\ArrayHelper;
 
 /* @var $this \yii\web\View */
 /* @var $form \yii\bootstrap4\ActiveForm */
@@ -25,14 +27,14 @@ use kartik\select2\Select2;
 <div class="form-row">
     <?= $form->field($model, 'new_ticket_assign_to', [
         'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-8', 'col-lg-6']
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg-4']
         ]
     ])->widget(Select2::class, [
         'data' => $users,
         'theme' => Select2::THEME_KRAJEE_BS4,
         'bsVersion' => 4,
         'options' => [
-            'placeholder' => Yii::t('simialbi/ticket', 'Select user')
+            'placeholder' => Yii::t('simialbi/ticket', 'Select user(s)')
         ],
         'pluginOptions' => [
             'allowClear' => true
@@ -40,7 +42,7 @@ use kartik\select2\Select2;
     ]); ?>
     <?= $form->field($model, 'new_ticket_status', [
         'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-4', 'col-lg-6']
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg-4']
         ]
     ])->widget(Select2::class, [
         'data' => $statuses,
@@ -53,4 +55,20 @@ use kartik\select2\Select2;
             'allowClear' => false
         ]
     ]); ?>
+    <div class="form-group col-12 col-md-6 col-lg-4">
+        <?= Html::label(Yii::t('simialbi/ticket', 'Responsible agents'), 'responsible-agents'); ?>
+        <?= Select2::widget([
+            'name' => 'agents',
+            'value' => ArrayHelper::getColumn($model->getAgents(), 'id'),
+            'id' => 'responsible-agents',
+            'data' => $users,
+            'options' => [
+                'placeholder' => Yii::t('simialbi/ticket', 'Select user(s)'),
+                'multiple' => true
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ]
+        ]); ?>
+    </div>
 </div>

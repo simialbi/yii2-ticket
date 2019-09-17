@@ -39,12 +39,16 @@ msgid "Resolve"
 msgstr "Resolve"
 
 msgctxt "simialbi/ticket"
+msgid "Responsible agents"
+msgstr "Responsible agents"
+
+msgctxt "simialbi/ticket"
 msgid "Save"
 msgstr "Save"
 
 msgctxt "simialbi/ticket"
-msgid "Select user"
-msgstr "Select user"
+msgid "Select user(s)"
+msgstr "Select user(s)"
 
 msgctxt "simialbi/ticket"
 msgid "Take ticket"

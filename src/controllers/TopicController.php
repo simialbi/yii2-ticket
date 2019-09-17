@@ -58,12 +58,25 @@ class TopicController extends Controller
 
     /**
      * @return string|\yii\web\Response
+     * @throws \yii\db\Exception
      */
     public function actionCreate()
     {
         $model = new Topic(['new_ticket_status' => Ticket::STATUS_OPEN, 'status' => true]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $agents = Yii::$app->request->getBodyParam('agents', []);
+            $rows = array_map(function ($item) use ($model) {
+                return [
+                    $model->id,
+                    $item
+                ];
+            }, $agents);
+            $model::getDb()->createCommand()->batchInsert('{{%ticket_topic_agent}}', [
+                'topic_id',
+                'agent_id'
+            ], $rows)->execute();
+
             return $this->redirect(['index']);
         }
 
@@ -80,12 +93,29 @@ class TopicController extends Controller
      * @param integer $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $agents = Yii::$app->request->getBodyParam('agents', []);
+            $rows = array_map(function ($item) use ($model) {
+                return [
+                    $model->id,
+                    $item
+                ];
+            }, $agents);
+
+            $model::getDb()->createCommand()->delete('{{%ticket_topic_agent}}', [
+                'topic_id' => $model->id
+            ])->execute();
+            $model::getDb()->createCommand()->batchInsert('{{%ticket_topic_agent}}', [
+                'topic_id',
+                'agent_id'
+            ], $rows)->execute();
+
             return $this->redirect(['index']);
         }
 
