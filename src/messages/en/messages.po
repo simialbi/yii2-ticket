@@ -71,6 +71,10 @@ msgid "There is a new ticket <i>{id}</i>"
 msgstr "There is a new ticket <i>{id}</i>"
 
 msgctxt "simialbi/ticket/mail"
+msgid "Ticket <i>{id}</i> has been resolved"
+msgstr "Ticket <i>{id}</i> has been resolved"
+
+msgctxt "simialbi/ticket/mail"
 msgid "Ticket notification for {id}"
 msgstr "Ticket notification for {id}"
 
