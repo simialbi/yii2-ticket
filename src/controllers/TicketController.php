@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\ticket\behaviors\SendMailBehavior;
 use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\SearchTicket;
 use simialbi\yii2\ticket\models\Ticket;
@@ -62,6 +63,14 @@ class TicketController extends Controller
                         'allow' => true,
                         'actions' => ['view'],
                         'roles' => ['viewTicket'],
+                        'roleParams' => function () {
+                            return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['close'],
+                        'roles' => ['closeTicket'],
                         'roleParams' => function () {
                             return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
                         }
@@ -129,6 +138,20 @@ class TicketController extends Controller
             'source_id' => 1,
             'priority' => Ticket::PRIORITY_NORMAL
         ]);
+        if ($this->module->sendMails) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendMailBehavior::class,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        $recipients[$agent->email] = $agent->name;
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->topic->new_ticket_assign_to) {
@@ -153,42 +176,6 @@ class TicketController extends Controller
                 'ticket' => $model,
                 'user' => $model->author
             ]));
-
-            if ($this->module->sendMails && Yii::$app->mailer) {
-                $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
-                $users = ArrayHelper::map(
-                    call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
-                    'id',
-                    'name'
-                );
-                $from = ArrayHelper::getValue(
-                    Yii::$app->params,
-                    'senderEmail',
-                    ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
-                );
-                $recipients = [];
-                foreach ($model->topic->agents as $agent) {
-                    $recipients[$agent->email] = $agent->name;
-                }
-
-                Yii::$app->mailer->compose([
-                    'html' => '@simialbi/yii2/ticket/mail/new-ticket-html',
-                    'text' => '@simialbi/yii2/ticket/mail/new-ticket-text'
-                ], [
-                    'model' => $model,
-                    'topics' => $topics,
-                    'users' => $users,
-                    'statuses' => Module::getStatuses(),
-                    'priorities' => Module::getPriorities()
-                ])
-                    ->setFrom($from)
-                    ->setTo($recipients)
-                    ->setSubject(Yii::t('simialbi/ticket/mail', 'New Ticket: {id} {subject}', [
-                        'id' => $model->id,
-                        'subject' => $model->subject
-                    ]))
-                    ->send();
-            }
 
             return $this->redirect(['index']);
         }
@@ -225,36 +212,6 @@ class TicketController extends Controller
                 'user' => $model->agent
             ]));
 
-            if ($this->module->sendMails && Yii::$app->mailer) {
-                $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
-                $users = ArrayHelper::map(
-                    call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
-                    'id',
-                    'name'
-                );
-                $from = ArrayHelper::getValue(
-                    Yii::$app->params,
-                    'senderEmail',
-                    ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
-                );
-                Yii::$app->mailer->compose([
-                    'html' => '@simialbi/yii2/ticket/mail/you-were-assigned-html',
-                    'text' => '@simialbi/yii2/ticket/mail/you-were-assigned-text'
-                ], [
-                    'model' => $model,
-                    'topics' => $topics,
-                    'users' => $users,
-                    'statuses' => Module::getStatuses(),
-                    'priorities' => Module::getPriorities()
-                ])
-                    ->setFrom($from)
-                    ->setTo([$model->agent->email => $model->agent->name])
-                    ->setSubject(Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
-                        'id' => $model->id,
-                        'subject' => $model->subject
-                    ]))
-                    ->send();
-            }
             return $this->redirect(['index']);
         }
 
@@ -288,6 +245,30 @@ class TicketController extends Controller
     }
 
     /**
+     * Close a ticket
+     *
+     * @param integer $id
+     *
+     * @return \yii\web\Response
+     *
+     * @throws NotFoundHttpException
+     */
+    public function actionClose($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = Ticket::STATUS_RESOLVED;
+
+        if ($model->save()) {
+            $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
+                'ticket' => $model,
+                'user' => $model->author
+            ]));
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    /**
      * Finds the model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
@@ -299,6 +280,21 @@ class TicketController extends Controller
     protected function findModel($id)
     {
         if (($model = Ticket::findOne($id)) !== null) {
+            if ($this->module->sendMails) {
+                $model->attachBehavior('sendMail', [
+                    'class' => SendMailBehavior::class,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+
+                        return $recipients;
+                    }
+                ]);
+            }
+
             return $model;
         } else {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));

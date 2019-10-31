@@ -25,4 +25,9 @@ class TicketEvent extends Event
      * @var UserInterface|null The user which is important with this event
      */
     public $user;
+
+    /**
+     * @var boolean If the ticket got closed
+     */
+    public $gotClosed = false;
 }

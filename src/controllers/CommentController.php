@@ -7,15 +7,14 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\ticket\behaviors\SendMailBehavior;
 use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\Ticket;
-use simialbi\yii2\ticket\models\Topic;
 use simialbi\yii2\ticket\Module;
 use simialbi\yii2\ticket\TicketEvent;
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 /**
@@ -57,6 +56,20 @@ class CommentController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $ticket = $model->ticket;
             $ticket->setScenario(Ticket::SCENARIO_COMMENT);
+            if ($this->module->sendMails) {
+                $model->attachBehavior('sendMail', [
+                    'class' => SendMailBehavior::class,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+
+                        return $recipients;
+                    }
+                ]);
+            }
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
 
             $ticket->load(Yii::$app->request->post());
@@ -65,16 +78,26 @@ class CommentController extends Controller
             if ($ticket->status === Ticket::STATUS_RESOLVED && $ticket->isAttributeChanged('status')) {
                 $isResolved = true;
             }
-            if ($ticket->save() && $isResolved) {
-                $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
-                    'ticket' => $model,
-                    'user' => $model->author
+            if ($ticket->save()) {
+                if ($isResolved) {
+                    $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
+                        'ticket' => $ticket,
+                        'user' => $model->author,
+                        'gotClosed' => true
+                    ]));
+                }
+
+                $ticket->trigger(Ticket::EVENT_AFTER_ADD_COMMENT, new TicketEvent([
+                    'ticket' => $ticket,
+                    'user' => $model->author,
+                    'gotClosed' => true
                 ]));
             }
 
             $this->module->trigger(Module::EVENT_TICKET_COMMENTED, new TicketEvent([
-                'ticket' => $model,
-                'user' => $model->author
+                'ticket' => $ticket,
+                'user' => $model->author,
+                'gotClosed' => $isResolved
             ]));
 
             if (!empty($attachments)) {
@@ -82,42 +105,6 @@ class CommentController extends Controller
                     $attachment = Attachment::findOne(['unique_id' => $attachmentId]);
                     $model->link('attachments', $attachment);
                 }
-            }
-
-            if ($this->module->sendMails && Yii::$app->mailer) {
-                $to = ($ticket->created_by == Yii::$app->user->id)
-                    ? [$ticket->agent->email => $ticket->agent->name]
-                    : [$ticket->author->email => $ticket->author->name];
-
-                $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
-                $users = ArrayHelper::map(
-                    call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
-                    'id',
-                    'name'
-                );
-                $from = ArrayHelper::getValue(
-                    Yii::$app->params,
-                    'senderEmail',
-                    ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
-                );
-                Yii::$app->mailer->compose([
-                    'html' => '@simialbi/yii2/ticket/mail/new-comment-in-ticket-html',
-                    'text' => '@simialbi/yii2/ticket/mail/new-comment-in-ticket-text'
-                ], [
-                    'model' => $ticket,
-                    'comment' => $model,
-                    'topics' => $topics,
-                    'users' => $users,
-                    'statuses' => Module::getStatuses(),
-                    'priorities' => Module::getPriorities()
-                ])
-                    ->setFrom($from)
-                    ->setTo($to)
-                    ->setSubject(Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
-                        'id' => $ticket->id,
-                        'subject' => $ticket->subject
-                    ]))
-                    ->send();
             }
 
             return $this->renderAjax('ticket-comments', [

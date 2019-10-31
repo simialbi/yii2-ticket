@@ -45,6 +45,7 @@ class Ticket extends ActiveRecord
     const EVENT_AFTER_CLOSE = 'afterClose';
     const EVENT_BEFORE_ASSIGN = 'beforeAssign';
     const EVENT_AFTER_ASSIGN = 'afterAssign';
+    const EVENT_AFTER_ADD_COMMENT = 'afterAddComment';
 
     const SCENARIO_ASSIGN = 'assign';
     const SCENARIO_COMMENT = 'comment';
@@ -186,18 +187,12 @@ class Ticket extends ActiveRecord
     public function beforeSave($insert)
     {
         if ($this->isAttributeChanged('status') && $this->status === self::STATUS_RESOLVED) {
-            $event = new ModelEvent();
-            $this->trigger(self::EVENT_BEFORE_CLOSE, $event);
-
-            if (!$event->isValid) {
+            if (!$this->beforeClose()) {
                 return false;
             }
         }
         if ($this->isAttributeChanged('assigned_to')) {
-            $event = new ModelEvent();
-            $this->trigger(self::EVENT_BEFORE_ASSIGN, $event);
-
-            if (!$event->isValid) {
+            if (!$this->beforeAssign()) {
                 return false;
             }
         }
@@ -211,16 +206,113 @@ class Ticket extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if (isset($changedAttributes['status']) && $changedAttributes['status'] === self::STATUS_RESOLVED) {
-            $this->trigger(self::EVENT_AFTER_CLOSE, new AfterSaveEvent([
-                'changedAttributes' => $changedAttributes,
-            ]));
+            $this->afterClose($changedAttributes);
         }
         if (isset($changedAttributes['assigned_to'])) {
-            $this->trigger(self::EVENT_AFTER_ASSIGN, new AfterSaveEvent([
-                'changedAttributes' => $changedAttributes,
-            ]));
+            $this->afterAssign($changedAttributes);
         }
         parent::afterSave($insert, $changedAttributes);
+    }
+
+    /** This method is called before a ticket gets assigned.
+     *
+     * The default implementation will trigger an [[EVENT_BEFORE_ASSIGN]] event.
+     * When overriding this method, make sure you call the parent implementation like the following:
+     *
+     * ```php
+     * public function beforeAssign()
+     * {
+     *     if (!parent::beforeAssign()) {
+     *         return false;
+     *     }
+     *
+     *     // ...custom code here...
+     *     return true;
+     * }
+     * ```
+     *
+     * @return bool whether the insertion or updating should continue.
+     * If `false`, the insertion or updating will be cancelled.
+     */
+    public function beforeAssign()
+    {
+        $event = new ModelEvent();
+        $this->trigger(self::EVENT_BEFORE_ASSIGN, $event);
+
+        return $event->isValid;
+    }
+
+    /**
+     * This method is called after assigning a ticket.
+     * The default implementation will trigger an [[EVENT_AFTER_ASSIGN]] event.
+     * The event class used is [[AfterSaveEvent]]. When overriding this method, make sure you call the
+     * parent implementation so that the event is triggered.
+     * @param array $changedAttributes The old values of attributes that had changed and were saved.
+     * You can use this parameter to take action based on the changes made for example send an email
+     * when the password had changed or implement audit trail that tracks all the changes.
+     * `$changedAttributes` gives you the old attribute values while the active record (`$this`) has
+     * already the new, updated values.
+     *
+     * Note that no automatic type conversion performed by default. You may use
+     * [[\yii\behaviors\AttributeTypecastBehavior]] to facilitate attribute typecasting.
+     * See http://www.yiiframework.com/doc-2.0/guide-db-active-record.html#attributes-typecasting.
+     */
+    public function afterAssign($changedAttributes)
+    {
+        $this->trigger(self::EVENT_AFTER_ASSIGN, new AfterSaveEvent([
+            'changedAttributes' => $changedAttributes,
+        ]));
+    }
+
+    /**
+     * This method is called before a ticket will be closed.
+     *
+     * The default implementation will trigger an [[EVENT_BEFORE_CLOSE]] event.
+     * When overriding this method, make sure you call the parent implementation like the following:
+     *
+     * ```php
+     * public function beforeClose()
+     * {
+     *     if (!parent::beforeClose()) {
+     *         return false;
+     *     }
+     *
+     *     // ...custom code here...
+     *     return true;
+     * }
+     * ```
+     *
+     * @return bool whether the insertion or updating should continue.
+     * If `false`, the insertion or updating will be cancelled.
+     */
+    public function beforeClose()
+    {
+        $event = new ModelEvent();
+        $this->trigger(self::EVENT_BEFORE_CLOSE, $event);
+
+        return $event->isValid;
+    }
+
+    /**
+     * This method is called after closing a ticket.
+     * The default implementation will trigger an [[EVENT_AFTER_CLOSE]] event.
+     * The event class used is [[AfterSaveEvent]]. When overriding this method, make sure you call the
+     * parent implementation so that the event is triggered.
+     * @param array $changedAttributes The old values of attributes that had changed and were saved.
+     * You can use this parameter to take action based on the changes made for example send an email
+     * when the password had changed or implement audit trail that tracks all the changes.
+     * `$changedAttributes` gives you the old attribute values while the active record (`$this`) has
+     * already the new, updated values.
+     *
+     * Note that no automatic type conversion performed by default. You may use
+     * [[\yii\behaviors\AttributeTypecastBehavior]] to facilitate attribute typecasting.
+     * See http://www.yiiframework.com/doc-2.0/guide-db-active-record.html#attributes-typecasting.
+     */
+    public function afterClose($changedAttributes)
+    {
+        $this->trigger(self::EVENT_AFTER_CLOSE, new AfterSaveEvent([
+            'changedAttributes' => $changedAttributes,
+        ]));
     }
 
     /**
