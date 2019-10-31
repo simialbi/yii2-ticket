@@ -149,12 +149,12 @@ class SendMailBehavior extends Behavior
         $recipients = [];
         ArrayHelper::setValue(
             $recipients,
-            ArrayHelper::getValue($this->owner, $this->agentEmailProperty),
+            [ArrayHelper::getValue($this->owner, $this->agentEmailProperty)],
             ArrayHelper::getValue($this->owner, $this->agentNameProperty)
         );
         ArrayHelper::setValue(
             $recipients,
-            ArrayHelper::getValue($this->owner, $this->authorEmailProperty),
+            [ArrayHelper::getValue($this->owner, $this->authorEmailProperty)],
             ArrayHelper::getValue($this->owner, $this->authorNameProperty)
         );
         return $this->sendMail(
