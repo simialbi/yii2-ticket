@@ -75,10 +75,27 @@ class CommentController extends Controller
             $ticket->load(Yii::$app->request->post());
 
             $isResolved = false;
-            if ($ticket->status === Ticket::STATUS_RESOLVED && $ticket->isAttributeChanged('status')) {
+            if ((int)$ticket->status === Ticket::STATUS_RESOLVED && $ticket->isAttributeChanged('status')) {
                 $isResolved = true;
             }
             if ($ticket->save()) {
+                if ($this->module->kanbanModule && ($task = $ticket->task)) {
+                    $taskComment = new \simialbi\yii2\kanban\models\Comment([
+                        'task_id' => $task->id,
+                        'created_at' => $model->created_at,
+                        'created_by' => $model->created_by,
+                        'text' => $model->text
+                    ]);
+                    $taskComment->detachBehavior('timestamp');
+                    $taskComment->detachBehavior('blameable');
+                    $taskComment->save();
+
+                    if ($isResolved) {
+                        $task->status = \simialbi\yii2\kanban\models\Task::STATUS_DONE;
+                        $task->save();
+                    }
+                }
+
                 if ($isResolved) {
                     $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
                         'ticket' => $ticket,
@@ -90,7 +107,7 @@ class CommentController extends Controller
                 $ticket->trigger(Ticket::EVENT_AFTER_ADD_COMMENT, new TicketEvent([
                     'ticket' => $ticket,
                     'user' => $model->author,
-                    'gotClosed' => true
+                    'gotClosed' => $isResolved
                 ]));
             }
 

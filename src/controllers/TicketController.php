@@ -7,8 +7,10 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\kanban\models\TaskUserAssignment;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
 use simialbi\yii2\ticket\models\Attachment;
+use simialbi\yii2\ticket\models\CreateTaskForm;
 use simialbi\yii2\ticket\models\SearchTicket;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
@@ -74,6 +76,14 @@ class TicketController extends Controller
                         'roleParams' => function () {
                             return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
                         }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-task'],
+                        'roles' => ['updateTicket'],
+                        'roleParams' => function () {
+                            return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
+                        }
                     ]
                 ]
             ]
@@ -106,6 +116,7 @@ class TicketController extends Controller
             'dataProvider' => $dataProvider,
             'topics' => $topics,
             'users' => $users,
+            'hasKanban' => (boolean)$this->module->kanbanModule,
             'statuses' => Module::getStatuses(),
             'priorities' => Module::getPriorities()
         ]);
@@ -207,6 +218,14 @@ class TicketController extends Controller
         $model->scenario = $model::SCENARIO_ASSIGN;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($this->module->kanbanModule && ($task = $model->task)) {
+                $assignment = new TaskUserAssignment([
+                    'user_id' => (string)$model->assigned_to,
+                    'task_id' => $task->id
+                ]);
+                $assignment->save();
+            }
+
             $this->module->trigger(Module::EVENT_TICKET_ASSIGNED, new TicketEvent([
                 'ticket' => $model,
                 'user' => $model->agent
@@ -234,7 +253,15 @@ class TicketController extends Controller
         $model = $this->findModel($id);
 
         $model->assigned_to = (string)Yii::$app->user->id;
-        $model->save();
+        if ($model->save()) {
+            if ($this->module->kanbanModule && ($task = $model->task)) {
+                $assignment = new TaskUserAssignment([
+                    'user_id' => (string)$model->assigned_to,
+                    'task_id' => $task->id
+                ]);
+                $assignment->save();
+            }
+        }
 
         $this->module->trigger(Module::EVENT_TICKET_ASSIGNED, new TicketEvent([
             'ticket' => $model,
@@ -259,6 +286,11 @@ class TicketController extends Controller
         $model->status = Ticket::STATUS_RESOLVED;
 
         if ($model->save()) {
+            if ($this->module->kanbanModule && ($task = $model->task)) {
+                $task->status = \simialbi\yii2\kanban\models\Task::STATUS_DONE;
+                $task->save();
+            }
+
             $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
                 'ticket' => $model,
                 'user' => $model->author
@@ -266,6 +298,62 @@ class TicketController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Create kanban task from ticket
+     *
+     * @param integer $id ticket id
+     *
+     * @return string
+     * @throws NotFoundHttpException
+     * @throws \yii\web\HttpException
+     */
+    public function actionCreateTask($id)
+    {
+        if (!$this->module->kanbanModule) {
+            throw new \yii\web\HttpException(501, 'Required "Kanban" module does not exits', 0);
+        }
+        $model = new CreateTaskForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $ticket = $this->findModel($id);
+
+            if ($model->createTask($ticket)) {
+                Yii::$app->session->addFlash('success', Yii::t(
+                    'simialbi/ticket/ticket/notification',
+                    'Linked task for ticket <b>{name}</b> created',
+                    ['name' => $ticket->subject]
+                ));
+            } else {
+                Yii::$app->session->addFlash('danger', Yii::t(
+                    'simialbi/ticket/ticket/notification',
+                    'Failed to create linked task for ticket <b>{name}</b>}',
+                    ['name' => $ticket->subject]
+                ));
+            }
+            return $this->redirect(['index']);
+        }
+
+        /** @var \simialbi\yii2\kanban\Module $module */
+        $module = Yii::$app->getModule($this->module->kanbanModule);
+
+        /** @var \simialbi\yii2\kanban\models\Board[] $boards */
+        $boards = $module::getUserBoards();
+
+        $buckets = [];
+        foreach ($boards as $board) {
+            $buckets[$board->name] = $board->getBuckets()
+                ->select(['name', 'id'])
+                ->orderBy(['name' => SORT_ASC])
+                ->indexBy('id')
+                ->column();
+        }
+
+        return $this->renderAjax('create-task', [
+            'model' => $model,
+            'buckets' => $buckets
+        ]);
     }
 
     /**

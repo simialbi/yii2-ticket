@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 /* @var $topics array */
 /* @var $users array */
+/* @var $hasKanban boolean */
 /* @var $statuses array */
 /* @var $priorities array */
 
@@ -229,7 +230,7 @@ $this->params['breadcrumbs'] = [$this->title];
             ],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {assign} {take} {close}',
+                'template' => '{view} {assign} {take} {create-task} {close}',
                 'buttons' => [
                     'assign' => function ($url) {
                         return Html::a(FAS::i('hand-point-right'), $url, [
@@ -251,6 +252,33 @@ $this->params['breadcrumbs'] = [$this->title];
                             'data-pjax' => '0'
                         ]);
                     },
+                    'create-task' => function ($url) {
+                        return Html::a(FAS::s([
+                            'style' => [
+                                'height' => '1em',
+                                'vertical-align' => '-.125em',
+                                'width' => '1em'
+                            ]
+                        ])->icon(FAS::i('check', [
+                            'style' => [
+                                'height' => '.5em',
+                                'width' => '.5em'
+                            ]
+                        ])->transform(['right-4', 'up-4']))->on(FAS::i('clone', [
+                            'style' => [
+                                'height' => '1em',
+                                'width' => '1em'
+                            ]
+                        ])), $url, [
+                            'title' => Yii::t('simialbi/ticket', 'Create Kanban task'),
+                            'aria-label' => Yii::t('simialbi/ticket', 'Create Kanban task'),
+                            'data' => [
+                                'pjax' => '0',
+                                'toggle' => 'modal',
+                                'target' => '#ticketModal'
+                            ]
+                        ]);
+                    },
                     'close' => function ($url) {
                         return Html::a(FAS::i('check-square'), $url, [
                             'title' => Yii::t('simialbi/ticket', 'Close ticket'),
@@ -269,6 +297,10 @@ $this->params['breadcrumbs'] = [$this->title];
                     'take' => function ($model) {
                         /* @var $model \simialbi\yii2\ticket\models\Ticket */
                         return empty($model->assigned_to) && Yii::$app->user->can('takeTicket', ['ticket' => $model]);
+                    },
+                    'create-task' => function ($model) use ($hasKanban) {
+                        /* @var $model \simialbi\yii2\ticket\models\Ticket */
+                        return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('updateTicket', ['ticket' => $model]);
                     },
                     'close' => function ($model) {
                         return Yii::$app->user->can('closeTicket', ['ticket' => $model]);

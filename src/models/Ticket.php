@@ -2,8 +2,10 @@
 
 namespace simialbi\yii2\ticket\models;
 
+use simialbi\yii2\kanban\models\Task;
 use Yii;
 use yii\base\ModelEvent;
+use yii\behaviors\AttributeTypecastBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -38,6 +40,7 @@ use yii\db\AfterSaveEvent;
  * @property-read Comment[] $comments
  * @property-read Source $source
  * @property-read Topic $topic
+ * @property-read \simialbi\yii2\kanban\models\Task $task
  */
 class Ticket extends ActiveRecord
 {
@@ -144,6 +147,14 @@ class Ticket extends ActiveRecord
                     self::EVENT_BEFORE_CLOSE => 'closed_by'
                 ],
                 'preserveNonEmptyValues' => false
+            ],
+            'typecast' => [
+                'class' => AttributeTypecastBehavior::class,
+                'attributeTypes' => [
+                    'status' => AttributeTypecastBehavior::TYPE_INTEGER
+                ],
+                'typecastAfterValidate' => true,
+                'typecastAfterFind' => true
             ],
             'timestamp' => [
                 'class' => TimestampBehavior::class,
@@ -407,5 +418,14 @@ class Ticket extends ActiveRecord
     public function getTopic()
     {
         return $this->hasOne(Topic::class, ['id' => 'topic_id']);
+    }
+
+    /**
+     * Get associated task
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTask()
+    {
+        return $this->hasOne(Task::class, ['ticket_id' => 'id']);
     }
 }

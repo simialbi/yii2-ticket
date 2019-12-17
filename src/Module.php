@@ -24,6 +24,11 @@ class Module extends \simialbi\yii2\base\Module
     const EVENT_TICKET_COMMENTED = 'ticketCommented';
 
     /**
+     * @var string|boolean|array Kanban module name if exits. Will be auto detected if not set
+     */
+    public $kanbanModule;
+
+    /**
      * {@inheritDoc}
      */
     public $defaultRoute = 'ticket';
@@ -56,6 +61,11 @@ class Module extends \simialbi\yii2\base\Module
                     'forceTranslation' => true
                 ]
             ]);
+        }
+        if (!isset($this->kanbanModule) && Yii::$app->hasModule('kanban')) {
+            $this->kanbanModule = 'kanban';
+        } elseif (isset($this->kanbanModule) && is_string($this->kanbanModule) && !Yii::$app->hasModule($this->kanbanModule)) {
+            $this->kanbanModule = false;
         }
 
         parent::init();

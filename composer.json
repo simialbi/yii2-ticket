@@ -35,6 +35,7 @@
     },
     "require-dev": {
         "fortawesome/font-awesome": "^5.10.0",
+        "simialbi/yii2-kanban": "^1.0.0",
         "yiisoft/yii2-coding-standards": "~2.0",
         "phpunit/phpunit": "<7"
     },
