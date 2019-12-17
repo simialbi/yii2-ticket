@@ -153,7 +153,8 @@ class Ticket extends ActiveRecord
                 'attributeTypes' => [
                     'status' => AttributeTypecastBehavior::TYPE_INTEGER
                 ],
-                'typecastAfterValidate' => true,
+                'typecastAfterValidate' => false,
+                'typecastBeforeSave' => true,
                 'typecastAfterFind' => true
             ],
             'timestamp' => [
