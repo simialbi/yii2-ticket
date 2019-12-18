@@ -27,6 +27,10 @@ msgid "Close ticket"
 msgstr "Ticket schliessen"
 
 msgctxt "simialbi/ticket"
+msgid "Create Kanban task"
+msgstr "Erstelle Kanban Aufgabe"
+
+msgctxt "simialbi/ticket"
 msgid "Create ticket"
 msgstr "Ticket erstellen"
 
@@ -149,6 +153,10 @@ msgstr "Text"
 msgctxt "simialbi/ticket/model/comment"
 msgid "Ticket ID"
 msgstr "Ticket"
+
+msgctxt "simialbi/ticket/model/create-task-form"
+msgid "Bucket"
+msgstr "Bucket"
 
 msgctxt "simialbi/ticket/model/source"
 msgid "Created At"
@@ -325,6 +333,14 @@ msgstr "Offen"
 msgctxt "simialbi/ticket/status"
 msgid "Resolved"
 msgstr "Gelöst"
+
+msgctxt "simialbi/ticket/ticket/notification"
+msgid "Failed to create linked task for ticket <b>{name}</b>"
+msgstr "Fehler beim Erstellen einer verlinkten Aufgabe für das Ticket <b>{name}</b>"
+
+msgctxt "simialbi/ticket/ticket/notification"
+msgid "Linked task for ticket <b>{name}</b> created"
+msgstr "Eine verlinkte Aufgabe wurde erstellt für das Ticket <b>{name}</b>"
 
 msgctxt "simialbi/ticket/topic"
 msgid "Create topic"

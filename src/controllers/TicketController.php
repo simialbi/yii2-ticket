@@ -20,6 +20,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -307,12 +308,12 @@ class TicketController extends Controller
      *
      * @return string
      * @throws NotFoundHttpException
-     * @throws \yii\web\HttpException
+     * @throws HttpException
      */
     public function actionCreateTask($id)
     {
         if (!$this->module->kanbanModule) {
-            throw new \yii\web\HttpException(501, 'Required "Kanban" module does not exits', 0);
+            throw new HttpException(501, 'Required "Kanban" module does not exits', 0);
         }
         $model = new CreateTaskForm();
 
@@ -328,7 +329,7 @@ class TicketController extends Controller
             } else {
                 Yii::$app->session->addFlash('danger', Yii::t(
                     'simialbi/ticket/ticket/notification',
-                    'Failed to create linked task for ticket <b>{name}</b>}',
+                    'Failed to create linked task for ticket <b>{name}</b>',
                     ['name' => $ticket->subject]
                 ));
             }
