@@ -135,7 +135,8 @@ class TicketController extends Controller
         $model = $this->findModel($id);
 
         return $this->render('view', [
-            'model' => $model
+            'model' => $model,
+            'hasKanban' => (boolean)$this->module->kanbanModule
         ]);
     }
 
