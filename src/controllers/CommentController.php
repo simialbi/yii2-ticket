@@ -57,7 +57,7 @@ class CommentController extends Controller
             $ticket = $model->ticket;
             $ticket->setScenario(Ticket::SCENARIO_COMMENT);
             if ($this->module->sendMails) {
-                $model->attachBehavior('sendMail', [
+                $ticket->attachBehavior('sendMail', [
                     'class' => SendMailBehavior::class,
                     'agentsToInform' => function ($model) {
                         /** @var $model Ticket */

@@ -135,7 +135,9 @@ class SendMailBehavior extends Behavior
             Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, $this->idProperty),
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
-            ])
+            ]),
+            null,
+            ['comment' => $this->owner->getComments()->one()]
         );
     }
 
