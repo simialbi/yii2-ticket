@@ -12,7 +12,7 @@ use yii\widgets\Pjax;
 
 Pjax::begin([
     'id' => 'createTaskPjax',
-    'formSelector' => '#',
+    'formSelector' => '#assignTicketForm',
     'enablePushState' => false,
     'clientOptions' => [
         'skipOuterContainers' => true
@@ -39,8 +39,7 @@ Pjax::begin([
             <div class="form-row">
                 <?= $form->field($model, 'bucket_id', [
                     'options' => [
-                        'class' => ['form-group', 'col-12'],
-                        'disabled' => true
+                        'class' => ['form-group', 'col-12']
                     ]
                 ])->widget(Select2::class, [
                     'data' => $buckets,
