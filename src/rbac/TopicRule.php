@@ -27,7 +27,7 @@ class TopicRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        $agents = ArrayHelper::getValue($params, ['ticket', 'topic', 'agents'], []);
+        $agents = array_keys(ArrayHelper::getValue($params, ['ticket', 'topic', 'agents'], []));
         return in_array($user, $agents);
     }
 }

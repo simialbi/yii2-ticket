@@ -236,6 +236,7 @@ class m190722_110712_init extends Migration
             $auth->addChild($author, $updateOwnTicket);
             $auth->addChild($closeOwnTicket, $closeTicket);
             $auth->addChild($author, $closeOwnTicket);
+            $auth->addChild($takeTopicTicket, $takeTicket);
         }
     }
 
