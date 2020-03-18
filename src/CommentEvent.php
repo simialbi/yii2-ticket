@@ -2,22 +2,28 @@
 /**
  * @package yii2-ticket
  * @author Simon Karlen <simi.albi@outlook.com>
- * @copyright Copyright © 2019 Simon Karlen
+ * @copyright Copyright © 2020 Simon Karlen
  */
 
 namespace simialbi\yii2\ticket;
 
 use simialbi\yii2\models\UserInterface;
+use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\Ticket;
 use yii\base\Event;
 
 /**
- * TicketEvent represents the event parameter used for an ticket event.
+ * CommentEvent represents the event parameter used for an ticket got a new comment event.
  */
-class TicketEvent extends Event
+class CommentEvent extends Event
 {
     /**
-     * @var Ticket The ticket which triggered the event
+     * @var Comment The comment which triggered the event
+     */
+    public $comment;
+
+    /**
+     * @var Ticket The ticket which received the comment
      */
     public $ticket;
 

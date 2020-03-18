@@ -22,7 +22,7 @@ use yii\bootstrap4\Html;
             <?= Yii::$app->formatter->asRelativeTime($model->created_at); ?>
         </time>
 
-        <?= Yii::$app->formatter->asParagraphs($model->text); ?>
+        <?= Yii::$app->formatter->asNtext($model->text); ?>
         <?php if ($model->attachments): ?>
             <div class="sa-ticket-comment-attachments d-flex align-items-center">
                 <?php foreach ($model->attachments as $attachment): ?>

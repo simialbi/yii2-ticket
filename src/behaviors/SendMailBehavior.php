@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket\behaviors;
 
+use simialbi\yii2\ticket\CommentEvent;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
 use simialbi\yii2\ticket\Module;
@@ -115,9 +116,11 @@ class SendMailBehavior extends Behavior
     /**
      * Sends an information mail after a comment was created in a ticket
      *
+     * @param CommentEvent $event
+     *
      * @return boolean
      */
-    public function afterComment()
+    public function afterComment($event)
     {
         if (ArrayHelper::getValue($this->owner, $this->createdByProperty) == Yii::$app->user->id) {
             $email = ArrayHelper::getValue($this->owner, $this->agentEmailProperty);
@@ -137,7 +140,7 @@ class SendMailBehavior extends Behavior
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
             ]),
             null,
-            ['comment' => $this->owner->getComments()->one()]
+            ['comment' => $event->comment]
         );
     }
 

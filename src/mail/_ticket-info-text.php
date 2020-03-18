@@ -30,7 +30,8 @@ echo Table::widget([
             ArrayHelper::getValue($priorities, $model->priority, $model->priority)
         ],
         [$model->getAttributeLabel('status'), ArrayHelper::getValue($statuses, $model->status, $model->status)],
-    ]
+    ],
+    'screenWidth' => 1920
 ]);
 echo "\r\n\r\n";
 echo strip_tags(Yii::t('simialbi/ticket/mail', 'Link to ticket <b>{id}</b>', ['id' => $model->id])) . "\n";

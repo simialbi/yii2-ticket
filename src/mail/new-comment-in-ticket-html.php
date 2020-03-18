@@ -22,7 +22,7 @@
         ]); ?>
     </p>
 
-    <?= Yii::$app->formatter->asParagraphs($comment->text); ?>
+    <?= Yii::$app->formatter->asNtext($comment->text); ?>
 
     <?= $this->render('_ticket-info-html', [
         'model' => $model,

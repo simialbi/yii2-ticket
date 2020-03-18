@@ -45,7 +45,7 @@ $this->params['breadcrumbs'] = [
                     <?= str_replace(
                         '<p>',
                         '<p class="card-text">',
-                        Yii::$app->formatter->asParagraphs($model->description)
+                        Yii::$app->formatter->asNtext($model->description)
                     ); ?>
                 </div>
             </div>
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'] = [
                 <?= str_replace(
                     '<p>',
                     '<p class="card-text">',
-                    Yii::$app->formatter->asParagraphs($model->solution->text)
+                    Yii::$app->formatter->asNtext($model->solution->text)
                 ); ?>
             </div>
         </div>

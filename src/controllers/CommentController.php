@@ -7,7 +7,9 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\kanban\models\Task;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
+use simialbi\yii2\ticket\CommentEvent;
 use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\Ticket;
@@ -91,7 +93,7 @@ class CommentController extends Controller
                     $taskComment->save();
 
                     if ($isResolved) {
-                        $task->status = \simialbi\yii2\kanban\models\Task::STATUS_DONE;
+                        $task->status = Task::STATUS_DONE;
                         $task->save();
                     }
                 }
@@ -104,14 +106,16 @@ class CommentController extends Controller
                     ]));
                 }
 
-                $ticket->trigger(Ticket::EVENT_AFTER_ADD_COMMENT, new TicketEvent([
+                $ticket->trigger(Ticket::EVENT_AFTER_ADD_COMMENT, new CommentEvent([
+                    'comment' => $model,
                     'ticket' => $ticket,
                     'user' => $model->author,
                     'gotClosed' => $isResolved
                 ]));
             }
 
-            $this->module->trigger(Module::EVENT_TICKET_COMMENTED, new TicketEvent([
+            $this->module->trigger(Module::EVENT_TICKET_COMMENTED, new CommentEvent([
+                'comment' => $model,
                 'ticket' => $ticket,
                 'user' => $model->author,
                 'gotClosed' => $isResolved
