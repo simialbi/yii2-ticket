@@ -42,11 +42,7 @@ $this->params['breadcrumbs'] = [
                 </div>
                 <div class="card-body">
                     <h4 class="card-title"><?= Html::encode($model->subject); ?></h4>
-                    <?= str_replace(
-                        '<p>',
-                        '<p class="card-text">',
-                        Yii::$app->formatter->asNtext($model->description)
-                    ); ?>
+                    <p class="card-text"><?= Yii::$app->formatter->asNtext($model->description); ?></p>
                 </div>
             </div>
         </div>
@@ -99,11 +95,7 @@ $this->params['breadcrumbs'] = [
                 </figure>
             </div>
             <div class="card-body">
-                <?= str_replace(
-                    '<p>',
-                    '<p class="card-text">',
-                    Yii::$app->formatter->asNtext($model->solution->text)
-                ); ?>
+                <p class="card-text"><?= Yii::$app->formatter->asNtext($model->description); ?></p>
             </div>
         </div>
     <?php endif; ?>
