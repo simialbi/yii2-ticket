@@ -18,11 +18,11 @@ use yii\bootstrap4\Html;
     <div class="media-body">
         <strong><?= Html::encode($model->author->name); ?></strong>
         <time datetime="<?= Yii::$app->formatter->asDatetime($model->created_at, 'yyyy-MM-dd HH:mm'); ?>"
-        class="text-muted small">
+              class="text-muted small">
             <?= Yii::$app->formatter->asRelativeTime($model->created_at); ?>
         </time>
 
-        <?= Yii::$app->formatter->asNtext($model->text); ?>
+        <p class="media-text mb-0"><?= Yii::$app->formatter->asNtext($model->text); ?></p>
         <?php if ($model->attachments): ?>
             <div class="sa-ticket-comment-attachments d-flex align-items-center">
                 <?php foreach ($model->attachments as $attachment): ?>
