@@ -1,7 +1,7 @@
 <?php
 
-use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\ActiveForm;
+use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 
 /* @var $this \yii\web\View */
@@ -10,18 +10,22 @@ use yii\bootstrap4\Html;
 /* @var $priorities array */
 /* @var $users array */
 
-$this->title = Yii::t('simialbi/ticket', 'Create ticket');
+$this->title = Yii::t('simialbi/ticket', 'Update ticket');
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('simialbi/ticket', 'My tickets'),
         'url' => ['ticket/index']
     ],
+    [
+        'label' => $model->subject,
+        'url' => ['ticket/view', 'id' => $model->id]
+    ],
     $this->title
 ];
 ?>
-<div class="sa-ticket-ticket-create">
+<div class="sa-ticket-ticket-update">
     <?php $form = ActiveForm::begin([
-        'id' => 'createTicketForm'
+        'id' => 'updateTicketForm'
     ]); ?>
 
     <?= $this->render('_form', [
@@ -34,19 +38,10 @@ $this->params['breadcrumbs'] = [
 
     <div class="form-row">
         <div class="col-12 form-group d-flex align-items-center">
-            <?= Html::submitButton(FAS::i('save') . ' ' . Yii::t('simialbi/ticket', 'Create ticket'), [
+            <?= Html::submitButton(FAS::i('save') . ' ' . Yii::t('simialbi/ticket', 'Update ticket'), [
                 'class' => ['btn', 'btn-primary', 'btn-sm']
             ]); ?>
-            <a href="javascript:;" id="file-upload" class="ml-3 btn btn-outline-secondary btn-sm">
-                <?= FAS::i('paperclip'); ?>
-            </a>
         </div>
     </div>
-    <div class="form-row" id="file-placeholder"></div>
     <?php ActiveForm::end(); ?>
 </div>
-
-<?= $this->render('/attachment/_resumable', [
-    'filePlaceholder' => 'file-placeholder',
-    'browseButton' => 'file-upload'
-]); ?>

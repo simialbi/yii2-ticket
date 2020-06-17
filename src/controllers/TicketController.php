@@ -51,6 +51,14 @@ class TicketController extends Controller
                     ],
                     [
                         'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['administrateTicket'],
+                        'roleParams' => function () {
+                            return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
+                        }
+                    ],
+                    [
+                        'allow' => true,
                         'actions' => ['assign'],
                         'roles' => ['assignTicket'],
                     ],
@@ -210,6 +218,42 @@ class TicketController extends Controller
     }
 
     /**
+     * Update a ticket
+     * @param integer $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->module->trigger(Module::EVENT_TICKET_UPDATED, new TicketEvent([
+                'ticket' => $model,
+                'user' => Yii::$app->user->id
+            ]));
+
+            return $this->redirect(['index']);
+        }
+
+        $topics = Topic::find()->select([
+            'name',
+            'id'
+        ])->orderBy([
+            'name' => SORT_ASC
+        ])->indexBy('id')->column();
+        $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+
+        return $this->render('update', [
+            'model' => $model,
+            'topics' => $topics,
+            'users' => $users,
+            'priorities' => Module::getPriorities()
+        ]);
+    }
+
+    /**
+     * Assign a ticket
      * @param integer $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException

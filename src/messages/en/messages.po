@@ -35,6 +35,10 @@ msgid "Create ticket"
 msgstr "Create ticket"
 
 msgctxt "simialbi/ticket"
+msgid "Update ticket"
+msgstr "Update ticket"
+
+msgctxt "simialbi/ticket"
 msgid "My tickets"
 msgstr "My tickets"
 

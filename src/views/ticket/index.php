@@ -230,7 +230,7 @@ $this->params['breadcrumbs'] = [$this->title];
             ],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {assign} {take} {create-task} {close}',
+                'template' => '{view} {update} {assign} {take} {create-task} {close}',
                 'buttons' => [
                     'assign' => function ($url) {
                         return Html::a(FAS::i('hand-point-right'), $url, [
@@ -290,6 +290,9 @@ $this->params['breadcrumbs'] = [$this->title];
                 'visibleButtons' => [
                     'view' => function ($model) {
                         return Yii::$app->user->can('viewTicket', ['ticket' => $model]);
+                    },
+                    'update' => function ($model) {
+                        return Yii::$app->user->can('administrateTicket', ['ticket' => $model]);
                     },
                     'assign' => function () {
                         return Yii::$app->user->can('assignTicket');
