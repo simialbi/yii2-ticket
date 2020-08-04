@@ -65,7 +65,9 @@ class CommentController extends Controller
                         /** @var $model Ticket */
                         $recipients = [];
                         foreach ($model->topic->agents as $agent) {
-                            $recipients[$agent->email] = $agent->name;
+                            if (!empty($agent->email)) {
+                                $recipients[$agent->email] = $agent->name;
+                            }
                         }
 
                         return $recipients;
