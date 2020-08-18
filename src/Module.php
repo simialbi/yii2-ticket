@@ -67,6 +67,9 @@ class Module extends \simialbi\yii2\base\Module
             $this->kanbanModule = 'kanban';
         } elseif (isset($this->kanbanModule) && is_string($this->kanbanModule) && !Yii::$app->hasModule($this->kanbanModule)) {
             $this->kanbanModule = false;
+        } elseif (is_array($this->kanbanModule) && isset($this->kanbanModule['class'])) {
+            $this->setModule('kanban', $this->kanbanModule);
+            $this->kanbanModule = $this->id . '/kanban';
         }
 
         parent::init();
