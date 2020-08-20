@@ -21,7 +21,8 @@ class SearchTicket extends Ticket
     public function rules()
     {
         return [
-            [['id', 'source_id', 'topic_id', 'due_date', 'priority'], 'integer'],
+            [['id', 'source_id', 'due_date', 'priority'], 'integer'],
+            [['topic_id'], 'each', 'rule' => ['integer']],
             ['description', 'string'],
             [['assigned_to', 'created_by', 'updated_by', 'closed_by'], 'string', 'max' => 64],
             ['subject', 'string', 'max' => 255],
@@ -34,10 +35,13 @@ class SearchTicket extends Ticket
             ],
             [
                 ['topic_id'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Topic::class,
-                'targetAttribute' => ['topic_id' => 'id']
+                'each',
+                'rule' => [
+                    'exist',
+                    'skipOnError' => true,
+                    'targetClass' => Topic::class,
+                    'targetAttribute' => ['topic_id' => 'id']
+                ]
             ],
             [
                 'priority',

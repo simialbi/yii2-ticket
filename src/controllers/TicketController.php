@@ -113,7 +113,16 @@ class TicketController extends Controller
         if (!Yii::$app->user->can('ticketAgent')) {
             $userId = Yii::$app->user->id;
         } elseif (!Yii::$app->user->can('assignTicket')) {
-            $searchModel->assigned_to = (string)Yii::$app->user->id;
+            $topics = Topic::find()->all();
+            $filterTopics = [];
+            /** @var Topic $topic */
+            foreach ($topics as $topic) {
+                $agents = ArrayHelper::index($topic->agents, 'id');
+                if (isset($agents[Yii::$app->user->id])) {
+                    $filterTopics[] = $topic->id;
+                }
+            }
+            $searchModel->topic_id = $filterTopics;
         }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $userId);
 

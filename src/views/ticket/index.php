@@ -173,14 +173,18 @@ $this->params['breadcrumbs'] = [$this->title];
             [
                 'class' => 'kartik\grid\DataColumn',
                 'attribute' => 'topic_id',
-                'value' => 'topic.name',
+                'value' => function ($model, $key, $index, $column) use ($topics) {
+                    /* @var $column \kartik\grid\DataColumn */
+                    return ArrayHelper::getValue($topics, $model->{$column->attribute});
+                },
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter' => $topics,
                 'filterWidgetOptions' => [
                     'theme' => Select2::THEME_KRAJEE_BS4,
                     'bsVersion' => 4,
                     'options' => [
-                        'placeholder' => ''
+                        'placeholder' => '',
+                        'multiple' => true
                     ],
                     'pluginOptions' => [
                         'allowClear' => true
