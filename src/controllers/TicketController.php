@@ -166,7 +166,8 @@ class TicketController extends Controller
     {
         $model = new Ticket([
             'source_id' => 1,
-            'priority' => Ticket::PRIORITY_NORMAL
+            'priority' => Ticket::PRIORITY_NORMAL,
+            'created_by' => Yii::$app->user->id
         ]);
         if ($this->module->sendMails) {
             $model->attachBehavior('sendMail', [
