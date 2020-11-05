@@ -71,6 +71,7 @@ class SendMailBehavior extends Behavior
      * Sends information mail after a ticket was created
      *
      * @return boolean
+     * @throws \Exception
      */
     public function afterInsert()
     {
@@ -99,6 +100,7 @@ class SendMailBehavior extends Behavior
      * Sends an information mail to the agent which was assigned to the ticket
      *
      * @return boolean
+     * @throws \Exception
      */
     public function afterAssign()
     {
@@ -123,6 +125,7 @@ class SendMailBehavior extends Behavior
      * @param CommentEvent $event
      *
      * @return boolean
+     * @throws \Exception
      */
     public function afterComment($event)
     {
@@ -152,6 +155,7 @@ class SendMailBehavior extends Behavior
      * Sends an information mail after closing a ticket
      *
      * @return boolean
+     * @throws \Exception
      */
     public function afterClose()
     {
@@ -200,6 +204,7 @@ class SendMailBehavior extends Behavior
      * `[email => name]`.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @return boolean
+     * @throws \Exception
      */
     protected function sendMail($view, $to, $subject, $from = null, array $params = [])
     {
