@@ -113,9 +113,7 @@ class SendMailBehavior extends Behavior
             Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, $this->idProperty),
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
-            ]),
-            null,
-            ['isRichText' => $this->isRichText]
+            ])
         );
     }
 
@@ -146,7 +144,7 @@ class SendMailBehavior extends Behavior
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
             ]),
             null,
-            ['comment' => $event->comment, 'isRichText' => $this->isRichText]
+            ['comment' => $event->comment]
         );
     }
 
@@ -177,9 +175,7 @@ class SendMailBehavior extends Behavior
             Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, $this->idProperty),
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
-            ]),
-            null,
-            ['isRichText' => $this->isRichText]
+            ])
         );
     }
 
@@ -228,7 +224,8 @@ class SendMailBehavior extends Behavior
             'topics' => $topics,
             'users' => $users,
             'statuses' => Module::getStatuses(),
-            'priorities' => Module::getPriorities()
+            'priorities' => Module::getPriorities(),
+            'isRichText' => $this->isRichText
         ], $params);
 
         return Yii::$app->mailer->compose($view, $params)->setFrom($from)->setTo($to)->setSubject($subject)->send();
