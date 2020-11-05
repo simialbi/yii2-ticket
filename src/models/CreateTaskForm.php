@@ -91,7 +91,7 @@ class CreateTaskForm extends Model
         if ($task->save()) {
             $assignment = new TaskUserAssignment([
                 'task_id' => $task->id,
-                'user_id' => (string)$ticket->agent->getId()
+                'user_id' => $ticket->assigned_to
             ]);
             $assignment->save();
             foreach ($ticket->comments as $comment) {
