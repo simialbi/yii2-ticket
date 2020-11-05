@@ -173,6 +173,7 @@ class TicketController extends Controller
         if ($this->module->sendMails) {
             $model->attachBehavior('sendMail', [
                 'class' => SendMailBehavior::class,
+                'isRichText' => $this->module->richTextFields,
                 'agentsToInform' => function ($model) {
                     /** @var $model Ticket */
                     $recipients = [];
@@ -432,6 +433,7 @@ class TicketController extends Controller
             if ($this->module->sendMails) {
                 $model->attachBehavior('sendMail', [
                     'class' => SendMailBehavior::class,
+                    'isRichText' => $this->module->richTextFields,
                     'agentsToInform' => function ($model) {
                         /** @var $model Ticket */
                         $recipients = [];

@@ -11,6 +11,7 @@ use yii\widgets\DetailView;
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 ?>
 
@@ -21,7 +22,7 @@ use yii\widgets\DetailView;
         'id',
         'created_at:datetime',
         'subject',
-        'description:ntext',
+        'description:' . ($isRichText ? 'html' : 'ntext'),
         [
             'attribute' => 'created_by',
             'value' => function ($model) use ($users) {

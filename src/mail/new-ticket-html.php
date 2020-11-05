@@ -6,6 +6,7 @@
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 ?>
 <div class="new-ticket-mail">
@@ -26,6 +27,7 @@
         'topics' => $topics,
         'users' => $users,
         'statuses' => $statuses,
-        'priorities' => $priorities
+        'priorities' => $priorities,
+        'isRichText' => $isRichText
     ]); ?>
 </div>

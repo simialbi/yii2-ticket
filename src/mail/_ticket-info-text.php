@@ -10,13 +10,14 @@ use yii\helpers\Url;
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 echo Table::widget([
     'rows' => [
         [$model->getAttributeLabel('id'), $model->id],
         [$model->getAttributeLabel('created_at'), Yii::$app->formatter->asDatetime($model->created_at)],
         [$model->getAttributeLabel('subject'), $model->subject],
-        [$model->getAttributeLabel('description'), $model->description],
+        [$model->getAttributeLabel('description'), ($isRichText) ? strip_tags($model->description) : $model->description],
         [
             $model->getAttributeLabel('created_by'),
             ArrayHelper::getValue($users, $model->created_by, $model->created_by)

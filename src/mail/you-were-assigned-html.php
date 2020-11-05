@@ -6,6 +6,7 @@
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 ?>
 <div class="you-were-assigned-mail">
@@ -31,6 +32,7 @@
         'topics' => $topics,
         'users' => $users,
         'statuses' => $statuses,
-        'priorities' => $priorities
+        'priorities' => $priorities,
+        'isRichText' => $isRichText
     ]); ?>
 </div>

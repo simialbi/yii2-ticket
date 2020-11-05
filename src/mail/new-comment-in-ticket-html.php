@@ -7,6 +7,7 @@
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 ?>
 <div class="new-comment-in-ticket-mail">
@@ -22,13 +23,14 @@
         ]); ?>
     </p>
 
-    <?= Yii::$app->formatter->asNtext($comment->text); ?>
+    <?= ($isRichText) ? $comment->text : Yii::$app->formatter->asNtext($comment->text); ?>
 
     <?= $this->render('_ticket-info-html', [
         'model' => $model,
         'topics' => $topics,
         'users' => $users,
         'statuses' => $statuses,
-        'priorities' => $priorities
+        'priorities' => $priorities,
+        'isRichText' => $isRichText
     ]); ?>
 </div>

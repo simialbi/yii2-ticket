@@ -61,6 +61,7 @@ class CommentController extends Controller
             if ($this->module->sendMails) {
                 $ticket->attachBehavior('sendMail', [
                     'class' => SendMailBehavior::class,
+                    'isRichText' => $this->module->richTextFields,
                     'agentsToInform' => function ($model) {
                         /** @var $model Ticket */
                         $recipients = [];

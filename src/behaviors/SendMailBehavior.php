@@ -49,6 +49,10 @@ class SendMailBehavior extends Behavior
      * @var \Closure|array An array or function which returns an array of agents to inform after a ticket was created
      */
     public $agentsToInform;
+    /**
+     * @var boolean If text is treated as rich text (html included)
+     */
+    public $isRichText = false;
 
     /**
      * {@inheritDoc}
@@ -109,7 +113,9 @@ class SendMailBehavior extends Behavior
             Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, $this->idProperty),
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
-            ])
+            ]),
+            null,
+            ['isRichText' => $this->isRichText]
         );
     }
 
@@ -140,7 +146,7 @@ class SendMailBehavior extends Behavior
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
             ]),
             null,
-            ['comment' => $event->comment]
+            ['comment' => $event->comment, 'isRichText' => $this->isRichText]
         );
     }
 
@@ -171,7 +177,9 @@ class SendMailBehavior extends Behavior
             Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, $this->idProperty),
                 'subject' => ArrayHelper::getValue($this->owner, $this->subjectProperty)
-            ])
+            ]),
+            null,
+            ['isRichText' => $this->isRichText]
         );
     }
 

@@ -6,6 +6,7 @@
 /* @var $users array */
 /* @var $statuses array */
 /* @var $priorities array */
+/* @var $isRichText boolean */
 
 echo Yii::t('simialbi/ticket/mail', 'Ticket notification for {id}', [
     'id' => $model->id
@@ -21,5 +22,6 @@ echo Yii::t('simialbi/ticket/mail', 'Ticket notification for {id}', [
     'topics' => $topics,
     'users' => $users,
     'statuses' => $statuses,
-    'priorities' => $priorities
+    'priorities' => $priorities,
+    'isRichText' => $isRichText
 ]);
