@@ -6,6 +6,7 @@ use yii\bootstrap4\Modal;
 
 /* @var $this \yii\web\View */
 /* @var $model \simialbi\yii2\ticket\models\Ticket */
+/* @var $richTextFields boolean */
 
 $this->title = $model->subject;
 $this->params['breadcrumbs'] = [
@@ -42,7 +43,9 @@ $this->params['breadcrumbs'] = [
                 </div>
                 <div class="card-body">
                     <h4 class="card-title"><?= Html::encode($model->subject); ?></h4>
-                    <p class="card-text"><?= Yii::$app->formatter->asNtext($model->description); ?></p>
+                    <p class="card-text">
+                        <?= ($richTextFields) ? $model->description : Yii::$app->formatter->asNtext($model->description); ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -109,7 +112,8 @@ $this->params['breadcrumbs'] = [
                     'class' => 'simialbi\yii2\ticket\models\Comment',
                     'ticket_id' => $model->id
                 ]),
-                'ticket' => $model
+                'ticket' => $model,
+                'richTextFields' => $richTextFields
             ]); ?>
         </div>
     </div>

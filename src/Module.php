@@ -35,6 +35,11 @@ class Module extends \simialbi\yii2\base\Module
     public $defaultRoute = 'ticket';
 
     /**
+     * @var boolean Use rich text fields in ticket comments
+     */
+    public $richTextFields = false;
+
+    /**
      * @var boolean Send mails if something happens with tickets
      */
     public $sendMails = true;

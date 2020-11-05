@@ -5,6 +5,7 @@ use yii\widgets\Pjax;
 /* @var $this \yii\web\View */
 /* @var $ticket \simialbi\yii2\ticket\models\Ticket */
 /* @var $newComment \simialbi\yii2\ticket\models\Comment */
+/* @var $richTextFields boolean */
 
 Pjax::begin([
     'id' => 'createCommentPjax',
@@ -20,7 +21,8 @@ Pjax::begin([
             <div class="sa-comment-create">
                 <?= $this->render('_form', [
                     'ticket' => $ticket,
-                    'model' => $newComment
+                    'model' => $newComment,
+                    'richTextFields' => $richTextFields
                 ]); ?>
             </div>
         <?php endif; ?>
@@ -29,7 +31,8 @@ Pjax::begin([
         <?php foreach ($ticket->comments as $comment): ?>
             <?= $this->render('_comment', [
                 'model' => $comment,
-                'index' => $i++
+                'index' => $i++,
+                'richTextFields' => $richTextFields
             ]); ?>
         <?php endforeach; ?>
     </div>

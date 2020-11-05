@@ -1,6 +1,7 @@
 <?php
 
 use kartik\select2\Select2;
+use marqu3s\summernote\Summernote;
 
 /* @var $this \yii\web\View */
 /* @var $form \yii\bootstrap4\ActiveForm */
@@ -8,6 +9,7 @@ use kartik\select2\Select2;
 /* @var $topics array */
 /* @var $priorities array */
 /* @var $users array */
+/* @var $richTextFields boolean */
 
 $isAgent = Yii::$app->user->can('ticketAgent');
 echo $form->errorSummary($model); ?>
@@ -59,9 +61,37 @@ echo $form->errorSummary($model); ?>
     ])->textInput(); ?>
 </div>
 <div class="form-row">
-    <?= $form->field($model, 'description', [
-        'options' => [
-            'class' => ['form-group', 'col-12']
-        ]
-    ])->textarea(['rows' => 5]); ?>
+    <?php if ($richTextFields): ?>
+        <?= $form->field($model, 'description', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->widget(Summernote::class, [
+            'clientOptions' => [
+                'styleTags' => [
+                    'p',
+                    [
+                        'title' => 'blockquote',
+                        'tag' => 'blockquote',
+                        'className' => 'blockquote',
+                        'value' => 'blockquote'
+                    ],
+                    'pre'
+                ],
+                'toolbar' => new \yii\helpers\ReplaceArrayValue([
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough']],
+                    ['script', ['subscript', 'superscript']],
+                    ['list', ['ol', 'ul']],
+                    ['clear', ['clear']]
+                ])
+            ]
+        ]); ?>
+    <?php else: ?>
+        <?= $form->field($model, 'description', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->textarea(['rows' => 5]); ?>
+    <?php endif; ?>
 </div>

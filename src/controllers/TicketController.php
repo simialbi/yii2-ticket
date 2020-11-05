@@ -153,7 +153,8 @@ class TicketController extends Controller
 
         return $this->render('view', [
             'model' => $model,
-            'hasKanban' => (boolean)$this->module->kanbanModule
+            'hasKanban' => (boolean)$this->module->kanbanModule,
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 
@@ -225,7 +226,8 @@ class TicketController extends Controller
             'model' => $model,
             'topics' => $topics,
             'users' => $users,
-            'priorities' => Module::getPriorities()
+            'priorities' => Module::getPriorities(),
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 
@@ -260,7 +262,8 @@ class TicketController extends Controller
             'model' => $model,
             'topics' => $topics,
             'users' => $users,
-            'priorities' => Module::getPriorities()
+            'priorities' => Module::getPriorities(),
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 

@@ -9,6 +9,7 @@ use yii\bootstrap4\Html;
 /* @var $topics array */
 /* @var $priorities array */
 /* @var $users array */
+/* @var $richTextFields boolean */
 
 $this->title = Yii::t('simialbi/ticket', 'Update ticket');
 $this->params['breadcrumbs'] = [
@@ -33,7 +34,8 @@ $this->params['breadcrumbs'] = [
         'model' => $model,
         'topics' => $topics,
         'priorities' => $priorities,
-        'users' => $users
+        'users' => $users,
+        'richTextFields' => $richTextFields
     ]); ?>
 
     <div class="form-row">

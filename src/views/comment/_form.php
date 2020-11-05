@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 /* @var $this \yii\web\View */
 /* @var $ticket \simialbi\yii2\ticket\models\Ticket */
 /* @var $model \simialbi\yii2\ticket\models\Comment */
+/* @var $richTextFields boolean */
 
 $form = ActiveForm::begin([
     'id' => 'createCommentForm',
@@ -85,6 +86,27 @@ echo $form->field($model, 'ticket_id', ['options' => ['class' => ['m-0']]])->hid
                 'class' => ['form-control'],
                 'placeholder' => $model->getAttributeLabel('text'),
                 'rows' => 1
+            ],
+            'richTextField' => $richTextFields,
+            'summernoteClientOptions' => [
+                'height' => 100,
+                'styleTags' => [
+                    'p',
+                    [
+                        'title' => 'blockquote',
+                        'tag' => 'blockquote',
+                        'className' => 'blockquote',
+                        'value' => 'blockquote'
+                    ],
+                    'pre'
+                ],
+                'toolbar' => new \yii\helpers\ReplaceArrayValue([
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough']],
+                    ['script', ['subscript', 'superscript']],
+                    ['list', ['ol', 'ul']],
+                    ['clear', ['clear']]
+                ])
             ]
         ]); ?>
     </div>

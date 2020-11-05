@@ -29,15 +29,19 @@
         "kartik-v/yii2-widget-fileinput": "^1.0.9",
         "kartik-v/yii2-widget-select2": "^2.1.0",
         "simialbi/yii2-fontawesome": "^3.4.0",
-        "simialbi/yii2-simialbi-base": ">=0.8.1 <1.0 | ^1.0.0",
+        "simialbi/yii2-simialbi-base": ">=0.9.4 <1.0 | ^1.0.0",
         "bower-asset/autosize": "^4.0.2",
         "bower-asset/resumablejs": "^1.1.0"
     },
     "require-dev": {
         "fortawesome/font-awesome": "^5.10.0",
         "simialbi/yii2-kanban": "^1.0.0",
+        "simialbi/yii2-summernote": "^1.1.0",
         "yiisoft/yii2-coding-standards": "~2.0",
         "phpunit/phpunit": "<7"
+    },
+    "suggest": {
+        "simialbi/yii2-summernote": "Install this extension to use rich text fields in comment fields"
     },
     "autoload": {
         "psr-4": {

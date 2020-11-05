@@ -6,6 +6,7 @@ use yii\bootstrap4\Html;
 /* @var $this \yii\web\View */
 /* @var $model \simialbi\yii2\ticket\models\Comment */
 /* @var $index integer */
+/* @var $richTextFields boolean */
 
 ?>
 
@@ -22,7 +23,9 @@ use yii\bootstrap4\Html;
             <?= Yii::$app->formatter->asRelativeTime($model->created_at); ?>
         </time>
 
-        <p class="media-text mb-0"><?= Yii::$app->formatter->asNtext(strip_tags($model->text)); ?></p>
+        <p class="media-text mb-0">
+            <?= ($richTextFields) ? $model->text : Yii::$app->formatter->asNtext($model->text); ?>
+        </p>
         <?php if ($model->attachments): ?>
             <div class="sa-ticket-comment-attachments d-flex align-items-center">
                 <?php foreach ($model->attachments as $attachment): ?>
