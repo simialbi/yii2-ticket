@@ -72,3 +72,50 @@ use yii\helpers\ArrayHelper;
         ]); ?>
     </div>
 </div>
+<div class="form-row">
+    <?= $form->field($model, 'on_new_ticket', [
+        'options' => [
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
+        ]
+    ])->radioList([
+        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
+        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+        '' => Yii::t('simialbi/ticket', 'Do nothing')
+    ]); ?>
+    <?= $form->field($model, 'on_ticket_update', [
+        'options' => [
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
+        ]
+    ])->radioList([
+        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
+        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+        '' => Yii::t('simialbi/ticket', 'Do nothing')
+    ]); ?>
+    <?= $form->field($model, 'on_ticket_assignment', [
+        'options' => [
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
+        ]
+    ])->radioList([
+        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
+        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+        '' => Yii::t('simialbi/ticket', 'Do nothing')
+    ]); ?>
+    <?= $form->field($model, 'on_ticket_resolution', [
+        'options' => [
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
+        ]
+    ])->radioList([
+        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
+        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+        '' => Yii::t('simialbi/ticket', 'Do nothing')
+    ]); ?>
+    <?= $form->field($model, 'on_ticket_comment', [
+        'options' => [
+            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
+        ]
+    ])->radioList([
+        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
+        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+        '' => Yii::t('simialbi/ticket', 'Do nothing')
+    ]); ?>
+</div>

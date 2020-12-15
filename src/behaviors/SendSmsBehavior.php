@@ -1,12 +1,12 @@
 <?php
 /**
  * @package yii2-ticket
- * @author Simon Karlen <simi.albi@outlook.com>
- * @copyright Copyright © 2019 Simon Karlen
+ * @author Simon Karlen <simi.albi@gmail.com>
  */
 
 namespace simialbi\yii2\ticket\behaviors;
 
+use simialbi\yii2\sms\ProviderInterface;
 use simialbi\yii2\ticket\CommentEvent;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
@@ -15,22 +15,23 @@ use Yii;
 use yii\base\Behavior;
 use yii\helpers\ArrayHelper;
 
-class SendMailBehavior extends Behavior
+class SendSmsBehavior extends Behavior
 {
     use SendBehaviorTrait;
 
     /**
-     * @var string|array|\Closure The ticket's agent's email address property (ticket as base model)
+     * @var string|array|\Closure The ticket's agent's mobile phone number property (ticket as base model)
      */
-    public $agentEmailProperty = ['agent', 'email'];
+    public $agentNumberProperty = ['agent', 'mobile'];
     /**
-     * @var string|array|\Closure The ticket's author's email address property (ticket as base model)
+     * @var string|array|\Closure The ticket's author's mobile phone number property (ticket as base model)
      */
-    public $authorEmailProperty = ['author', 'email'];
+    public $authorNumberProperty = ['author', 'number'];
     /**
-     * @var boolean If text is treated as rich text (html included)
+     * @var ProviderInterface|string the provider object or the ID of the provider application component that is
+     * used to send sms
      */
-    public $isRichText = false;
+    public $provider;
 
     /**
      * {@inheritDoc}
@@ -61,11 +62,8 @@ class SendMailBehavior extends Behavior
             ? call_user_func($this->agentsToInform, $this->owner)
             : $this->agentsToInform;
 
-        return $this->sendMail(
-            [
-                'html' => '@simialbi/yii2/ticket/mail/new-ticket-html',
-                'text' => '@simialbi/yii2/ticket/mail/new-ticket-text'
-            ],
+        return $this->sendSms(
+            '@simialbi/yii2/ticket/sms/new-ticket',
             $recipients,
             Yii::t('simialbi/ticket/mail', 'New Ticket: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, 'id'),
@@ -82,13 +80,10 @@ class SendMailBehavior extends Behavior
      */
     public function afterAssign()
     {
-        $email = ArrayHelper::getValue($this->owner, $this->agentEmailProperty);
+        $email = ArrayHelper::getValue($this->owner, $this->agentNumberProperty);
         $name = ArrayHelper::getValue($this->owner, $this->agentNameProperty, $email);
-        return $this->sendMail(
-            [
-                'html' => '@simialbi/yii2/ticket/mail/you-were-assigned-html',
-                'text' => '@simialbi/yii2/ticket/mail/you-were-assigned-text'
-            ],
+        return $this->sendSms(
+            '@simialbi/yii2/ticket/sms/you-were-assigned',
             [$email => $name],
             Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, 'id'),
@@ -108,18 +103,13 @@ class SendMailBehavior extends Behavior
     public function afterComment($event)
     {
         if (ArrayHelper::getValue($this->owner, 'created_by') == Yii::$app->user->id) {
-            $email = ArrayHelper::getValue($this->owner, $this->agentEmailProperty);
-            $name = ArrayHelper::getValue($this->owner, $this->agentNameProperty, $email);
+            $number = ArrayHelper::getValue($this->owner, $this->agentNumberProperty);
         } else {
-            $email = ArrayHelper::getValue($this->owner, $this->authorEmailProperty);
-            $name = ArrayHelper::getValue($this->owner, $this->authorNameProperty, $email);
+            $number = ArrayHelper::getValue($this->owner, $this->authorNumberProperty);
         }
-        return $this->sendMail(
-            [
-                'html' => '@simialbi/yii2/ticket/mail/new-comment-in-ticket-html',
-                'text' => '@simialbi/yii2/ticket/mail/new-comment-in-ticket-text'
-            ],
-            [$email => $name],
+        return $this->sendSms(
+            '@simialbi/yii2/ticket/sms/new-comment-in-ticket',
+            $number,
             Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, 'id'),
                 'subject' => ArrayHelper::getValue($this->owner, 'subject')
@@ -140,20 +130,12 @@ class SendMailBehavior extends Behavior
         $recipients = [];
         ArrayHelper::setValue(
             $recipients,
-            [ArrayHelper::getValue($this->owner, $this->agentEmailProperty)],
+            [ArrayHelper::getValue($this->owner, $this->agentNumberProperty)],
             ArrayHelper::getValue($this->owner, $this->agentNameProperty)
         );
-        ArrayHelper::setValue(
-            $recipients,
-            [ArrayHelper::getValue($this->owner, $this->authorEmailProperty)],
-            ArrayHelper::getValue($this->owner, $this->authorNameProperty)
-        );
-        return $this->sendMail(
-            [
-                'html' => '@simialbi/yii2/ticket/mail/ticket-resolved-html',
-                'text' => '@simialbi/yii2/ticket/mail/ticket-resolved-text'
-            ],
-            $recipients,
+        return $this->sendSms(
+            '@simialbi/yii2/ticket/sms/ticket-resolved',
+            ArrayHelper::getValue($this->owner, $this->agentNumberProperty),
             Yii::t('simialbi/ticket/mail', 'Ticket updated: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, 'id'),
                 'subject' => ArrayHelper::getValue($this->owner, 'subject')
@@ -164,19 +146,16 @@ class SendMailBehavior extends Behavior
     /**
      * Creates a new message instance and composes its body content via view rendering and send the mail.
      *
-     * @param string|array $view the view to be used for rendering the message body. This can be:
+     * @param string $view the view to be used for rendering the message body. This can be:
      *
      * - a string, which represents the view name or [path alias](guide:concept-aliases) for rendering the HTML body of the email.
      *   In this case, the text body will be generated by applying `strip_tags()` to the HTML body.
-     * - an array with 'html' and/or 'text' elements. The 'html' element refers to the view name or path alias
-     *   for rendering the HTML body, while 'text' element is for rendering the text body. For example,
-     *   `['html' => 'contact-html', 'text' => 'contact-text']`.
      * @param string|array $to receiver email address.
      * You may pass an array of addresses if multiple recipients should receive this message.
      * You may also specify receiver name in addition to email address using format:
      * `[email => name]`.
-     * @param string $subject message subject
-     * @param string|array $from sender email address.
+     * @param string|null $subject message subject
+     * @param string|array|null $from sender email address.
      * You may pass an array of addresses if this message is from multiple people.
      * You may also specify sender name in addition to email address using format:
      * `[email => name]`.
@@ -184,18 +163,18 @@ class SendMailBehavior extends Behavior
      * @return boolean
      * @throws \Exception
      */
-    protected function sendMail($view, $to, $subject, $from = null, array $params = [])
+    protected function sendSms($view, $to, $subject = null, $from = null, array $params = [])
     {
-        if (!Yii::$app->mailer) {
+        /** @var ProviderInterface $provider */
+        if (is_string($this->provider)) {
+            $provider = Yii::$app->get($this->provider, false);
+        } else {
+            $provider = $this->provider;
+        }
+        if (!$provider) {
             return false;
         }
-        if (empty($from)) {
-            $from = ArrayHelper::getValue(
-                Yii::$app->params,
-                'senderEmail',
-                ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
-            );
-        }
+
         $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
         $users = ArrayHelper::map(
             call_user_func([Yii::$app->user->identityClass, 'findIdentities']),
@@ -207,10 +186,9 @@ class SendMailBehavior extends Behavior
             'topics' => $topics,
             'users' => $users,
             'statuses' => Module::getStatuses(),
-            'priorities' => Module::getPriorities(),
-            'isRichText' => $this->isRichText
+            'priorities' => Module::getPriorities()
         ], $params);
 
-        return Yii::$app->mailer->compose($view, $params)->setFrom($from)->setTo($to)->setSubject($subject)->send();
+        return $provider->compose($view, $params)->setFrom($from)->setTo($to)->setSubject($subject)->send();
     }
 }

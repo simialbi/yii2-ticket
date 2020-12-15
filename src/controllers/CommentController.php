@@ -9,10 +9,12 @@ namespace simialbi\yii2\ticket\controllers;
 
 use simialbi\yii2\kanban\models\Task;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
+use simialbi\yii2\ticket\behaviors\SendSmsBehavior;
 use simialbi\yii2\ticket\CommentEvent;
 use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\Ticket;
+use simialbi\yii2\ticket\models\Topic;
 use simialbi\yii2\ticket\Module;
 use simialbi\yii2\ticket\TicketEvent;
 use Yii;
@@ -58,10 +60,25 @@ class CommentController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $ticket = $model->ticket;
             $ticket->setScenario(Ticket::SCENARIO_COMMENT);
-            if ($this->module->sendMails) {
+            if ($ticket->topic->on_ticket_comment === Topic::BEHAVIOR_MAIL) {
                 $ticket->attachBehavior('sendMail', [
                     'class' => SendMailBehavior::class,
                     'isRichText' => $this->module->richTextFields,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            if (!empty($agent->email)) {
+                                $recipients[$agent->email] = $agent->name;
+                            }
+                        }
+
+                        return $recipients;
+                    }
+                ]);
+            } elseif ($ticket->topic->on_ticket_comment === TOPIC::BEHAVIOR_SMS) {
+                $ticket->attachBehavior('sendSms', [
+                    'class' => SendSmsBehavior::class,
                     'agentsToInform' => function ($model) {
                         /** @var $model Ticket */
                         $recipients = [];

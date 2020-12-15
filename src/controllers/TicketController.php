@@ -9,6 +9,7 @@ namespace simialbi\yii2\ticket\controllers;
 
 use simialbi\yii2\kanban\models\TaskUserAssignment;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
+use simialbi\yii2\ticket\behaviors\SendSmsBehavior;
 use simialbi\yii2\ticket\models\Attachment;
 use simialbi\yii2\ticket\models\CreateTaskForm;
 use simialbi\yii2\ticket\models\SearchTicket;
@@ -170,23 +171,6 @@ class TicketController extends Controller
             'priority' => Ticket::PRIORITY_NORMAL,
             'created_by' => Yii::$app->user->id
         ]);
-        if ($this->module->sendMails) {
-            $model->attachBehavior('sendMail', [
-                'class' => SendMailBehavior::class,
-                'isRichText' => $this->module->richTextFields,
-                'agentsToInform' => function ($model) {
-                    /** @var $model Ticket */
-                    $recipients = [];
-                    foreach ($model->topic->agents as $agent) {
-                        if (!empty($agent->email)) {
-                            $recipients[$agent->email] = $agent->name;
-                        }
-                    }
-
-                    return $recipients;
-                }
-            ]);
-        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->topic->new_ticket_assign_to) {
@@ -194,6 +178,38 @@ class TicketController extends Controller
             }
             if ($model->topic->new_ticket_status) {
                 $model->status = $model->topic->new_ticket_status;
+            }
+            if ($model->topic->on_new_ticket === Topic::BEHAVIOR_MAIL) {
+                $model->attachBehavior('sendMail', [
+                    'class' => SendMailBehavior::class,
+                    'isRichText' => $this->module->richTextFields,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            if (!empty($agent->email)) {
+                                $recipients[$agent->email] = $agent->name;
+                            }
+                        }
+
+                        return $recipients;
+                    }
+                ]);
+            } elseif ($model->topic->on_new_ticket === Topic::BEHAVIOR_SMS) {
+                $model->attachBehavior('sendSms', [
+                    'class' => SendSmsBehavior::class,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            if (!empty($agent->email)) {
+                                $recipients[$agent->email] = $agent->name;
+                            }
+                        }
+
+                        return $recipients;
+                    }
+                ]);
             }
             if (!empty($model->dirtyAttributes)) {
                 $model->save();
@@ -242,7 +258,41 @@ class TicketController extends Controller
     {
         $model = $this->findModel($id);
 
+        if ($model->topic->on_ticket_update === Topic::BEHAVIOR_MAIL) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendMailBehavior::class,
+                'isRichText' => $this->module->richTextFields,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        } elseif ($model->topic->on_ticket_update === Topic::BEHAVIOR_SMS) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendSmsBehavior::class,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             $this->module->trigger(Module::EVENT_TICKET_UPDATED, new TicketEvent([
                 'ticket' => $model,
                 'user' => Yii::$app->user->id
@@ -278,6 +328,39 @@ class TicketController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = $model::SCENARIO_ASSIGN;
+
+        if ($model->topic->on_ticket_assignment === Topic::BEHAVIOR_MAIL) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendMailBehavior::class,
+                'isRichText' => $this->module->richTextFields,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        } elseif ($model->topic->on_ticket_assignment === Topic::BEHAVIOR_SMS) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendSmsBehavior::class,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($this->module->kanbanModule && ($task = $model->task)) {
@@ -346,6 +429,39 @@ class TicketController extends Controller
     {
         $model = $this->findModel($id);
         $model->status = Ticket::STATUS_RESOLVED;
+
+        if ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_MAIL) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendMailBehavior::class,
+                'isRichText' => $this->module->richTextFields,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        } elseif ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_SMS) {
+            $model->attachBehavior('sendMail', [
+                'class' => SendSmsBehavior::class,
+                'agentsToInform' => function ($model) {
+                    /** @var $model Ticket */
+                    $recipients = [];
+                    foreach ($model->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ]);
+        }
 
         if ($model->save()) {
             if ($this->module->kanbanModule && ($task = $model->task)) {
@@ -430,24 +546,6 @@ class TicketController extends Controller
     protected function findModel($id)
     {
         if (($model = Ticket::findOne($id)) !== null) {
-            if ($this->module->sendMails) {
-                $model->attachBehavior('sendMail', [
-                    'class' => SendMailBehavior::class,
-                    'isRichText' => $this->module->richTextFields,
-                    'agentsToInform' => function ($model) {
-                        /** @var $model Ticket */
-                        $recipients = [];
-                        foreach ($model->topic->agents as $agent) {
-                            if (!empty($agent->email)) {
-                                $recipients[$agent->email] = $agent->name;
-                            }
-                        }
-
-                        return $recipients;
-                    }
-                ]);
-            }
-
             return $model;
         } else {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));

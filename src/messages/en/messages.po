@@ -35,8 +35,8 @@ msgid "Create ticket"
 msgstr "Create ticket"
 
 msgctxt "simialbi/ticket"
-msgid "Update ticket"
-msgstr "Update ticket"
+msgid "Do nothing"
+msgstr "Do nothing"
 
 msgctxt "simialbi/ticket"
 msgid "My tickets"
@@ -59,8 +59,20 @@ msgid "Select user(s)"
 msgstr "Select user(s)"
 
 msgctxt "simialbi/ticket"
+msgid "Send SMS"
+msgstr "Send SMS"
+
+msgctxt "simialbi/ticket"
+msgid "Send mail"
+msgstr "Send mail"
+
+msgctxt "simialbi/ticket"
 msgid "Take ticket"
 msgstr "Take ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Update ticket"
+msgstr "Update ticket"
 
 msgctxt "simialbi/ticket/mail"
 msgid "Link to ticket <b>{id}</b>"
@@ -271,6 +283,10 @@ msgid "New Ticket Status"
 msgstr "New Ticket Status"
 
 msgctxt "simialbi/ticket/model/topic"
+msgid "Notification on {event}"
+msgstr "Notification on {event}"
+
+msgctxt "simialbi/ticket/model/topic"
 msgid "Status"
 msgstr "Status"
 
@@ -281,6 +297,26 @@ msgstr "Updated At"
 msgctxt "simialbi/ticket/model/topic"
 msgid "Updated By"
 msgstr "Updated By"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "new comment on ticket"
+msgstr "new comment on ticket"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "new ticket"
+msgstr "new ticket"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket assignment"
+msgstr "ticket assignment"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket resolution"
+msgstr "ticket resolution"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket update"
+msgstr "ticket resolution"
 
 msgctxt "simialbi/ticket/notification"
 msgid "Topic <b>{topic}</b> deleted"
@@ -357,4 +393,12 @@ msgstr "Topics"
 msgctxt "simialbi/ticket/topic"
 msgid "Update topic"
 msgstr "Update topic"
+
+msgctxt "yii"
+msgid "(not set)"
+msgstr ""
+
+msgctxt "yii"
+msgid "Page not found."
+msgstr ""
 
