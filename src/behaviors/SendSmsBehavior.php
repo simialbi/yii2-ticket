@@ -47,7 +47,7 @@ class SendSmsBehavior extends Behavior
     }
 
     /**
-     * Sends information mail after a ticket was created
+     * Sends information sms after a ticket was created
      *
      * @return boolean
      * @throws \Exception
@@ -73,7 +73,7 @@ class SendSmsBehavior extends Behavior
     }
 
     /**
-     * Sends an information mail to the agent which was assigned to the ticket
+     * Sends an information sms to the agent which was assigned to the ticket
      *
      * @return boolean
      * @throws \Exception
@@ -93,7 +93,7 @@ class SendSmsBehavior extends Behavior
     }
 
     /**
-     * Sends an information mail after a comment was created in a ticket
+     * Sends an information sms after a comment was created in a ticket
      *
      * @param CommentEvent $event
      *
@@ -120,7 +120,7 @@ class SendSmsBehavior extends Behavior
     }
 
     /**
-     * Sends an information mail after closing a ticket
+     * Sends an information sms after closing a ticket
      *
      * @return boolean
      * @throws \Exception
@@ -144,7 +144,7 @@ class SendSmsBehavior extends Behavior
     }
 
     /**
-     * Creates a new message instance and composes its body content via view rendering and send the mail.
+     * Creates a new message instance and composes its body content via view rendering and send the sms.
      *
      * @param string $view the view to be used for rendering the message body. This can be:
      *
