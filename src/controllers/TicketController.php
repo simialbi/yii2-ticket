@@ -275,7 +275,7 @@ class TicketController extends Controller
                 }
             ]);
         } elseif ($model->topic->on_ticket_update === Topic::BEHAVIOR_SMS) {
-            $model->attachBehavior('sendMail', [
+            $model->attachBehavior('sendSms', [
                 'class' => SendSmsBehavior::class,
                 'agentsToInform' => function ($model) {
                     /** @var $model Ticket */
@@ -346,7 +346,7 @@ class TicketController extends Controller
                 }
             ]);
         } elseif ($model->topic->on_ticket_assignment === Topic::BEHAVIOR_SMS) {
-            $model->attachBehavior('sendMail', [
+            $model->attachBehavior('sendSms', [
                 'class' => SendSmsBehavior::class,
                 'agentsToInform' => function ($model) {
                     /** @var $model Ticket */
@@ -447,7 +447,7 @@ class TicketController extends Controller
                 }
             ]);
         } elseif ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_SMS) {
-            $model->attachBehavior('sendMail', [
+            $model->attachBehavior('sendSms', [
                 'class' => SendSmsBehavior::class,
                 'agentsToInform' => function ($model) {
                     /** @var $model Ticket */
