@@ -1,0 +1,404 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "simialbi/ticket"
+msgid "Assign ticket"
+msgstr "Attribuer un ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Attachments"
+msgstr "Annexes"
+
+msgctxt "simialbi/ticket"
+msgid "Close"
+msgstr "Fermer"
+
+msgctxt "simialbi/ticket"
+msgid "Close ticket"
+msgstr "Fermer un ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Create Kanban task"
+msgstr "Créer une tâche Kanban"
+
+msgctxt "simialbi/ticket"
+msgid "Create ticket"
+msgstr "Créer un ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Do nothing"
+msgstr ""
+
+msgctxt "simialbi/ticket"
+msgid "My tickets"
+msgstr "Mes tickets"
+
+msgctxt "simialbi/ticket"
+msgid "Resolve"
+msgstr "Fermer"
+
+msgctxt "simialbi/ticket"
+msgid "Responsible agents"
+msgstr "Agents responsables"
+
+msgctxt "simialbi/ticket"
+msgid "Save"
+msgstr "Sauvegarder"
+
+msgctxt "simialbi/ticket"
+msgid "Select user(s)"
+msgstr "Sélectionnez un/des utilisateur(s)"
+
+msgctxt "simialbi/ticket"
+msgid "Send SMS"
+msgstr ""
+
+msgctxt "simialbi/ticket"
+msgid "Send mail"
+msgstr ""
+
+msgctxt "simialbi/ticket"
+msgid "Take ticket"
+msgstr "Accepter un ticket"
+
+msgctxt "simialbi/ticket"
+msgid "Update ticket"
+msgstr "Modifier un ticket"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Link to ticket <b>{id}</b>"
+msgstr "Lien vers le ticket <b>{id}</b> "
+
+msgctxt "simialbi/ticket/mail"
+msgid "New Ticket: {id} {subject}"
+msgstr "Nouveau ticket : {id} {subject}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "There is a new comment in ticket <i>{id}</i>"
+msgstr "Il y a un nouveau commentaire dans le ticket <i>{id}</i>"
+
+msgctxt "simialbi/ticket/mail"
+msgid "There is a new ticket <i>{id}</i>"
+msgstr "Il y a un nouveau ticket <i>{id}</i>"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Ticket <i>{id}</i> has been resolved"
+msgstr "Ticket résolu: <i>{id}</i>"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Ticket notification for {id}"
+msgstr "Notification du ticket pour {id}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "Ticket updated: {id} {subject}"
+msgstr "Ticket mis à jour: {id} {subject}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "You've been assigned to a ticket: {id} {subject}"
+msgstr "Un ticket vous a été assigné: {id} {subject}"
+
+msgctxt "simialbi/ticket/mail"
+msgid "You've been assigned to the ticket <b>{subject}</b> by <b>{user}</b>"
+msgstr "Un ticket vous a été assigné <b>{subject}</b> par <b>{user}</b>"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Created At"
+msgstr "Créé le"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Created By"
+msgstr "Créé par"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Mime Type"
+msgstr "Type de mime"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Path"
+msgstr "Chemin"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Size"
+msgstr "Taille"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Ticket ID"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Updated At"
+msgstr "Modifié le"
+
+msgctxt "simialbi/ticket/model/attachment"
+msgid "Updated By"
+msgstr "Modifié par"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Created At"
+msgstr "Créé le"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Created By"
+msgstr "Créé par"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Text"
+msgstr "Texte"
+
+msgctxt "simialbi/ticket/model/comment"
+msgid "Ticket ID"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/model/create-task-form"
+msgid "Bucket"
+msgstr "Bucket"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Created At"
+msgstr "Créé le"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Created By"
+msgstr "Créé par"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Updated At"
+msgstr "Modifié le"
+
+msgctxt "simialbi/ticket/model/source"
+msgid "Updated By"
+msgstr "Modifié par"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Assigned To"
+msgstr "Affecté à"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Closed At"
+msgstr "Fermé le"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Closed By"
+msgstr "Fermé par"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Created At"
+msgstr "Créé le"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Created By"
+msgstr "Créé par"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Due Date"
+msgstr "Date d'échéance"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Source ID"
+msgstr "Source"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Subject"
+msgstr "Sujet"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Topic ID"
+msgstr "Thème"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Updated At"
+msgstr "Modifié le"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Updated By"
+msgstr "Modifié par"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Created At"
+msgstr "Créé le"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Created By"
+msgstr "Créé par"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "New Ticket Assign To"
+msgstr "Attribution automatique de nouveaux tickets à"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "New Ticket Status"
+msgstr "Statut des nouveaux tickets"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Notification on {event}"
+msgstr ""
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Updated At"
+msgstr "Modifié le"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "Updated By"
+msgstr "Modifié par"
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "new comment on ticket"
+msgstr ""
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "new ticket"
+msgstr ""
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket assignment"
+msgstr ""
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket resolution"
+msgstr ""
+
+msgctxt "simialbi/ticket/model/topic"
+msgid "ticket update"
+msgstr ""
+
+msgctxt "simialbi/ticket/notification"
+msgid "Topic <b>{topic}</b> deleted"
+msgstr "Le thème <b>{topic}</b> a été supprimé"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Emergency"
+msgstr "Urgence"
+
+msgctxt "simialbi/ticket/priority"
+msgid "High"
+msgstr "Haut"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Low"
+msgstr "Bas"
+
+msgctxt "simialbi/ticket/priority"
+msgid "Normal"
+msgstr "Normal"
+
+msgctxt "simialbi/ticket/source"
+msgid "Email"
+msgstr "E-Mail"
+
+msgctxt "simialbi/ticket/source"
+msgid "Other"
+msgstr "Autres"
+
+msgctxt "simialbi/ticket/source"
+msgid "Phone"
+msgstr "Téléphone"
+
+msgctxt "simialbi/ticket/source"
+msgid "Ticket"
+msgstr "Ticket"
+
+msgctxt "simialbi/ticket/status"
+msgid "Assigned"
+msgstr "Attribué"
+
+msgctxt "simialbi/ticket/status"
+msgid "In progress"
+msgstr "En cours"
+
+msgctxt "simialbi/ticket/status"
+msgid "Late"
+msgstr "En retard"
+
+msgctxt "simialbi/ticket/status"
+msgid "Open"
+msgstr "Ouvert"
+
+msgctxt "simialbi/ticket/status"
+msgid "Resolved"
+msgstr "Résolu"
+
+msgctxt "simialbi/ticket/ticket/notification"
+msgid "Failed to create linked task for ticket <b>{name}</b>"
+msgstr "Erreur lors de la création d'une tâche liée pour le ticket <b>{name}</b>"
+
+msgctxt "simialbi/ticket/ticket/notification"
+msgid "Linked task for ticket <b>{name}</b> created"
+msgstr "Une tâche liée a été créée pour le ticket <b>{name}</b>"
+
+msgctxt "simialbi/ticket/topic"
+msgid "Create topic"
+msgstr "Créer un thème"
+
+msgctxt "simialbi/ticket/topic"
+msgid "Topics"
+msgstr "Thèmes"
+
+msgctxt "simialbi/ticket/topic"
+msgid "Update topic"
+msgstr "Modifier le thème"
+
+msgctxt "yii"
+msgid "(not set)"
+msgstr ""
+
+msgctxt "yii"
+msgid "Page not found."
+msgstr ""
+
