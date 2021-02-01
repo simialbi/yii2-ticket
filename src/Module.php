@@ -40,6 +40,12 @@ class Module extends \simialbi\yii2\base\Module
     public $richTextFields = false;
 
     /**
+     * @var \simialbi\yii2\sms\ProviderInterface|string|array the provider object or the ID of the provider application
+     * component that is used to send sms
+     */
+    public $smsProvider;
+
+    /**
      * {@inheritDoc}
      * @throws \ReflectionException
      * @throws InvalidConfigException
@@ -70,6 +76,10 @@ class Module extends \simialbi\yii2\base\Module
         } elseif (is_array($this->kanbanModule) && isset($this->kanbanModule['class'])) {
             $this->setModule('kanban', $this->kanbanModule);
             $this->kanbanModule = $this->id . '/kanban';
+        }
+        if (is_array($this->smsProvider) && isset($this->smsProvider['class'])) {
+            $this->setModule('ticketSmsProvider', $this->smsProvider);
+            $this->smsProvider = 'ticketSmsProvider';
         }
 
         parent::init();

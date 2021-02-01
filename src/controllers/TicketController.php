@@ -208,7 +208,8 @@ class TicketController extends Controller
                         }
 
                         return $recipients;
-                    }
+                    },
+                    'provider' => $this->module->smsProvider
                 ]);
             }
             if (!empty($model->dirtyAttributes)) {
@@ -287,7 +288,8 @@ class TicketController extends Controller
                     }
 
                     return $recipients;
-                }
+                },
+                'provider' => $this->module->smsProvider
             ]);
         }
 
@@ -358,7 +360,8 @@ class TicketController extends Controller
                     }
 
                     return $recipients;
-                }
+                },
+                'provider' => $this->module->smsProvider
             ]);
         }
 
@@ -459,7 +462,8 @@ class TicketController extends Controller
                     }
 
                     return $recipients;
-                }
+                },
+                'provider' => $this->module->smsProvider
             ]);
         }
 

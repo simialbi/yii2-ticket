@@ -89,7 +89,8 @@ class CommentController extends Controller
                         }
 
                         return $recipients;
-                    }
+                    },
+                    'provider' => $this->module->smsProvider
                 ]);
             }
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
