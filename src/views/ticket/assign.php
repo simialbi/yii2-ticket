@@ -50,7 +50,7 @@ Pjax::begin([
                 'clientOptions' => [
                     'format' => 'd.m.Y',
                     'large' => true,
-                    'minDate' => Yii::$app->formatter->asDate('today', 'MM/dd/yyyy')
+                    'minDate' => Yii::$app->formatter->asDate(($model->due_date) ? $model->due_date : 'today', 'MM/dd/yyyy')
                 ]
             ]); ?>
             <?= $form->field($model, 'assignment_comment')->textarea(); ?>

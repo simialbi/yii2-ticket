@@ -346,6 +346,9 @@ class TicketController extends Controller
     public function actionAssign($id)
     {
         $model = $this->findModel($id);
+        if ($model->due_date) {
+            $model->due_date = Yii::$app->formatter->asDate($model->due_date, 'dd.MM.yyyy');
+        }
         $model->scenario = $model::SCENARIO_ASSIGN;
 
         if ($model->topic->on_ticket_assignment === Topic::BEHAVIOR_MAIL) {
