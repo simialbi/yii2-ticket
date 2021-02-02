@@ -80,11 +80,11 @@ class SendSmsBehavior extends Behavior
      */
     public function afterAssign()
     {
-        $email = ArrayHelper::getValue($this->owner, $this->agentNumberProperty);
-        $name = ArrayHelper::getValue($this->owner, $this->agentNameProperty, $email);
+        $number = ArrayHelper::getValue($this->owner, $this->agentNumberProperty);
+
         return $this->sendSms(
             '@simialbi/yii2/ticket/sms/you-were-assigned',
-            [$email => $name],
+            $number,
             Yii::t('simialbi/ticket/mail', 'You\'ve been assigned to a ticket: {id} {subject}', [
                 'id' => ArrayHelper::getValue($this->owner, 'id'),
                 'subject' => ArrayHelper::getValue($this->owner, 'subject')
@@ -127,12 +127,6 @@ class SendSmsBehavior extends Behavior
      */
     public function afterClose()
     {
-        $recipients = [];
-        ArrayHelper::setValue(
-            $recipients,
-            [ArrayHelper::getValue($this->owner, $this->agentNumberProperty)],
-            ArrayHelper::getValue($this->owner, $this->agentNameProperty)
-        );
         return $this->sendSms(
             '@simialbi/yii2/ticket/sms/ticket-resolved',
             ArrayHelper::getValue($this->owner, $this->agentNumberProperty),

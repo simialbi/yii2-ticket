@@ -14,4 +14,6 @@ echo Yii::t('simialbi/ticket/mail', 'Ticket notification for {id}', [
 
 <?= strip_tags(Yii::t('simialbi/ticket/mail', 'There is a new ticket <i>{id}</i>', [
     'id' => $model->id
-]));
+])); ?>
+
+<?= strip_tags(preg_replace('#</p><p>|<br ?/?>#g', "\n", $model->description));
