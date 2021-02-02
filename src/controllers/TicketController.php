@@ -101,6 +101,24 @@ class TicketController extends Controller
     }
 
     /**
+     * Finds the model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
+     * @param integer $id
+     *
+     * @return Ticket the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Ticket::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        }
+    }
+
+    /**
      * @return string
      */
     public function actionIndex()
@@ -172,7 +190,7 @@ class TicketController extends Controller
             'created_by' => Yii::$app->user->id
         ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->topic->new_ticket_assign_to) {
                 $model->assigned_to = $model->topic->new_ticket_assign_to;
             }
@@ -212,9 +230,7 @@ class TicketController extends Controller
                     'provider' => $this->module->smsProvider
                 ]);
             }
-            if (!empty($model->dirtyAttributes)) {
-                $model->save();
-            }
+            $model->save();
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
 
             if (!empty($attachments)) {
@@ -294,7 +310,6 @@ class TicketController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
             $this->module->trigger(Module::EVENT_TICKET_UPDATED, new TicketEvent([
                 'ticket' => $model,
                 'user' => Yii::$app->user->id
@@ -536,23 +551,5 @@ class TicketController extends Controller
             'model' => $model,
             'buckets' => $buckets
         ]);
-    }
-
-    /**
-     * Finds the model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param integer $id
-     *
-     * @return Ticket the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Ticket::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-        }
     }
 }
