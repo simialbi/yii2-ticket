@@ -307,7 +307,7 @@ $this->params['breadcrumbs'] = [$this->title];
                     },
                     'create-task' => function ($model) use ($hasKanban) {
                         /* @var $model \simialbi\yii2\ticket\models\Ticket */
-                        return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('updateTicket', ['ticket' => $model]);
+                        return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('ticketAgent');
                     },
                     'close' => function ($model) {
                         return Yii::$app->user->can('closeTicket', ['ticket' => $model]);

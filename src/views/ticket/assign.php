@@ -2,6 +2,7 @@
 
 use kartik\select2\Select2;
 use rmrevin\yii\fontawesome\FAS;
+use simialbi\yii2\datedropper\Datedropper;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\widgets\Pjax;
@@ -44,7 +45,15 @@ Pjax::begin([
                 'pluginOptions' => [
                     'allowClear' => false
                 ]
-            ]) ?>
+            ]); ?>
+            <?= $form->field($model, 'due_date')->widget(Datedropper::class, [
+                'clientOptions' => [
+                    'format' => 'd.m.Y',
+                    'large' => true,
+                    'minDate' => Yii::$app->formatter->asDate('today', 'MM/dd/yyyy')
+                ]
+            ]); ?>
+            <?= $form->field($model, 'assignment_comment')->textarea(); ?>
         </div>
         <div class="modal-footer">
             <?= Html::button(Yii::t('simialbi/ticket', 'Close'), [

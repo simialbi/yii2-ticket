@@ -10,6 +10,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\AfterSaveEvent;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "{{%ticket_ticket}}".
@@ -21,6 +22,7 @@ use yii\db\AfterSaveEvent;
  * @property string $subject
  * @property string $description
  * @property integer $due_date
+ * @property string $assignment_comment
  * @property integer $status
  * @property integer $priority
  * @property string $created_by
@@ -35,6 +37,7 @@ use yii\db\AfterSaveEvent;
  * @property-read \simialbi\yii2\models\UserInterface $author
  * @property-read \simialbi\yii2\models\UserInterface $agent
  * @property-read \simialbi\yii2\models\UserInterface $referrer
+ * @property-read array $history
  * @property-read Comment $solution
  * @property-read Attachment[] $attachments
  * @property-read Comment[] $comments
@@ -78,8 +81,8 @@ class Ticket extends ActiveRecord
     public function rules()
     {
         return [
-            [['source_id', 'topic_id', 'due_date', 'status', 'priority'], 'integer'],
-            ['description', 'string'],
+            [['source_id', 'topic_id', 'status', 'priority'], 'integer'],
+            [['description', 'assignment_comment'], 'string'],
             ['assigned_to', 'string', 'max' => 64],
             ['subject', 'string', 'max' => 255],
             [
@@ -112,8 +115,9 @@ class Ticket extends ActiveRecord
                     self::STATUS_RESOLVED
                 ]
             ],
+            ['due_date', 'date', 'format' => 'dd.MM.yyyy', 'timestampAttribute' => 'due_date'],
 
-            [['assigned_to', 'due_date'], 'default'],
+            [['assigned_to', 'due_date', 'assignment_comment'], 'default'],
             ['status', 'default', 'value' => $this->topic ? $this->topic->new_ticket_status : self::STATUS_OPEN],
             ['priority', 'default', 'value' => self::PRIORITY_NORMAL],
             ['status', 'default', 'value' => self::STATUS_IN_PROGRESS, 'on' => self::SCENARIO_COMMENT],
@@ -182,6 +186,7 @@ class Ticket extends ActiveRecord
             'subject' => Yii::t('simialbi/ticket/model/ticket', 'Subject'),
             'description' => Yii::t('simialbi/ticket/model/ticket', 'Description'),
             'due_date' => Yii::t('simialbi/ticket/model/ticket', 'Due Date'),
+            'assignment_comment' => Yii::t('simialbi/ticket/model/ticket', 'Assignment comment'),
             'status' => Yii::t('simialbi/ticket/model/ticket', 'Status'),
             'priority' => Yii::t('simialbi/ticket/model/ticket', 'Priority'),
             'created_by' => Yii::t('simialbi/ticket/model/ticket', 'Created By'),
@@ -189,6 +194,7 @@ class Ticket extends ActiveRecord
             'closed_by' => Yii::t('simialbi/ticket/model/ticket', 'Closed By'),
             'created_at' => Yii::t('simialbi/ticket/model/ticket', 'Created At'),
             'updated_at' => Yii::t('simialbi/ticket/model/ticket', 'Updated At'),
+            'assigned_at' => Yii::t('simialbi/ticket/model/comment', 'Assigned At'),
             'closed_at' => Yii::t('simialbi/ticket/model/ticket', 'Closed At')
         ];
     }
@@ -352,6 +358,62 @@ class Ticket extends ActiveRecord
     public function getReferrer()
     {
         return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->assigned_by);
+    }
+
+    /**
+     *
+     */
+    public function getHistory()
+    {
+        $history = $this->getComments()->indexBy('created_at')->all();
+        $history[$this->created_at] = Yii::t(
+            'simialbi/ticket/history',
+            '{user} created the ticket',
+            [
+                'user' => $this->author->name
+            ]
+        );
+        if (isset($this->assigned_at)) {
+            if ($this->assigned_to === $this->assigned_by) {
+                $history[$this->assigned_at] = Yii::t(
+                    'simialbi/ticket/history',
+                    '{agent} took ticket at {assigned_at,date} {assigned_at,time}',
+                    [
+                        'agent' => $this->agent->name,
+                        'assigned_at' => $this->assigned_at
+                    ]
+                );
+            } else {
+                $msg = Yii::t(
+                    'simialbi/ticket/history',
+                    '{referrer} assigned {agent} to the ticket at {assigned_at,date} {assigned_at,time}',
+                    [
+                        'referrer' => $this->referrer->name,
+                        'agent' => $this->agent->name,
+                        'assigned_at' => $this->assigned_at
+                    ]
+                );
+                if ($this->assignment_comment && $this->assigned_to == Yii::$app->user->id) {
+                    $msg .= Html::tag('br') . "\n";
+                    $msg .= Html::tag('em', $this->assignment_comment, ['class' => 'small']);
+                }
+                $history[$this->assigned_to] = $msg;
+            }
+        }
+        if ($this->closed_at) {
+            $history[$this->closed_at] = Yii::t(
+                'simialbi/ticket/history',
+                '{agent} closed ticket at {closed_at,date} {closed_at,time}',
+                [
+                    'agent' => $this->agent->name,
+                    'closed_at' => $this->closed_at
+                ]
+            );
+        }
+
+        krsort($history);
+
+        return $history;
     }
 
     /**

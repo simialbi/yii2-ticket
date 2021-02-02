@@ -153,13 +153,15 @@ class CommentController extends Controller
                 'ticket' => $model->ticket,
                 'newComment' => new Comment([
                     'ticket_id' => $model->ticket_id
-                ])
+                ]),
+                'richTextFields' => $this->module->richTextFields
             ]);
         }
 
         return $this->renderAjax('ticket-comments', [
             'ticket' => $model->ticket,
-            'newComment' => $model
+            'newComment' => $model,
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 }

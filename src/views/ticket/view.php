@@ -3,12 +3,16 @@
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
+use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
 
 /* @var $this \yii\web\View */
 /* @var $model \simialbi\yii2\ticket\models\Ticket */
 /* @var $richTextFields boolean */
+/* @var $statuses array */
+/* @var $priorities array */
 
-$this->title = $model->subject;
+$this->title = $model->id . ': ' . $model->subject;
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('simialbi/ticket', 'My tickets'),
@@ -50,6 +54,36 @@ $this->params['breadcrumbs'] = [
             </div>
         </div>
         <div class="col-12 col-lg-4 mt-3 mt-lg-0">
+            <div class="card mb-3">
+                <div class="card-header d-flex align-items-center text-gray">
+                    <?= FAS::i('sliders-h', ['class' => 'mb-0', 'style' => ['font-size' => '20px', 'height' => '20px']]); ?>
+                    <span class="h5 mb-0 ml-3"><?= Yii::t('simialbi/ticket', 'Properties'); ?></span>
+                </div>
+                <?php $attributes = [
+                    [
+                        'attribute' => 'assigned_to',
+                        'value' => $model->agent ? $model->agent->name : null
+                    ],
+                    [
+                        'attribute' => 'priority',
+                        'value' => ArrayHelper::getValue($priorities, $model->priority)
+                    ],
+                    [
+                        'attribute' => 'status',
+                        'value' => ArrayHelper::getValue($statuses, $model->status)
+                    ]
+                ]; ?>
+                <?php if (Yii::$app->user->can('ticketAgent') && $model->assigned_to == Yii::$app->user->id) {
+                    $attributes[] = 'due_date:date';
+                } ?>
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'options' => [
+                        'class' => ['table', 'table-striped', 'm-0']
+                    ],
+                    'attributes' => $attributes
+                ]); ?>
+            </div>
             <div class="card">
                 <div class="card-header d-flex align-items-center text-gray">
                     <?= FAS::i('file', ['class' => 'mb-0', 'style' => ['font-size' => '20px', 'height' => '20px']]); ?>

@@ -173,7 +173,9 @@ class TicketController extends Controller
         return $this->render('view', [
             'model' => $model,
             'hasKanban' => (boolean)$this->module->kanbanModule,
-            'richTextFields' => $this->module->richTextFields
+            'richTextFields' => $this->module->richTextFields,
+            'statuses' => Module::getStatuses(),
+            'priorities' => Module::getPriorities()
         ]);
     }
 
@@ -394,7 +396,7 @@ class TicketController extends Controller
                 'user' => $model->agent
             ]));
 
-            return $this->redirect(['index']);
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
@@ -416,6 +418,7 @@ class TicketController extends Controller
         $model = $this->findModel($id);
 
         $model->assigned_to = (string)Yii::$app->user->id;
+        $model->status = Ticket::STATUS_ASSIGNED;
         if ($model->save()) {
             if ($this->module->kanbanModule && ($task = $model->task)) {
                 $assignment = new TaskUserAssignment([
@@ -431,7 +434,8 @@ class TicketController extends Controller
             'user' => $model->agent
         ]));
 
-        return $this->redirect(['index']);
+//        return $this->goBack();
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

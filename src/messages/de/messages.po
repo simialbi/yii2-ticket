@@ -43,6 +43,10 @@ msgid "My tickets"
 msgstr "Meine Tickets"
 
 msgctxt "simialbi/ticket"
+msgid "Properties"
+msgstr "Eigenschaften"
+
+msgctxt "simialbi/ticket"
 msgid "Resolve"
 msgstr "Schliessen"
 
@@ -73,6 +77,22 @@ msgstr "Ticket übernehmen"
 msgctxt "simialbi/ticket"
 msgid "Update ticket"
 msgstr "Ticket bearbeiten"
+
+msgctxt "simialbi/ticket/history"
+msgid "{agent} closed ticket at {closed_at,date} {closed_at,time}"
+msgstr "{agent} hat das Ticket geschlossen am {closed_at,date,dd.MM.yyyy} {closed_at,time,HH:mm}"
+
+msgctxt "simialbi/ticket/history"
+msgid "{agent} took ticket at {assigned_at,date} {assigned_at,time}"
+msgstr "{agent} hat das Ticket übernommen am {assigned_at,date,dd.MM.yyyy} {assigned_at,time,HH:mm}"
+
+msgctxt "simialbi/ticket/history"
+msgid "{referrer} assigned {agent} to the ticket at {assigned_at,date} {assigned_at,time}"
+msgstr "{referrer} hat das Ticket {agent} zugewiesen am {assigned_at,date,dd.MM.yyyy} {assigned_at,time,HH:mm}"
+
+msgctxt "simialbi/ticket/history"
+msgid "{user} created the ticket"
+msgstr "{user} hat das Ticket erstellt"
 
 msgctxt "simialbi/ticket/mail"
 msgid "Link to ticket <b>{id}</b>"
@@ -151,6 +171,10 @@ msgid "Updated By"
 msgstr "Bearbeitet von"
 
 msgctxt "simialbi/ticket/model/comment"
+msgid "Assigned At"
+msgstr "Zugewiesen am"
+
+msgctxt "simialbi/ticket/model/comment"
 msgid "Created At"
 msgstr "Erstellt am"
 
@@ -201,6 +225,10 @@ msgstr "Bearbeitet von"
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Assigned To"
 msgstr "Zugewiesen an"
+
+msgctxt "simialbi/ticket/model/ticket"
+msgid "Assignment comment"
+msgstr "Kommentar"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Closed At"
@@ -393,12 +421,4 @@ msgstr "Themen"
 msgctxt "simialbi/ticket/topic"
 msgid "Update topic"
 msgstr "Thema bearbeiten"
-
-msgctxt "yii"
-msgid "(not set)"
-msgstr ""
-
-msgctxt "yii"
-msgid "Page not found."
-msgstr ""
 

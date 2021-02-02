@@ -16,7 +16,7 @@ Pjax::begin([
     ]
 ]);
 ?>
-    <div class="sa-ticket-ticket-comments">
+    <div class="sa-ticket-ticket-comments d-flex flex-column">
         <?php if (Yii::$app->user->can('updateTicket', ['ticket' => $ticket])): ?>
             <div class="sa-comment-create">
                 <?= $this->render('_form', [
@@ -28,12 +28,16 @@ Pjax::begin([
         <?php endif; ?>
 
         <?php $i = 0; ?>
-        <?php foreach ($ticket->comments as $comment): ?>
-            <?= $this->render('_comment', [
-                'model' => $comment,
-                'index' => $i++,
-                'richTextFields' => $richTextFields
-            ]); ?>
+        <?php foreach ($ticket->history as $item): ?>
+            <?php if (is_string($item)): ?>
+                <div class="alert alert-info m-2 text-center w-75 align-self-center"><?= $item; ?></div>
+            <?php else: ?>
+                <?= $this->render('_comment', [
+                    'model' => $item,
+                    'index' => $i++,
+                    'richTextFields' => $richTextFields
+                ]); ?>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php

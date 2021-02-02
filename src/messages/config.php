@@ -32,9 +32,8 @@ return [
         '*.php',
     ],
     'format' => 'po',
-    'db' => 'db',
     'catalog' => 'messages',
-    'ignoreCategories' => [],
+    'ignoreCategories' => ['yii'],
     'phpFileHeader' => '',
     'phpDocBlock' => null,
 ];
