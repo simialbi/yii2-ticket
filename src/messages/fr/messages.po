@@ -36,7 +36,7 @@ msgstr "Créer un ticket"
 
 msgctxt "simialbi/ticket"
 msgid "Do nothing"
-msgstr "Ne rien faire"
+msgstr "Aucun notification"
 
 msgctxt "simialbi/ticket"
 msgid "My tickets"
@@ -52,7 +52,7 @@ msgstr "Fermer"
 
 msgctxt "simialbi/ticket"
 msgid "Responsible agents"
-msgstr "Agents responsables"
+msgstr "Responsables"
 
 msgctxt "simialbi/ticket"
 msgid "Save"
@@ -64,11 +64,11 @@ msgstr "Sélectionnez utilisateur(s)"
 
 msgctxt "simialbi/ticket"
 msgid "Send SMS"
-msgstr "Envoi SMS"
+msgstr "Envoi par SMS"
 
 msgctxt "simialbi/ticket"
 msgid "Send mail"
-msgstr "Envoi mail"
+msgstr "Envoi par mail"
 
 msgctxt "simialbi/ticket"
 msgid "Take ticket"
@@ -312,7 +312,7 @@ msgstr "Statut des nouveaux tickets"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "Notification on {event}"
-msgstr "Notification de {event}"
+msgstr "Notification {event}"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "Status"
@@ -328,23 +328,23 @@ msgstr "Modifié par"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "new comment on ticket"
-msgstr "Nouveau commentaire d'un ticket"
+msgstr "d'un nouveau commentaire du ticket"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "new ticket"
-msgstr "Nouveau ticket"
+msgstr "du nouveau ticket"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "ticket assignment"
-msgstr "Ticket attitré"
+msgstr "de l'attribution du ticket"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "ticket resolution"
-msgstr "Résolution ticket"
+msgstr "de la résolution ticket"
 
 msgctxt "simialbi/ticket/model/topic"
 msgid "ticket update"
-msgstr "Mise à jour ticket"
+msgstr "de la mise à jour ticket"
 
 msgctxt "simialbi/ticket/notification"
 msgid "Topic <b>{topic}</b> deleted"
