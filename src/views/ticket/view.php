@@ -73,8 +73,12 @@ $this->params['breadcrumbs'] = [
                         'value' => ArrayHelper::getValue($statuses, $model->status)
                     ]
                 ]; ?>
-                <?php if (Yii::$app->user->can('ticketAgent') && $model->assigned_to == Yii::$app->user->id) {
+                <?php
+                if (Yii::$app->user->can('ticketAgent') &&
+                    ($model->assigned_to == Yii::$app->user->id || $model->assigned_by == Yii::$app->user->id)
+                ) {
                     $attributes[] = 'due_date:date';
+                    $attributes[] = 'assignment_comment:ntext';
                 } ?>
                 <?= DetailView::widget([
                     'model' => $model,
@@ -132,7 +136,11 @@ $this->params['breadcrumbs'] = [
                 </figure>
             </div>
             <div class="card-body">
-                <p class="card-text"><?= Yii::$app->formatter->asNtext($model->description); ?></p>
+                <?= preg_replace(
+                    '#<p[^>]*>#g',
+                    '<p class="card-text">',
+                    ($richTextFields) ? $model->solution->text : Yii::$app->formatter->asParagraphs($model->solution->text)
+                ); ?>
             </div>
         </div>
     <?php endif; ?>
