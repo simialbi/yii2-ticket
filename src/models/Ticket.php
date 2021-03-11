@@ -37,6 +37,7 @@ use yii\helpers\Html;
  * @property-read \simialbi\yii2\models\UserInterface $author
  * @property-read \simialbi\yii2\models\UserInterface $agent
  * @property-read \simialbi\yii2\models\UserInterface $referrer
+ * @property-read \simialbi\yii2\models\UserInterface $closer
  * @property-read array $history
  * @property-read Comment $solution
  * @property-read Attachment[] $attachments
@@ -361,6 +362,15 @@ class Ticket extends ActiveRecord
     }
 
     /**
+     * Get user who closed the ticket
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getCloser()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->closed_by);
+    }
+
+    /**
      *
      */
     public function getHistory()
@@ -405,7 +415,7 @@ class Ticket extends ActiveRecord
                 'simialbi/ticket/history',
                 '{agent} closed ticket at {closed_at,date} {closed_at,time}',
                 [
-                    'agent' => $this->agent->name,
+                    'agent' => $this->closer->name,
                     'closed_at' => $this->closed_at
                 ]
             );
