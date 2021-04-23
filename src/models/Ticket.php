@@ -124,6 +124,7 @@ class Ticket extends ActiveRecord
             ['status', 'default', 'value' => self::STATUS_IN_PROGRESS, 'on' => self::SCENARIO_COMMENT],
 
             ['created_by', 'safe'],
+            ['assigned_to', 'safe'],
 
             [['source_id', 'topic_id', 'subject', 'description'], 'required'],
             ['assigned_to', 'required', 'on' => self::SCENARIO_ASSIGN],
@@ -383,7 +384,7 @@ class Ticket extends ActiveRecord
                 'user' => $this->author->name
             ]
         );
-        if (isset($this->assigned_at)) {
+        if (isset($this->assigned_at) && isset($this->assigned_to)) {
             if ($this->assigned_to === $this->assigned_by) {
                 $history[$this->assigned_at] = Yii::t(
                     'simialbi/ticket/history',

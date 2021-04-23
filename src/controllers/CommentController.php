@@ -96,6 +96,11 @@ class CommentController extends Controller
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
 
             $ticket->load(Yii::$app->request->post());
+            if (!$ticket->assigned_to) {
+                if (array_key_exists(Yii::$app->user->id, $ticket->topic->agents)) {
+                    $ticket->assigned_to = (string)Yii::$app->user->id;
+                }
+            }
 
             $isResolved = false;
             if ((int)$ticket->status === Ticket::STATUS_RESOLVED && $ticket->isAttributeChanged('status')) {
