@@ -17,6 +17,7 @@ use yii\helpers\ArrayHelper;
  * @property string $name
  * @property string $new_ticket_assign_to
  * @property integer $new_ticket_status
+ * @property string $template
  * @property boolean $status
  * @property string $on_new_ticket
  * @property string $on_ticket_update
@@ -57,7 +58,8 @@ class Topic extends ActiveRecord
             ['new_ticket_status', 'default', 'value' => Ticket::STATUS_OPEN],
             ['name', 'string', 'max' => 255],
             ['new_ticket_assign_to', 'string', 'max' => 64],
-            ['new_ticket_assign_to', 'default'],
+            ['template', 'string'],
+            [['new_ticket_assign_to', 'template'], 'default'],
             ['status', 'boolean'],
             ['status', 'default', 'value' => true],
             [
@@ -108,6 +110,7 @@ class Topic extends ActiveRecord
             'name' => Yii::t('simialbi/ticket/model/topic', 'Name'),
             'new_ticket_assign_to' => Yii::t('simialbi/ticket/model/topic', 'New Ticket Assign To'),
             'new_ticket_status' => Yii::t('simialbi/ticket/model/topic', 'New Ticket Status'),
+            'template' => Yii::t('simialbi/ticket/model/topic', 'Template'),
             'status' => Yii::t('simialbi/ticket/model/topic', 'Status'),
             'on_new_ticket' => Yii::t(
                 'simialbi/ticket/model/topic',

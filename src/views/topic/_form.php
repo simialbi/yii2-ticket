@@ -1,6 +1,7 @@
 <?php
 
 use kartik\select2\Select2;
+use marqu3s\summernote\Summernote;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
@@ -9,6 +10,7 @@ use yii\helpers\ArrayHelper;
 /* @var $model \simialbi\yii2\ticket\models\Topic */
 /* @var $users array */
 /* @var $statuses array */
+/* @var $richTextFields boolean */
 
 ?>
 
@@ -71,6 +73,41 @@ use yii\helpers\ArrayHelper;
             ]
         ]); ?>
     </div>
+</div>
+<div class="form-row">
+    <?php if ($richTextFields): ?>
+        <?= $form->field($model, 'template', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->widget(Summernote::class, [
+            'clientOptions' => [
+                'styleTags' => [
+                    'p',
+                    [
+                        'title' => 'blockquote',
+                        'tag' => 'blockquote',
+                        'className' => 'blockquote',
+                        'value' => 'blockquote'
+                    ],
+                    'pre'
+                ],
+                'toolbar' => new \yii\helpers\ReplaceArrayValue([
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough']],
+                    ['script', ['subscript', 'superscript']],
+                    ['list', ['ol', 'ul']],
+                    ['clear', ['clear']]
+                ])
+            ]
+        ]); ?>
+    <?php else: ?>
+        <?= $form->field($model, 'template', [
+            'options' => [
+                'class' => ['form-group', 'col-12']
+            ]
+        ])->textarea(['rows' => 5]); ?>
+    <?php endif; ?>
 </div>
 <div class="form-row">
     <?= $form->field($model, 'on_new_ticket', [

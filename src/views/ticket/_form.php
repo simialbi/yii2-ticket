@@ -2,11 +2,15 @@
 
 use kartik\select2\Select2;
 use marqu3s\summernote\Summernote;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Json;
+use yii\helpers\ReplaceArrayValue;
 
 /* @var $this \yii\web\View */
 /* @var $form \yii\bootstrap4\ActiveForm */
 /* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $topics array */
+/* @var $topics \simialbi\yii2\ticket\models\Topic[] */
 /* @var $priorities array */
 /* @var $users array */
 /* @var $richTextFields boolean */
@@ -19,7 +23,7 @@ echo $form->errorSummary($model); ?>
             'class' => ['form-group', 'col-12', 'col-sm-6', $isAgent ? 'col-lg-4' : '']
         ]
     ])->widget(Select2::class, [
-        'data' => $topics,
+        'data' => ArrayHelper::map($topics, 'id', 'name'),
         'theme' => Select2::THEME_KRAJEE_BS4,
         'bsVersion' => 4,
         'pluginOptions' => [
@@ -78,7 +82,7 @@ echo $form->errorSummary($model); ?>
                     ],
                     'pre'
                 ],
-                'toolbar' => new \yii\helpers\ReplaceArrayValue([
+                'toolbar' => new ReplaceArrayValue([
                     ['style', ['style']],
                     ['font', ['bold', 'italic', 'underline', 'strikethrough']],
                     ['script', ['subscript', 'superscript']],
@@ -95,3 +99,28 @@ echo $form->errorSummary($model); ?>
         ])->textarea(['rows' => 5]); ?>
     <?php endif; ?>
 </div>
+<?php
+$selectId = Html::getInputId($model, 'topic_id');
+$textAreaId = Html::getInputId($model, 'description');
+$jsTopics = Json::encode(ArrayHelper::map($topics, 'id', 'template'));
+$js = <<<JS
+var topics = $jsTopics;
+jQuery('#$selectId').on('change.sa-ticket', function () {
+    var \$this = jQuery(this);
+    if (topics[\$this.val()]) {
+        if ($richTextFields) {
+            jQuery('#$textAreaId').summernote('reset');
+            jQuery('#$textAreaId').summernote('code', topics[\$this.val()]);
+        } else {
+            jQuery('#$textAreaId').val(topics[\$this.val()]);
+        }
+    } else {
+        if ($richTextFields) {
+            jQuery('#$textAreaId').summernote('reset');
+        } else {
+            jQuery('#$textAreaId').val('');
+        }
+    }
+}).trigger('change');
+JS;
+$this->registerJs($js);

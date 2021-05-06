@@ -250,12 +250,7 @@ class TicketController extends Controller
             return $this->redirect(['index']);
         }
 
-        $topics = Topic::find()->select([
-            'name',
-            'id'
-        ])->orderBy([
-            'name' => SORT_ASC
-        ])->indexBy('id')->column();
+        $topics = Topic::find()->orderBy(['name' => SORT_ASC])->where(['status' => true])->all();
         $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
 
         return $this->render('create', [
@@ -320,12 +315,7 @@ class TicketController extends Controller
             return $this->redirect(['index']);
         }
 
-        $topics = Topic::find()->select([
-            'name',
-            'id'
-        ])->orderBy([
-            'name' => SORT_ASC
-        ])->indexBy('id')->column();
+        $topics = Topic::find()->orderBy(['name' => SORT_ASC])->where(['status' => true])->all();
         $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
 
         return $this->render('update', [

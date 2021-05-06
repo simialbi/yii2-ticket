@@ -23,14 +23,17 @@ class SearchTopic extends Topic
         return [
             ['new_ticket_status', 'integer'],
             ['name', 'string', 'max' => 255],
+            ['template', 'string'],
             [['new_ticket_assign_to', 'created_by', 'updated_by'], 'string', 'max' => 64],
             ['status', 'boolean'],
             ['created_at', 'datetime', 'timestampAttribute' => 'created_at'],
             ['updated_at', 'datetime', 'timestampAttribute' => 'updated_at']
         ];
-    }/**
- * {@inheritDoc}
- */
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function scenarios()
     {
         return Model::scenarios();
@@ -74,7 +77,8 @@ class SearchTopic extends Topic
             'updated_at' => $this->updated_at
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'template', $this->template]);
 
         return $dataProvider;
     }

@@ -17,6 +17,12 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class TopicController
+ * @package simialbi\yii2\ticket\controllers
+ *
+ * @property-read Module $module
+ */
 class TopicController extends Controller
 {
     /**
@@ -85,7 +91,8 @@ class TopicController extends Controller
         return $this->render('create', [
             'model' => $model,
             'users' => $users,
-            'statuses' => Module::getStatuses()
+            'statuses' => Module::getStatuses(),
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 
@@ -124,7 +131,8 @@ class TopicController extends Controller
         return $this->render('update', [
             'model' => $model,
             'users' => $users,
-            'statuses' => Module::getStatuses()
+            'statuses' => Module::getStatuses(),
+            'richTextFields' => $this->module->richTextFields
         ]);
     }
 
