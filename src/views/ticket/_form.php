@@ -106,19 +106,20 @@ $jsTopics = Json::encode(ArrayHelper::map($topics, 'id', 'template'));
 $js = <<<JS
 var topics = $jsTopics;
 jQuery('#$selectId').on('change.sa-ticket', function () {
-    var \$this = jQuery(this);
+    var \$this = jQuery(this),
+        \$textarea = jQuery('#$textAreaId');
     if (topics[\$this.val()]) {
         if ($richTextFields) {
-            jQuery('#$textAreaId').summernote('reset');
-            jQuery('#$textAreaId').summernote('code', topics[\$this.val()]);
+            \$textarea.summernote('reset');
+            \$textarea.summernote('code', topics[\$this.val()]);
         } else {
-            jQuery('#$textAreaId').val(topics[\$this.val()]);
+            \$textarea.val(topics[\$this.val()]);
         }
     } else {
         if ($richTextFields) {
-            jQuery('#$textAreaId').summernote('reset');
+            \$textarea.summernote('reset');
         } else {
-            jQuery('#$textAreaId').val('');
+            \$textarea.val('');
         }
     }
 }).trigger('change');
