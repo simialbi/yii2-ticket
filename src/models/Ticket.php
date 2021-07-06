@@ -10,6 +10,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\AfterSaveEvent;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /**
@@ -67,6 +68,11 @@ class Ticket extends ActiveRecord
     const PRIORITY_NORMAL = 2;
     const PRIORITY_HIGH = 3;
     const PRIORITY_EMERGENCY = 4;
+
+    /**
+     * @var array Ticket history
+     */
+    private $_history;
 
     /**
      * {@inheritDoc}
@@ -372,59 +378,66 @@ class Ticket extends ActiveRecord
     }
 
     /**
+     * Gets the ticket history
      *
+     * @return array
      */
     public function getHistory()
     {
-        $history = $this->getComments()->indexBy('created_at')->all();
-        $history[$this->created_at] = Yii::t(
-            'simialbi/ticket/history',
-            '{user} created the ticket',
-            [
-                'user' => $this->author->name
-            ]
-        );
-        if (isset($this->assigned_at) && isset($this->assigned_to)) {
-            if ($this->assigned_to === $this->assigned_by) {
-                $history[$this->assigned_at] = Yii::t(
-                    'simialbi/ticket/history',
-                    '{agent} took ticket at {assigned_at,date} {assigned_at,time}',
-                    [
-                        'agent' => $this->agent->name,
-                        'assigned_at' => $this->assigned_at
-                    ]
-                );
-            } else {
-                $msg = Yii::t(
-                    'simialbi/ticket/history',
-                    '{referrer} assigned {agent} to the ticket at {assigned_at,date} {assigned_at,time}',
-                    [
-                        'referrer' => $this->referrer->name,
-                        'agent' => $this->agent->name,
-                        'assigned_at' => $this->assigned_at
-                    ]
-                );
-                if ($this->assignment_comment && $this->assigned_to == Yii::$app->user->id) {
-                    $msg .= Html::tag('br') . "\n";
-                    $msg .= Html::tag('em', $this->assignment_comment, ['class' => 'small']);
-                }
-                $history[$this->assigned_to] = $msg;
-            }
-        }
-        if ($this->closed_at) {
-            $history[$this->closed_at] = Yii::t(
+        if (empty($this->_history)) {
+            $this->_history = array_map(function ($item) {
+                return [$item];
+            }, $this->getComments()->indexBy('created_at')->all());
+            $this->_history = ArrayHelper::merge($this->_history, [$this->created_at => [Yii::t(
                 'simialbi/ticket/history',
-                '{agent} closed ticket at {closed_at,date} {closed_at,time}',
+                '{user} created the ticket',
                 [
-                    'agent' => $this->closer->name,
-                    'closed_at' => $this->closed_at
+                    'user' => $this->author->name
                 ]
-            );
+            )]]);
+            if (isset($this->assigned_at) && isset($this->assigned_to)) {
+                if ($this->assigned_to === $this->assigned_by) {
+                    $this->_history = ArrayHelper::merge($this->_history, [$this->assigned_at => [Yii::t(
+                        'simialbi/ticket/history',
+                        '{agent} took ticket at {assigned_at,date} {assigned_at,time}',
+                        [
+                            'agent' => $this->agent->name,
+                            'assigned_at' => $this->assigned_at
+                        ]
+                    )]]);
+                } else {
+                    $msg = Yii::t(
+                        'simialbi/ticket/history',
+                        '{referrer} assigned {agent} to the ticket at {assigned_at,date} {assigned_at,time}',
+                        [
+                            'referrer' => $this->referrer->name,
+                            'agent' => $this->agent->name,
+                            'assigned_at' => $this->assigned_at
+                        ]
+                    );
+                    if ($this->assignment_comment && $this->assigned_to == Yii::$app->user->id) {
+                        $msg .= Html::tag('br') . "\n";
+                        $msg .= Html::tag('em', $this->assignment_comment, ['class' => 'small']);
+                    }
+
+                    $this->_history = ArrayHelper::merge($this->_history, [$this->assigned_at => [$msg]]);
+                }
+            }
+            if ($this->closed_at && $this->status === self::STATUS_RESOLVED) {
+                $this->_history = ArrayHelper::merge($this->_history, [$this->closed_at => [Yii::t(
+                    'simialbi/ticket/history',
+                    '{agent} closed ticket at {closed_at,date} {closed_at,time}',
+                    [
+                        'agent' => $this->closer->name,
+                        'closed_at' => $this->closed_at
+                    ]
+                )]]);
+            }
+
+            krsort($this->_history);
         }
 
-        krsort($history);
-
-        return $history;
+        return $this->_history;
     }
 
     /**

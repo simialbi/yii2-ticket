@@ -28,16 +28,18 @@ Pjax::begin([
         <?php endif; ?>
 
         <?php $i = 0; ?>
-        <?php foreach ($ticket->history as $item): ?>
-            <?php if (is_string($item)): ?>
-                <div class="alert alert-info m-2 text-center w-75 align-self-center"><?= $item; ?></div>
-            <?php else: ?>
-                <?= $this->render('_comment', [
-                    'model' => $item,
-                    'index' => $i++,
-                    'richTextFields' => $richTextFields
-                ]); ?>
-            <?php endif; ?>
+        <?php foreach ($ticket->history as $when => $items): ?>
+            <?php foreach ($items as $item): ?>
+                <?php if (is_string($item)): ?>
+                    <div class="alert alert-info m-2 text-center w-75 align-self-center"><?= $item; ?></div>
+                <?php else: ?>
+                    <?= $this->render('_comment', [
+                        'model' => $item,
+                        'index' => $i++,
+                        'richTextFields' => $richTextFields
+                    ]); ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         <?php endforeach; ?>
     </div>
 <?php
