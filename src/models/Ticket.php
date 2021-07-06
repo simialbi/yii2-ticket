@@ -10,7 +10,6 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\AfterSaveEvent;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /**
@@ -388,23 +387,23 @@ class Ticket extends ActiveRecord
             $this->_history = array_map(function ($item) {
                 return [$item];
             }, $this->getComments()->indexBy('created_at')->all());
-            $this->_history = ArrayHelper::merge($this->_history, [$this->created_at => [Yii::t(
+            $this->_history[$this->created_at][] = Yii::t(
                 'simialbi/ticket/history',
                 '{user} created the ticket',
                 [
                     'user' => $this->author->name
                 ]
-            )]]);
+            );
             if (isset($this->assigned_at) && isset($this->assigned_to)) {
                 if ($this->assigned_to === $this->assigned_by) {
-                    $this->_history = ArrayHelper::merge($this->_history, [$this->assigned_at => [Yii::t(
+                    $this->_history[$this->assigned_at][] = Yii::t(
                         'simialbi/ticket/history',
                         '{agent} took ticket at {assigned_at,date} {assigned_at,time}',
                         [
                             'agent' => $this->agent->name,
                             'assigned_at' => $this->assigned_at
                         ]
-                    )]]);
+                    );
                 } else {
                     $msg = Yii::t(
                         'simialbi/ticket/history',
@@ -420,18 +419,18 @@ class Ticket extends ActiveRecord
                         $msg .= Html::tag('em', $this->assignment_comment, ['class' => 'small']);
                     }
 
-                    $this->_history = ArrayHelper::merge($this->_history, [$this->assigned_at => [$msg]]);
+                    $this->_history[$this->assigned_at][] = $msg;
                 }
             }
             if ($this->closed_at && $this->status === self::STATUS_RESOLVED) {
-                $this->_history = ArrayHelper::merge($this->_history, [$this->closed_at => [Yii::t(
+                $this->_history[$this->closed_at][] = Yii::t(
                     'simialbi/ticket/history',
                     '{agent} closed ticket at {closed_at,date} {closed_at,time}',
                     [
                         'agent' => $this->closer->name,
                         'closed_at' => $this->closed_at
                     ]
-                )]]);
+                );
             }
 
             krsort($this->_history);
