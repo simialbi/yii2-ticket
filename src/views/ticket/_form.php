@@ -103,6 +103,7 @@ echo $form->errorSummary($model); ?>
 $selectId = Html::getInputId($model, 'topic_id');
 $textAreaId = Html::getInputId($model, 'description');
 $jsTopics = Json::encode(ArrayHelper::map($topics, 'id', 'template'));
+$richTextFields = $richTextFields ? 'true' : 'false';
 $js = <<<JS
 var topics = $jsTopics;
 jQuery('#$selectId').on('change.sa-ticket', function () {
