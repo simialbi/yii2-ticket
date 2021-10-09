@@ -62,5 +62,4 @@ return [
     'Create topic'          => 'Nuovo argomento',
     'Topics'                => 'Argomenti',
     'Update topic'          => 'Aggiorna argomento'
-
 ];
