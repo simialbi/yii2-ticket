@@ -12,7 +12,7 @@
 return [
     'sourcePath' => 'src',
     'messagePath' => 'src/messages',
-    'languages' => ['de', 'fr', 'en'],
+    'languages' => ['de', 'fr', 'en', 'it'],
     'translator' => 'Yii::t',
     'sort' => true,
     'overwrite' => true,

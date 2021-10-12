@@ -319,6 +319,10 @@ msgid "Status"
 msgstr "Status"
 
 msgctxt "simialbi/ticket/model/topic"
+msgid "Template"
+msgstr "Template"
+
+msgctxt "simialbi/ticket/model/topic"
 msgid "Updated At"
 msgstr "Bearbeitet am"
 
