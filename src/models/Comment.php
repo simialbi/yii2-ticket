@@ -60,7 +60,8 @@ class Comment extends ActiveRecord
                 'class' => BlameableBehavior::class,
                 'attributes' => [
                     self::EVENT_BEFORE_INSERT => 'created_by'
-                ]
+                ],
+                'preserveNonEmptyValues' => true
             ],
             'timestamp' => [
                 'class' => TimestampBehavior::class,
