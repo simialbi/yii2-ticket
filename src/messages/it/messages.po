@@ -92,7 +92,7 @@ msgstr "{referrer} ha assegnato {agent} al ticket il {assigned_at,date} {assigne
 
 msgctxt "simialbi/ticket/history"
 msgid "{user} created the ticket"
-msgstr "{user} ha reato il ticket"
+msgstr "{user} ha creato il ticket"
 
 msgctxt "simialbi/ticket/mail"
 msgid "Link to ticket <b>{id}</b>"
