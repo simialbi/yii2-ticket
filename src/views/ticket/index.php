@@ -267,8 +267,11 @@ $this->params['breadcrumbs'] = [$this->title];
                             'style' => [
                                 'height' => '.5em',
                                 'width' => '.5em'
+                            ],
+                            'data' => [
+                                'fa-transform' => 'right-4 up-4'
                             ]
-                        ])->transform(['right-4', 'up-4']))->on(FAS::i('clone', [
+                        ]))->on(FAS::i('clone', [
                             'style' => [
                                 'height' => '1em',
                                 'width' => '1em'
