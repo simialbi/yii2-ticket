@@ -325,7 +325,8 @@ $this->params['breadcrumbs'] = [$this->title];
 Modal::begin([
     'id' => 'ticketModal',
     'options' => [
-        'class' => ['modal', 'remote', 'fade']
+        'class' => ['modal', 'remote', 'fade'],
+        'tabindex' => ''
     ],
     'clientOptions' => [
         'backdrop' => 'static',
