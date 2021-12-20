@@ -99,30 +99,3 @@ echo $form->errorSummary($model); ?>
         ])->textarea(['rows' => 5]); ?>
     <?php endif; ?>
 </div>
-<?php
-$selectId = Html::getInputId($model, 'topic_id');
-$textAreaId = Html::getInputId($model, 'description');
-$jsTopics = Json::encode(ArrayHelper::map($topics, 'id', 'template'));
-$richTextFields = $richTextFields ? 'true' : 'false';
-$js = <<<JS
-var topics = $jsTopics;
-jQuery('#$selectId').on('change.sa-ticket', function () {
-    var \$this = jQuery(this),
-        \$textarea = jQuery('#$textAreaId');
-    if (topics[\$this.val()]) {
-        if ($richTextFields) {
-            \$textarea.summernote('reset');
-            \$textarea.summernote('code', topics[\$this.val()]);
-        } else {
-            \$textarea.val(topics[\$this.val()]);
-        }
-    } else {
-        if ($richTextFields) {
-            \$textarea.summernote('reset');
-        } else {
-            \$textarea.val('');
-        }
-    }
-}).trigger('change');
-JS;
-$this->registerJs($js);
