@@ -114,6 +114,12 @@ class SendMailBehavior extends Behavior
             $email = ArrayHelper::getValue($this->owner, $this->authorEmailProperty);
             $name = ArrayHelper::getValue($this->owner, $this->authorNameProperty, $email);
         }
+
+        // if no agent is set, abort
+        if ($email === null) {
+            return false;
+        }
+
         return $this->sendMail(
             [
                 'html' => '@simialbi/yii2/ticket/mail/new-comment-in-ticket-html',
