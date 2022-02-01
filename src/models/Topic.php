@@ -11,7 +11,7 @@ use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "{{%ticket_topic}}".
+ * This is the model class for table "{{%ticket__topic}}".
  *
  * @property integer $id
  * @property string $name
@@ -45,7 +45,7 @@ class Topic extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ticket_topic}}';
+        return '{{%ticket__topic}}';
     }
 
     /**
@@ -155,7 +155,7 @@ class Topic extends ActiveRecord
             $query = new Query();
             $query
                 ->select(['agent_id'])
-                ->from('{{%ticket_topic_agent}}')
+                ->from('{{%ticket__topic_agent}}')
                 ->where(['topic_id' => $this->id]);
 
             $ids = $query->column();

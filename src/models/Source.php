@@ -7,7 +7,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%ticket_source}}".
+ * This is the model class for table "{{%ticket__source}}".
  *
  * @property integer $id
  * @property string $name
@@ -25,7 +25,7 @@ class Source extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ticket_source}}';
+        return '{{%ticket__source}}';
     }
 
     /**

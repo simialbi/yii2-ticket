@@ -13,7 +13,7 @@ use yii\db\AfterSaveEvent;
 use yii\helpers\Html;
 
 /**
- * This is the model class for table "{{%ticket_ticket}}".
+ * This is the model class for table "{{%ticket__ticket}}".
  *
  * @property integer $id
  * @property string $assigned_to
@@ -78,7 +78,7 @@ class Ticket extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ticket_ticket}}';
+        return '{{%ticket__ticket}}';
     }
 
     /**
@@ -468,7 +468,7 @@ class Ticket extends ActiveRecord
     public function getAttachments()
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
-            ->viaTable('{{%ticket_attachment_ticket}}', ['ticket_id' => 'id'])
+            ->viaTable('{{%ticket__attachment_ticket}}', ['ticket_id' => 'id'])
             ->union(
                 $this->getComments()
                     ->orderBy(null)

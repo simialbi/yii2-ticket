@@ -78,7 +78,7 @@ class TopicController extends Controller
                     $item
                 ];
             }, $agents);
-            $model::getDb()->createCommand()->batchInsert('{{%ticket_topic_agent}}', [
+            $model::getDb()->createCommand()->batchInsert('{{%ticket__topic_agent}}', [
                 'topic_id',
                 'agent_id'
             ], $rows)->execute();
@@ -115,10 +115,10 @@ class TopicController extends Controller
                 ];
             }, $agents);
 
-            $model::getDb()->createCommand()->delete('{{%ticket_topic_agent}}', [
+            $model::getDb()->createCommand()->delete('{{%ticket__topic_agent}}', [
                 'topic_id' => $model->id
             ])->execute();
-            $model::getDb()->createCommand()->batchInsert('{{%ticket_topic_agent}}', [
+            $model::getDb()->createCommand()->batchInsert('{{%ticket__topic_agent}}', [
                 'topic_id',
                 'agent_id'
             ], $rows)->execute();

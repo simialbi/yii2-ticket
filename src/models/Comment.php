@@ -8,7 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%ticket_comment}}".
+ * This is the model class for table "{{%ticket__comment}}".
  *
  * @property integer $id
  * @property integer $ticket_id
@@ -27,7 +27,7 @@ class Comment extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ticket_comment}}';
+        return '{{%ticket__comment}}';
     }
 
     /**
@@ -103,7 +103,7 @@ class Comment extends ActiveRecord
     public function getAttachments()
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
-            ->viaTable('{{%ticket_attachment_comment}}', ['comment_id' => 'id']);
+            ->viaTable('{{%ticket__attachment_comment}}', ['comment_id' => 'id']);
     }
 
     /**

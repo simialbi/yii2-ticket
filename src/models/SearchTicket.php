@@ -11,7 +11,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * This is the search model class for table "{{%ticket_ticket}}".
+ * This is the search model class for table "{{%ticket__ticket}}".
  */
 class SearchTicket extends Ticket
 {

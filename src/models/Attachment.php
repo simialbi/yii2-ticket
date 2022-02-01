@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 
 /**
- * This is the model class for table "{{%ticket_attachment}}".
+ * This is the model class for table "{{%ticket__attachment}}".
  *
  * @property integer $id
  * @property string $unique_id
@@ -34,7 +34,7 @@ class Attachment extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ticket_attachment}}';
+        return '{{%ticket__attachment}}';
     }
 
     /**
@@ -202,7 +202,7 @@ class Attachment extends ActiveRecord
     public function getTickets()
     {
         return $this->hasMany(Ticket::class, ['id' => 'ticket_id'])
-            ->viaTable('{{%ticket_attachment_ticket}}', ['attachment_id' => 'id']);
+            ->viaTable('{{%ticket__attachment_ticket}}', ['attachment_id' => 'id']);
     }
 
     /**
@@ -213,6 +213,6 @@ class Attachment extends ActiveRecord
     public function getComments()
     {
         return $this->hasMany(Comment::class, ['id' => 'comment_id'])
-            ->viaTable('{{%ticket_attachment_comment}}', ['attachment_id' => 'id']);
+            ->viaTable('{{%ticket__attachment_comment}}', ['attachment_id' => 'id']);
     }
 }
