@@ -2,9 +2,10 @@
 
 use kartik\select2\Select2;
 use rmrevin\yii\fontawesome\FAS;
-use simialbi\yii2\datedropper\Datedropper;
+use sandritsch91\yii2\flatpickr\Flatpickr;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
+use yii\widgets\MaskedInput;
 use yii\widgets\Pjax;
 
 /* @var $this \yii\web\View */
@@ -46,12 +47,12 @@ Pjax::begin([
                     'allowClear' => false
                 ]
             ]); ?>
-            <?= $form->field($model, 'due_date')->widget(Datedropper::class, [
+            <?= $form->field($model, 'due_date')->widget(MaskedInput::class, [
                 'clientOptions' => [
-                    'format' => 'd.m.Y',
-                    'large' => true,
-                    'minDate' => Yii::$app->formatter->asDate(($model->due_date) ? $model->due_date : 'today', 'MM/dd/yyyy')
+                    'alias' => 'dd.mm.yyyy'
                 ]
+            ])->widget(Flatpickr::class, [
+                    'customAssetBundle' => false
             ]); ?>
             <?= $form->field($model, 'assignment_comment')->textarea(); ?>
         </div>
