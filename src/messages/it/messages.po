@@ -227,6 +227,10 @@ msgid "Assigned To"
 msgstr "Assegnato a"
 
 msgctxt "simialbi/ticket/model/ticket"
+msgid "Assigned By"
+msgstr "Assegnato da"
+
+msgctxt "simialbi/ticket/model/ticket"
 msgid "Assignment comment"
 msgstr "Commento assegnazione"
 
