@@ -230,7 +230,7 @@ class Ticket extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if (isset($changedAttributes['status']) && $this->status === self::STATUS_RESOLVED) {
+        if (isset($changedAttributes['status']) && (int)$this->status === self::STATUS_RESOLVED) {
             $this->afterClose($changedAttributes);
         }
         if (isset($changedAttributes['assigned_to'])) {
