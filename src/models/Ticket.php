@@ -211,7 +211,7 @@ class Ticket extends ActiveRecord
      */
     public function beforeSave($insert)
     {
-        if ($this->isAttributeChanged('status') && $this->status === self::STATUS_RESOLVED) {
+        if ($this->isAttributeChanged('status') && (int)$this->status === self::STATUS_RESOLVED) {
             if (!$this->beforeClose()) {
                 return false;
             }
