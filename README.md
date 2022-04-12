@@ -25,7 +25,8 @@ to the `require` section of your `composer.json`.
 In order to use this module, you will need to:
 
 1. [Setup Module](#setup-module) your application so that the module is available.
-2. [Create a user identity](#create-identity) class which extends UserInterface
+2. [Create a user identity](#create-identity) class which extends UserInterface.
+3. [Assign roles to users](#assign-roles-to-users)
 
 ### Setup Module
 Configure the module in the modules section of your Yii configuration file.
