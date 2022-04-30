@@ -272,7 +272,7 @@ msgstr ""
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Status"
-msgstr "Stato"
+msgstr "Attivo"
 
 msgctxt "simialbi/ticket/model/ticket"
 msgid "Subject"
@@ -420,7 +420,7 @@ msgstr "Attvità collegata al ticket <b>{name}</b> creata"
 
 msgctxt "simialbi/ticket/topic"
 msgid "Create topic"
-msgstr "Nuovo argoment"
+msgstr "Nuovo argomento"
 
 msgctxt "simialbi/ticket/topic"
 msgid "Topics"
