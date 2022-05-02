@@ -137,7 +137,7 @@ $this->params['breadcrumbs'] = [
             </div>
             <div class="card-body">
                 <?= preg_replace(
-                    '#<p[^>]*>#g',
+                    '#<p[^>]*>#',
                     '<p class="card-text">',
                     ($richTextFields) ? $model->solution->text : Yii::$app->formatter->asParagraphs($model->solution->text)
                 ); ?>

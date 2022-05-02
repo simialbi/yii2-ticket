@@ -313,7 +313,8 @@ $this->params['breadcrumbs'] = [$this->title];
                         return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('ticketAgent');
                     },
                     'close' => function ($model) {
-                        return Yii::$app->user->can('closeTicket', ['ticket' => $model]);
+                        /* @var $model \simialbi\yii2\ticket\models\Ticket */
+                        return Yii::$app->user->can('closeTicket', ['ticket' => $model]) && $model->status !== $model::STATUS_RESOLVED;
                     }
                 ],
                 'width' => '120px'
