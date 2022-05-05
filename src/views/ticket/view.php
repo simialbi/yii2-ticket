@@ -179,4 +179,8 @@ $this->registerJs("jQuery('#ticketPreviewModal').on('show.bs.modal', function (e
     var modal = jQuery(this);
     modal.find('.modal-content').load(href);
 });");
+
+$this->registerCss('p.card-text img {
+    max-width: 100%;
+}');
 ?>

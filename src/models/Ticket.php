@@ -38,6 +38,7 @@ use yii\helpers\Html;
  * @property-read \simialbi\yii2\models\UserInterface $agent
  * @property-read \simialbi\yii2\models\UserInterface $referrer
  * @property-read \simialbi\yii2\models\UserInterface $closer
+ * @property-read \simialbi\yii2\models\UserInterface $updater
  * @property-read array $history
  * @property-read Comment $solution
  * @property-read Attachment[] $attachments
@@ -374,6 +375,15 @@ class Ticket extends ActiveRecord
     public function getCloser()
     {
         return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->closed_by);
+    }
+
+    /**
+     * Get user who updated the ticket
+     * @return \simialbi\yii2\models\UserInterface
+     */
+    public function getUpdater()
+    {
+        return call_user_func([Yii::$app->user->identityClass, 'findIdentity'], $this->updated_by);
     }
 
     /**

@@ -24,6 +24,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class TicketController
@@ -310,7 +311,7 @@ class TicketController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->module->trigger(Module::EVENT_TICKET_UPDATED, new TicketEvent([
                 'ticket' => $model,
-                'user' => Yii::$app->user->id
+                'user' => $model->updater
             ]));
 
             return $this->redirect(['index']);
@@ -527,7 +528,7 @@ class TicketController extends Controller
      *
      * @param integer $id ticket id
      *
-     * @return string
+     * @return string|Response
      * @throws NotFoundHttpException
      * @throws HttpException
      */
