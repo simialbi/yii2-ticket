@@ -78,6 +78,10 @@ msgctxt "simialbi/ticket"
 msgid "Update ticket"
 msgstr "Update ticket"
 
+msgctxt "simialbi/ticket"
+msgid "Solution"
+msgstr "Solution"
+
 msgctxt "simialbi/ticket/history"
 msgid "{agent} closed ticket at {closed_at,date} {closed_at,time}"
 msgstr "{agent} closed ticket at {closed_at,date} {closed_at,time}"
@@ -429,4 +433,3 @@ msgstr "Topics"
 msgctxt "simialbi/ticket/topic"
 msgid "Update topic"
 msgstr "Update topic"
-

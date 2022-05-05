@@ -290,7 +290,11 @@ $this->params['breadcrumbs'] = [$this->title];
                         return Html::a(FAS::i('check-square'), $url, [
                             'title' => Yii::t('simialbi/ticket', 'Close ticket'),
                             'aria-label' => Yii::t('simialbi/ticket', 'Close ticket'),
-                            'data-pjax' => '0'
+                            'data' => [
+                                'pjax' => '0',
+                                'toggle' => 'modal',
+                                'target' => '#ticketModal'
+                            ]
                         ]);
                     }
                 ],

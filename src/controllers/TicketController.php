@@ -11,6 +11,7 @@ use simialbi\yii2\kanban\models\TaskUserAssignment;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
 use simialbi\yii2\ticket\behaviors\SendSmsBehavior;
 use simialbi\yii2\ticket\models\Attachment;
+use simialbi\yii2\ticket\models\Comment;
 use simialbi\yii2\ticket\models\CreateTaskForm;
 use simialbi\yii2\ticket\models\SearchTicket;
 use simialbi\yii2\ticket\models\Ticket;
@@ -436,62 +437,89 @@ class TicketController extends Controller
      *
      * @param integer $id
      *
-     * @return \yii\web\Response
+     * @return \yii\web\Response|string
      *
      * @throws NotFoundHttpException
      */
     public function actionClose($id)
     {
-        $model = $this->findModel($id);
-        $model->status = Ticket::STATUS_RESOLVED;
+        if (Yii::$app->request->post()) {
+            $model = $this->findModel($id);
+            $model->status = Ticket::STATUS_RESOLVED;
 
-        if ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_MAIL) {
-            $model->attachBehavior('sendMail', [
-                'class' => SendMailBehavior::class,
-                'isRichText' => $this->module->richTextFields,
-                'agentsToInform' => function ($model) {
-                    /** @var $model Ticket */
-                    $recipients = [];
-                    foreach ($model->topic->agents as $agent) {
-                        if (!empty($agent->email)) {
-                            $recipients[$agent->email] = $agent->name;
-                        }
+            // comment if not empty
+            if (ArrayHelper::getValue(Yii::$app->request->post(), 'comment') != null) {
+                $comment = new Comment([
+                    'ticket_id' => $model->id,
+                    'text' => Yii::$app->request->post('comment')
+                ]);
+                if ($comment->save()) {
+                    if ($this->module->kanbanModule && ($task = $model->task)) {
+                        $taskComment = new \simialbi\yii2\kanban\models\Comment([
+                            'task_id' => $task->id,
+                            'created_at' => $comment->created_at,
+                            'created_by' => $comment->created_by,
+                            'text' => $comment->text
+                        ]);
+                        $taskComment->detachBehavior('timestamp');
+                        $taskComment->detachBehavior('blameable');
+                        $taskComment->save();
                     }
-
-                    return $recipients;
                 }
-            ]);
-        } elseif ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_SMS) {
-            $model->attachBehavior('sendSms', [
-                'class' => SendSmsBehavior::class,
-                'agentsToInform' => function ($model) {
-                    /** @var $model Ticket */
-                    $recipients = [];
-                    foreach ($model->topic->agents as $agent) {
-                        if (!empty($agent->mobile)) {
-                            $recipients[] = $agent->mobile;
-                        }
-                    }
-
-                    return $recipients;
-                },
-                'provider' => $this->module->smsProvider
-            ]);
-        }
-
-        if ($model->save()) {
-            if ($this->module->kanbanModule && ($task = $model->task)) {
-                $task->status = \simialbi\yii2\kanban\models\Task::STATUS_DONE;
-                $task->save();
             }
 
-            $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
-                'ticket' => $model,
-                'user' => $model->author
-            ]));
+            if ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_MAIL) {
+                $model->attachBehavior('sendMail', [
+                    'class' => SendMailBehavior::class,
+                    'isRichText' => $this->module->richTextFields,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            if (!empty($agent->email)) {
+                                $recipients[$agent->email] = $agent->name;
+                            }
+                        }
+
+                        return $recipients;
+                    }
+                ]);
+            } elseif ($model->topic->on_ticket_resolution === Topic::BEHAVIOR_SMS) {
+                $model->attachBehavior('sendSms', [
+                    'class' => SendSmsBehavior::class,
+                    'agentsToInform' => function ($model) {
+                        /** @var $model Ticket */
+                        $recipients = [];
+                        foreach ($model->topic->agents as $agent) {
+                            if (!empty($agent->mobile)) {
+                                $recipients[] = $agent->mobile;
+                            }
+                        }
+
+                        return $recipients;
+                    },
+                    'provider' => $this->module->smsProvider
+                ]);
+            }
+
+            if ($model->save()) {
+                if ($this->module->kanbanModule && ($task = $model->task)) {
+                    $task->status = \simialbi\yii2\kanban\models\Task::STATUS_DONE;
+                    $task->save();
+                }
+
+                $this->module->trigger(Module::EVENT_TICKET_RESOLVED, new TicketEvent([
+                    'ticket' => $model,
+                    'user' => $model->author
+                ]));
+            }
+
+            return $this->redirect(['index']);
         }
 
-        return $this->redirect(['index']);
+        return $this->renderAjax('close', [
+            'id' => $id
+        ]);
     }
 
     /**
