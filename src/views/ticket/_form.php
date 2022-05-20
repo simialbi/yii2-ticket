@@ -73,8 +73,10 @@ echo $form->errorSummary($model); ?>
                 'callbacks' => [
                     'onPaste' => new JsExpression('function (e) {
                         var files = ((e.originalEvent || e).clipboardData || window.clipboardData).files;
-                        if (files && files.length && resumable) {
-                            resumable.addFiles(files, e);
+                        if (files && files.length) {
+                            if (resumable && typeof resumable.addFiles === \'function\') {
+                                resumable.addFiles(files);
+                            }
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             return false;
