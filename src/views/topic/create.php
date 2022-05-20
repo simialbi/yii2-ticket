@@ -4,11 +4,11 @@ use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Topic */
-/* @var $users array */
-/* @var $statuses array */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Topic */
+/** @var $users array */
+/** @var $statuses array */
+/** @var $richTextFields boolean */
 
 $this->title = Yii::t('simialbi/ticket/topic', 'Create topic');
 $this->params['breadcrumbs'] = [

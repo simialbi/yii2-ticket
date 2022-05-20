@@ -6,12 +6,12 @@ use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
-/* @var $this \yii\web\View */
-/* @var $searchModel \simialbi\yii2\ticket\models\SearchTopic */
-/* @var $dataProvider \yii\data\ActiveDataProvider */
-/* @var $users array */
-/* @var $statuses array */
-/* @var $priorities array */
+/** @var $this \yii\web\View */
+/** @var $searchModel \simialbi\yii2\ticket\models\SearchTopic */
+/** @var $dataProvider \yii\data\ActiveDataProvider */
+/** @var $users array */
+/** @var $statuses array */
+/** @var $priorities array */
 
 $this->title = Yii::t('simialbi/ticket/topic', 'Topics');
 $this->params['breadcrumbs'] = [$this->title];
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'] = [$this->title];
                 'class' => 'kartik\grid\DataColumn',
                 'attribute' => 'new_ticket_status',
                 'value' => function ($model, $key, $index, $column) use ($statuses) {
-                    /* @var $column \kartik\grid\DataColumn */
+                    /** @var $column \kartik\grid\DataColumn */
                     return ArrayHelper::getValue($statuses, $model->{$column->attribute});
                 },
                 'filterType' => GridView::FILTER_SELECT2,

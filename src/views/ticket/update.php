@@ -4,12 +4,12 @@ use yii\bootstrap4\ActiveForm;
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $topics array */
-/* @var $priorities array */
-/* @var $users array */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Ticket */
+/** @var $topics array */
+/** @var $priorities array */
+/** @var $users array */
+/** @var $richTextFields boolean */
 
 $this->title = Yii::t('simialbi/ticket', 'Update ticket');
 $this->params['breadcrumbs'] = [

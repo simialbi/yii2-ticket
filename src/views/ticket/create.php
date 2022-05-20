@@ -6,12 +6,12 @@ use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $topics array */
-/* @var $priorities array */
-/* @var $users array */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Ticket */
+/** @var $topics array */
+/** @var $priorities array */
+/** @var $users array */
+/** @var $richTextFields boolean */
 
 $this->title = Yii::t('simialbi/ticket', 'Create ticket');
 $this->params['breadcrumbs'] = [

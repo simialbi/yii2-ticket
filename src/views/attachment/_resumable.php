@@ -4,9 +4,9 @@ use simialbi\yii2\ticket\ResumableAsset;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
-/* @var $this \yii\web\View */
-/* @var $filePlaceholder string */
-/* @var $browseButton string */
+/** @var $this \yii\web\View */
+/** @var $filePlaceholder string */
+/** @var $browseButton string */
 
 ResumableAsset::register($this);
 
@@ -56,10 +56,10 @@ resumable.on('fileAdded', function (file) {
     resumable.upload();
     var container = jQuery('#$filePlaceholder');
     var el = '$template';
-    
+
     el = el.replace('{identifier}', file.uniqueIdentifier);
     el = el.replace('{name}', file.fileName);
-    
+
     container.append(el);
 });
 resumable.on('fileProgress', function (file) {
@@ -84,5 +84,3 @@ resumable.on('fileSuccess', function (file, msg) {
 JS;
 
 $this->registerJs($js);
-
-?>

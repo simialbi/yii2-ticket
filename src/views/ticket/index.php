@@ -7,14 +7,14 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
 use yii\helpers\ArrayHelper;
 
-/* @var $this \yii\web\View */
-/* @var $searchModel \simialbi\yii2\ticket\models\SearchTicket */
-/* @var $dataProvider \yii\data\ActiveDataProvider */
-/* @var $topics array */
-/* @var $users array */
-/* @var $hasKanban boolean */
-/* @var $statuses array */
-/* @var $priorities array */
+/** @var $this \yii\web\View */
+/** @var $searchModel \simialbi\yii2\ticket\models\SearchTicket */
+/** @var $dataProvider \yii\data\ActiveDataProvider */
+/** @var $topics array */
+/** @var $users array */
+/** @var $hasKanban boolean */
+/** @var $statuses array */
+/** @var $priorities array */
 
 $this->title = Yii::t('simialbi/ticket', 'My tickets');
 $this->params['breadcrumbs'] = [$this->title];
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'] = [$this->title];
                 'class' => 'kartik\grid\DataColumn',
                 'attribute' => 'priority',
                 'value' => function ($model, $key, $index, $column) use ($priorities) {
-                    /* @var $column \kartik\grid\DataColumn */
+                    /** @var $column \kartik\grid\DataColumn */
                     return ArrayHelper::getValue($priorities, $model->{$column->attribute});
                 },
                 'filterType' => GridView::FILTER_SELECT2,
@@ -174,7 +174,7 @@ $this->params['breadcrumbs'] = [$this->title];
                 'class' => 'kartik\grid\DataColumn',
                 'attribute' => 'topic_id',
                 'value' => function ($model, $key, $index, $column) use ($topics) {
-                    /* @var $column \kartik\grid\DataColumn */
+                    /** @var $column \kartik\grid\DataColumn */
                     return ArrayHelper::getValue($topics, $model->{$column->attribute});
                 },
                 'filterType' => GridView::FILTER_SELECT2,
@@ -214,7 +214,7 @@ $this->params['breadcrumbs'] = [$this->title];
                 'class' => 'kartik\grid\DataColumn',
                 'attribute' => 'status',
                 'value' => function ($model, $key, $index, $column) use ($statuses) {
-                    /* @var $column \kartik\grid\DataColumn */
+                    /** @var $column \kartik\grid\DataColumn */
                     return ArrayHelper::getValue($statuses, $model->{$column->attribute});
                 },
                 'filterType' => GridView::FILTER_SELECT2,
@@ -309,15 +309,15 @@ $this->params['breadcrumbs'] = [$this->title];
                         return Yii::$app->user->can('assignTicket');
                     },
                     'take' => function ($model) {
-                        /* @var $model \simialbi\yii2\ticket\models\Ticket */
+                        /** @var $model \simialbi\yii2\ticket\models\Ticket */
                         return empty($model->assigned_to) && Yii::$app->user->can('takeTicket', ['ticket' => $model]);
                     },
                     'create-task' => function ($model) use ($hasKanban) {
-                        /* @var $model \simialbi\yii2\ticket\models\Ticket */
+                        /** @var $model \simialbi\yii2\ticket\models\Ticket */
                         return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('ticketAgent');
                     },
                     'close' => function ($model) {
-                        /* @var $model \simialbi\yii2\ticket\models\Ticket */
+                        /** @var $model \simialbi\yii2\ticket\models\Ticket */
                         return Yii::$app->user->can('closeTicket', ['ticket' => $model]) && $model->status !== $model::STATUS_RESOLVED;
                     }
                 ],

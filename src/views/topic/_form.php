@@ -5,12 +5,12 @@ use marqu3s\summernote\Summernote;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
-/* @var $this \yii\web\View */
-/* @var $form \yii\bootstrap4\ActiveForm */
-/* @var $model \simialbi\yii2\ticket\models\Topic */
-/* @var $users array */
-/* @var $statuses array */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $form \yii\bootstrap4\ActiveForm */
+/** @var $model \simialbi\yii2\ticket\models\Topic */
+/** @var $users array */
+/** @var $statuses array */
+/** @var $richTextFields boolean */
 
 ?>
 

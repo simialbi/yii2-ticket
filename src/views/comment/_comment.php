@@ -3,15 +3,14 @@
 use rmrevin\yii\fontawesome\FAS;
 use yii\bootstrap4\Html;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Comment */
-/* @var $index integer */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Comment */
+/** @var $index integer */
+/** @var $richTextFields boolean */
 
 ?>
 
-<div
-    class="sa-ticket-comment media p-2 m-2 rounded position-relative <?= ($index % 2 === 0) ? 'bg-light' : 'bg-white'; ?>">
+<div class="sa-ticket-comment media p-2 m-2 rounded position-relative bg-<?= ($index % 2 === 0) ? 'light' : 'white'; ?>">
     <?php if ($model->author->image): ?>
         <img src="<?= $model->author->image; ?>" alt="<?= Html::encode($model->author->name); ?>"
              class="rounded-circle mr-3" style="height: 50px; width: 50px;">

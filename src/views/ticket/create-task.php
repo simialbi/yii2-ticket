@@ -6,9 +6,9 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\widgets\Pjax;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\CreateTaskForm */
-/* @var $buckets array */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\CreateTaskForm */
+/** @var $buckets array */
 
 Pjax::begin([
     'id' => 'createTaskPjax',

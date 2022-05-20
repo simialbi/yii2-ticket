@@ -6,11 +6,11 @@ use yii\bootstrap4\Modal;
 use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $richTextFields boolean */
-/* @var $statuses array */
-/* @var $priorities array */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Ticket */
+/** @var $richTextFields boolean */
+/** @var $statuses array */
+/** @var $priorities array */
 
 $this->title = $model->id . ': ' . $model->subject;
 $this->params['breadcrumbs'] = [

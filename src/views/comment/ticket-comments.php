@@ -2,10 +2,10 @@
 
 use yii\widgets\Pjax;
 
-/* @var $this \yii\web\View */
-/* @var $ticket \simialbi\yii2\ticket\models\Ticket */
-/* @var $newComment \simialbi\yii2\ticket\models\Comment */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $ticket \simialbi\yii2\ticket\models\Ticket */
+/** @var $newComment \simialbi\yii2\ticket\models\Comment */
+/** @var $richTextFields boolean */
 
 Pjax::begin([
     'id' => 'createCommentPjax',

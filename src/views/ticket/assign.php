@@ -8,9 +8,9 @@ use yii\bootstrap4\Html;
 use yii\widgets\MaskedInput;
 use yii\widgets\Pjax;
 
-/* @var $this \yii\web\View */
-/* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $users array */
+/** @var $this \yii\web\View */
+/** @var $model \simialbi\yii2\ticket\models\Ticket */
+/** @var $users array */
 
 Pjax::begin([
     'id' => 'assignTicketPjax',

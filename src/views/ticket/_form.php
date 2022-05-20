@@ -3,17 +3,15 @@
 use kartik\select2\Select2;
 use marqu3s\summernote\Summernote;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\ReplaceArrayValue;
+use yii\web\JsExpression;
 
-/* @var $this \yii\web\View */
-/* @var $form \yii\bootstrap4\ActiveForm */
-/* @var $model \simialbi\yii2\ticket\models\Ticket */
-/* @var $topics \simialbi\yii2\ticket\models\Topic[] */
-/* @var $priorities array */
-/* @var $users array */
-/* @var $richTextFields boolean */
+/** @var $this \yii\web\View */
+/** @var $form \yii\bootstrap4\ActiveForm */
+/** @var $model \simialbi\yii2\ticket\models\Ticket */
+/** @var $topics \simialbi\yii2\ticket\models\Topic[] */
+/** @var $priorities array */
+/** @var $users array */
+/** @var $richTextFields boolean */
 
 $isAgent = Yii::$app->user->can('ticketAgent');
 echo $form->errorSummary($model); ?>
@@ -72,6 +70,18 @@ echo $form->errorSummary($model); ?>
             ]
         ])->widget(Summernote::class, [
             'clientOptions' => [
+                'callbacks' => [
+                    'onPaste' => new JsExpression('function (e) {
+                        var files = ((e.originalEvent || e).clipboardData || window.clipboardData).files;
+                        if (files && files.length && resumable) {
+                            resumable.addFiles(files, e);
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                    }')
+                ],
+                'disableDragAndDrop' => true,
                 'styleTags' => [
                     'p',
                     [
@@ -82,13 +92,13 @@ echo $form->errorSummary($model); ?>
                     ],
                     'pre'
                 ],
-                'toolbar' => new ReplaceArrayValue([
+                'toolbar' => [
                     ['style', ['style']],
                     ['font', ['bold', 'italic', 'underline', 'strikethrough']],
                     ['script', ['subscript', 'superscript']],
                     ['list', ['ol', 'ul']],
                     ['clear', ['clear']]
-                ])
+                ]
             ]
         ]); ?>
     <?php else: ?>
