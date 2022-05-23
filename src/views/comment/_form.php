@@ -6,6 +6,7 @@ use simialbi\yii2\widgets\CommentInput;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
+use yii\web\JsExpression;
 
 /** @var $this \yii\web\View */
 /** @var $ticket \simialbi\yii2\ticket\models\Ticket */
@@ -93,7 +94,7 @@ echo $form->field($model, 'ticket_id', ['options' => ['class' => ['m-0']]])->hid
                     'onPaste' => new JsExpression('function (e) {
                         var files = ((e.originalEvent || e).clipboardData || window.clipboardData).files;
                         if (files && files.length) {
-                            if (resumable && typeof resumable.addFiles === \'function\')
+                            if (resumable && typeof resumable.addFiles === \'function\') {
                                 resumable.addFiles(files, e);
                             }
                             e.preventDefault();
