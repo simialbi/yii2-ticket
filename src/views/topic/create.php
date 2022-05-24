@@ -31,7 +31,6 @@ $this->params['breadcrumbs'] = [
         'model' => $model,
         'statuses' => $statuses,
         'agents' => $agents,
-        'agents' => $agents,
         'users' => $users,
         'richTextFields' => $richTextFields
     ]); ?>
