@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 /** @var $this \yii\web\View */
 /** @var $form \yii\bootstrap4\ActiveForm */
 /** @var $model \simialbi\yii2\ticket\models\Topic */
+/** @var $agents array */
 /** @var $users array */
 /** @var $statuses array */
 /** @var $richTextFields boolean */
@@ -63,7 +64,7 @@ use yii\helpers\ArrayHelper;
             'name' => 'agents',
             'value' => ArrayHelper::getColumn($model->getAgents(), 'id'),
             'id' => 'responsible-agents',
-            'data' => $users,
+            'data' => $agents,
             'options' => [
                 'placeholder' => Yii::t('simialbi/ticket', 'Select user(s)'),
                 'multiple' => true
@@ -156,3 +157,34 @@ use yii\helpers\ArrayHelper;
         '' => Yii::t('simialbi/ticket', 'Do nothing')
     ]); ?>
 </div>
+
+<?php
+$idAssign = '#' . Html::getInputId($model, 'new_ticket_assign_to');
+$idAgents = '#responsible-agents';
+$js = <<<JS
+    jQuery('$idAgents').on('change', function() {
+        var elem = jQuery('$idAssign');
+        var _this = jQuery(this);
+
+        // Add missing agents
+        var arrIds = _this.val();
+        jQuery.each(arrIds, function(k,v) {
+            if (elem.find('option[value="' + v + '"]').length == 0) {
+                var option = _this.find('option[value="' + v + '"]');
+                var newOption = new Option(option.text(), option.attr('value'), false, false);
+                elem.append(newOption).trigger('change');
+            }
+        });
+
+        // Remove agents
+        jQuery.each(elem.find('option[value]'), function() {
+            if (!jQuery(this).attr('value') == '') {
+                if (_this.find('option[value="' + $(this).attr('value') + '"]:selected').length == 0) {
+                    jQuery(this).remove();
+                }
+            }
+        });
+    });
+JS;
+
+$this->registerJs($js);

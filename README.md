@@ -38,6 +38,7 @@ Configure the module in the modules section of your Yii configuration file.
         //'richTextFields' => true,
         //'kanbanModule' => 'kanban',
         //'smsProvider' => 'smsProvider',
+        //'canAssignTicketsToNonAgents' => false,
         //'on ticketCreated' => function ($event) {},
         //[...]
     ]
@@ -46,11 +47,12 @@ Configure the module in the modules section of your Yii configuration file.
 
 #### Parameters
 
-| Parameter        | Description                                                                                                                                             |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `richTextFields` | Set this parameter to true to use rich text fields. To do this you need to add `simialbi/yii2-summernote` to the require section of your composer.json. |
-| `kanbanModule`   | If you use the [Kanban Module](https://github.com/simialbi/yii2-kanban) too, you can put the id of the module here to use link functionality.           |
-| `smsProvider`    | If you wan't to add SMS notification functionality, insert the sms component id here. It must implement `\simialbi\yii2\sms\ProviderInterface`.         |
+| Parameter                     | Description                                                                                                                                             |
+|-------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `richTextFields`              | Set this parameter to true to use rich text fields. To do this you need to add `simialbi/yii2-summernote` to the require section of your composer.json. |
+| `kanbanModule`                | If you use the [Kanban Module](https://github.com/simialbi/yii2-kanban) too, you can put the id of the module here to use link functionality.           |
+| `smsProvider`                 | If you want to add SMS notification functionality, insert the sms component id here. It must implement `\simialbi\yii2\sms\ProviderInterface`.          |
+| `canAssignTicketsToNonAgents` | If set to true, agents can assign tickets to non agents                                                                                                 |
 
 #### Events
 | Event                    | Description                                                |

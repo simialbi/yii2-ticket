@@ -55,10 +55,7 @@ class TicketController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['update'],
-                        'roles' => ['administrateTicket'],
-                        'roleParams' => function () {
-                            return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
-                        }
+                        'roles' => ['updateTicket']
                     ],
                     [
                         'allow' => true,
@@ -92,7 +89,7 @@ class TicketController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['create-task'],
-                        'roles' => ['updateTicket'],
+                        'roles' => ['administrateTicket'],
                         'roleParams' => function () {
                             return ['ticket' => $this->findModel(Yii::$app->request->get('id'))];
                         }
@@ -133,17 +130,6 @@ class TicketController extends Controller
         $userId = null;
         if (!Yii::$app->user->can('ticketAgent')) {
             $userId = Yii::$app->user->id;
-        } elseif (!Yii::$app->user->can('assignTicket')) {
-            $topics = Topic::find()->all();
-            $filterTopics = [];
-            /** @var Topic $topic */
-            foreach ($topics as $topic) {
-                $agents = ArrayHelper::index($topic->agents, 'id');
-                if (isset($agents[Yii::$app->user->id])) {
-                    $filterTopics[] = $topic->id;
-                }
-            }
-            $searchModel->topic_id = $filterTopics;
         }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $userId);
 
@@ -394,7 +380,10 @@ class TicketController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        $users = ArrayHelper::map($model->topic->agents, 'id', 'name');
+        if ($this->module->canAssignTicketsToNonAgents) {
+            $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        }
 
         return $this->renderAjax('assign', [
             'model' => $model,

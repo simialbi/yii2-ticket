@@ -9,8 +9,10 @@ namespace simialbi\yii2\ticket;
 
 use simialbi\yii2\models\UserInterface;
 use simialbi\yii2\ticket\models\Ticket;
+use simialbi\yii2\ticket\models\Topic;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Module
@@ -44,6 +46,11 @@ class Module extends \simialbi\yii2\base\Module
      * component that is used to send sms
      */
     public $smsProvider;
+
+    /**
+     * @var boolean if set to true, agents can assign tickets to non-agents
+     */
+    public $canAssignTicketsToNonAgents = false;
 
     /**
      * {@inheritDoc}
@@ -114,5 +121,33 @@ class Module extends \simialbi\yii2\base\Module
             Ticket::STATUS_OPEN => Yii::t('simialbi/ticket/status', 'Open'),
             Ticket::STATUS_LATE => Yii::t('simialbi/ticket/status', 'Late'),
         ];
+    }
+
+    /**
+     * Get all users with role ticketAgent
+     * @param null|Topic $topic filter by topic
+     * @return array
+     */
+    public static function getAgents($topic = null)
+    {
+        $ret = [];
+        $users = call_user_func([Yii::$app->user->identityClass, 'findIdentities']);
+
+        if (!Yii::$app->authManager) {
+            return ArrayHelper::map($users, 'id', 'name');
+        }
+
+        foreach ($users as $user) {
+            // check if is agent
+            if (Yii::$app->authManager->checkAccess($user->id, 'ticketAgent')) {
+                if (!is_null($topic) && array_key_exists($user->id, $topic->agents)) {
+                    $ret[] = $user;
+                } else {
+                    $ret[] = $user;
+                }
+            }
+        }
+
+        return ArrayHelper::map($ret, 'id', 'name');
     }
 }

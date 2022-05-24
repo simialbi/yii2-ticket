@@ -302,11 +302,12 @@ $this->params['breadcrumbs'] = [$this->title];
                     'view' => function ($model) {
                         return Yii::$app->user->can('viewTicket', ['ticket' => $model]);
                     },
-                    'update' => function ($model) {
-                        return Yii::$app->user->can('administrateTicket', ['ticket' => $model]);
+                    'update' => function () {
+                        return Yii::$app->user->can('updateTicket');
                     },
-                    'assign' => function () {
-                        return Yii::$app->user->can('assignTicket');
+                    'assign' => function ($model) {
+                        // Todo: add rule to assignTicket permission which checks if user is agent, and if yes, checks if agent is responsible for the ticket topic
+                        return $model->status !== $model::STATUS_RESOLVED && Yii::$app->user->can('assignTicket');
                     },
                     'take' => function ($model) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */
@@ -314,7 +315,11 @@ $this->params['breadcrumbs'] = [$this->title];
                     },
                     'create-task' => function ($model) use ($hasKanban) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */
-                        return $hasKanban && !$model->getTask()->count() && Yii::$app->user->can('ticketAgent');
+                        return
+                            $hasKanban &&
+                            !$model->getTask()->count() &&
+                            $model->status !== $model::STATUS_RESOLVED &&
+                            Yii::$app->user->can('administrateTicket', ['ticket' => $model]);
                     },
                     'close' => function ($model) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */

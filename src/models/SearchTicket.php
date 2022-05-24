@@ -86,11 +86,27 @@ class SearchTicket extends Ticket
      */
     public function search($params, $userId = null)
     {
-        $query = Ticket::find();
+        $query = Ticket::find()
+            ->alias('t');
 
-        if ($userId) {
-            $query->where([
-                'created_by' => $userId
+        if (\Yii::$app->user->can('ticketAdministrator')) {
+            // Can see everything, no filters applied
+        } elseif (\Yii::$app->user->can('ticketAgent')) {
+            // Agent: show only tickets of topics where agent is responsible, own and assigned tickets
+            $query
+                ->innerJoin(['ta' => '{{%ticket__topic_agent}}'], 't.topic_id = ta.topic_id')
+                ->andWhere([
+                    'or',
+                    ['{{ta}}.[[agent_id]]' => \Yii::$app->user->id],
+                    ['created_by' => \Yii::$app->user->id],
+                    ['assigned_to' => \Yii::$app->user->id]
+                ]);
+        } elseif ($userId) {
+            // normal user: show only own and assigned tickets
+            $query->andWhere([
+                'or',
+                ['created_by' => $userId],
+                ['assigned_to' => $userId]
             ]);
         }
 

@@ -86,10 +86,16 @@ class TopicController extends Controller
             return $this->redirect(['index']);
         }
 
-        $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        $agents = $this->module->getAgents();
+
+        $users = ArrayHelper::map($model->agents, 'id', 'name');
+        if ($this->module->canAssignTicketsToNonAgents) {
+            $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        }
 
         return $this->render('create', [
             'model' => $model,
+            'agents' => $agents,
             'users' => $users,
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields
@@ -126,10 +132,16 @@ class TopicController extends Controller
             return $this->redirect(['index']);
         }
 
-        $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        $agents = $this->module->getAgents();
+
+        $users = ArrayHelper::map($model->agents, 'id', 'name');
+        if ($this->module->canAssignTicketsToNonAgents) {
+            $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
+        }
 
         return $this->render('update', [
             'model' => $model,
+            'agents' => $agents,
             'users' => $users,
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields

@@ -6,6 +6,7 @@ use yii\bootstrap4\Html;
 
 /** @var $this \yii\web\View */
 /** @var $model \simialbi\yii2\ticket\models\Topic */
+/** @var $agents array */
 /** @var $users array */
 /** @var $statuses array */
 /** @var $richTextFields boolean */
@@ -29,6 +30,7 @@ $this->params['breadcrumbs'] = [
         'form' => $form,
         'model' => $model,
         'statuses' => $statuses,
+        'agents' => $agents,
         'users' => $users,
         'richTextFields' => $richTextFields
     ]); ?>
