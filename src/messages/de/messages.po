@@ -52,7 +52,7 @@ msgstr "Schliessen"
 
 msgctxt "simialbi/ticket"
 msgid "Responsible agents"
-msgstr "Zustänidge Agenten"
+msgstr "Zuständige Agenten"
 
 msgctxt "simialbi/ticket"
 msgid "Save"
