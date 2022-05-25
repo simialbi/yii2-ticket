@@ -98,7 +98,8 @@ class TopicController extends Controller
             'agents' => $agents,
             'users' => $users,
             'statuses' => Module::getStatuses(),
-            'richTextFields' => $this->module->richTextFields
+            'richTextFields' => $this->module->richTextFields,
+            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents
         ]);
     }
 
@@ -144,7 +145,8 @@ class TopicController extends Controller
             'agents' => $agents,
             'users' => $users,
             'statuses' => Module::getStatuses(),
-            'richTextFields' => $this->module->richTextFields
+            'richTextFields' => $this->module->richTextFields,
+            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents
         ]);
     }
 

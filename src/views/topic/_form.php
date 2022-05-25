@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 /** @var $users array */
 /** @var $statuses array */
 /** @var $richTextFields boolean */
+/** @var $canAssignTicketsToNonAgents boolean */
 
 ?>
 
@@ -169,7 +170,7 @@ $js = <<<JS
         // Add missing agents
         var arrIds = _this.val();
         jQuery.each(arrIds, function(k,v) {
-            if (elem.find('option[value="' + v + '"]').length == 0) {
+            if (elem.find('option[value="' + v + '"]').length === 0) {
                 var option = _this.find('option[value="' + v + '"]');
                 var newOption = new Option(option.text(), option.attr('value'), false, false);
                 elem.append(newOption).trigger('change');
@@ -179,7 +180,7 @@ $js = <<<JS
         // Remove agents
         jQuery.each(elem.find('option[value]'), function() {
             if (!jQuery(this).attr('value') == '') {
-                if (_this.find('option[value="' + $(this).attr('value') + '"]:selected').length == 0) {
+                if (_this.find('option[value="' + jQuery(this).attr('value') + '"]:selected').length === 0) {
                     jQuery(this).remove();
                 }
             }
@@ -187,4 +188,6 @@ $js = <<<JS
     });
 JS;
 
-$this->registerJs($js);
+if (!$canAssignTicketsToNonAgents){
+    $this->registerJs($js);
+}

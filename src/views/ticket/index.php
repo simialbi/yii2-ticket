@@ -311,7 +311,9 @@ $this->params['breadcrumbs'] = [$this->title];
                     },
                     'take' => function ($model) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */
-                        return empty($model->assigned_to) && Yii::$app->user->can('takeTicket', ['ticket' => $model]);
+                        return
+                            $model->status !== $model::STATUS_RESOLVED &&
+                            empty($model->assigned_to) && Yii::$app->user->can('takeTicket', ['ticket' => $model]);
                     },
                     'create-task' => function ($model) use ($hasKanban) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */
@@ -323,7 +325,9 @@ $this->params['breadcrumbs'] = [$this->title];
                     },
                     'close' => function ($model) {
                         /** @var $model \simialbi\yii2\ticket\models\Ticket */
-                        return Yii::$app->user->can('closeTicket', ['ticket' => $model]) && $model->status !== $model::STATUS_RESOLVED;
+                        return
+                            Yii::$app->user->can('closeTicket', ['ticket' => $model]) &&
+                            $model->status !== $model::STATUS_RESOLVED;
                     }
                 ],
                 'width' => '120px'
