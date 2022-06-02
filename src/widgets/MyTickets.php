@@ -87,7 +87,9 @@ class MyTickets extends Widget
                 ->innerJoinWith('topic to')
                 ->innerJoin('{{%ticket__topic_agent}} ta', ['ta.agent_id' => Yii::$app->user->id])
                 ->where([
-                    'assigned_to' => null
+                    'and',
+                    ['!=', '{{ti}}.[[status]]', Ticket::STATUS_RESOLVED],
+                    ['assigned_to' => null]
                 ]);
 
             $query = (new Query())->from($query1->union($query2));
@@ -126,7 +128,6 @@ class MyTickets extends Widget
         $cnt_created = count(array_filter($tickets, function ($item) {
             return $item->created_by == Yii::$app->user->id;
         }));
-        $overdue = 0;
 
         $containerOptions = $this->containerOptions;
         $containerOptions = ArrayHelper::merge($containerOptions, ['class' => ['my-tickets']]);
@@ -165,7 +166,6 @@ class MyTickets extends Widget
                 default:
                     $icon = 'angle-up';
             }
-            $ticket->due_date && $ticket->due_date < time() ? $overdue++ : '';
 
             echo $this->render('ticket', [
                 'icon' => $icon,
@@ -177,14 +177,14 @@ class MyTickets extends Widget
 
         $options = ($this->toolTipOptions === false) ? 'false' : Json::encode($this->toolTipOptions);
         $js = <<<JS
-var cnt = $overdue;
+var cnt = $cnt_assigned;
 if (cnt > 0) {
     $('.tickets-icon-count').text(cnt).show();    
 }
 
 var options = $options;
 if (options != false) {
-    $('#re-tickets [data-toggle="tooltip"]').tooltip(options);    
+    $('.my-tickets [data-toggle="tooltip"]').tooltip(options);    
 }
 JS;
         $this->view->registerJs($js);
