@@ -82,6 +82,10 @@ msgctxt "simialbi/ticket"
 msgid "Solution"
 msgstr "Soluzione"
 
+msgctxt "simialbi/ticket"
+msgid "Assigned to me"
+msgstr "Assegnato a me"
+
 msgctxt "simialbi/ticket/history"
 msgid "{agent} closed ticket at {closed_at,date} {closed_at,time}"
 msgstr "{agent} ha chiuso il ticket il {closed_at,date} {closed_at,time}"

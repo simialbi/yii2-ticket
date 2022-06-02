@@ -1,0 +1,61 @@
+@import "../../../vendor/bower-asset/bootstrap/scss/functions";
+@import "../../../vendor/bower-asset/bootstrap/scss/variables";
+
+$ticket-priority-1-bg: $gray-200 !default;
+$ticket-priority-1-color: $dark !default;
+
+$ticket-priority-2-bg: $primary !default;
+$ticket-priority-2-color: $white !default;
+
+$ticket-priority-3-bg: $secondary !default;
+$ticket-priority-3-color: $white !default;
+
+$ticket-priority-4-bg: $danger !default;
+$ticket-priority-4-color: $white !default;
+
+$ticket-description-bg: $gray-100 !default;
+$ticket-priority-width: 35px !default;
+
+$ticket-description-padding: 0.5rem !default;
+
+.my-tickets {
+    position: relative;
+
+    .ticket {
+        padding: 2px 0 0 0;
+        white-space: normal;
+
+        .icon {
+            min-width: $ticket-priority-width;
+
+            &.priority-1 {
+                color: $ticket-priority-1-color;
+                background-color: $ticket-priority-1-bg;
+            }
+            &.priority-2 {
+                color: $ticket-priority-2-color;
+                background-color: $ticket-priority-2-bg;
+            }
+            &.priority-3 {
+                color: $ticket-priority-3-color;
+                background-color: $ticket-priority-3-bg;
+            }
+            &.priority-4 {
+                color: $ticket-priority-4-color;
+                background-color: $ticket-priority-4-bg;
+            }
+        }
+
+        .description {
+            background-color: $ticket-description-bg;
+            line-height: 1.2;
+            padding: $ticket-description-padding;
+            max-width: calc(100% - #{$ticket-description-padding});
+            overflow: hidden;
+        }
+
+        .actions {
+            background-color: $ticket-description-bg;
+        }
+    }
+}
