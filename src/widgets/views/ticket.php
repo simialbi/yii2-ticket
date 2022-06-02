@@ -52,7 +52,7 @@ if ($ticket->agent) {
                 <?php
                 if (Yii::$app->user->can('takeTicket', ['ticket' => $ticket])):
                     ?>
-                    <div class="assign flex-grow-1 d-flex align-items-center">
+                    <div class="take flex-grow-1 d-flex align-items-center">
                         <?= Html::a(FAS::i('hand-rock'), Url::to(['/ticket/ticket/take', 'id' => $ticket->id]), [
                             'title' => Yii::t('simialbi/ticket', 'Take ticket'),
                             'aria-label' => Yii::t('simialbi/ticket', 'Take ticket')
