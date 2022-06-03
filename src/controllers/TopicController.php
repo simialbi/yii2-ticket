@@ -10,6 +10,7 @@ namespace simialbi\yii2\ticket\controllers;
 use simialbi\yii2\ticket\models\SearchTopic;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
+use simialbi\yii2\ticket\models\TopicNotification;
 use simialbi\yii2\ticket\Module;
 use Yii;
 use yii\filters\AccessControl;
@@ -83,6 +84,8 @@ class TopicController extends Controller
                 'agent_id'
             ], $rows)->execute();
 
+            $this->saveTopicNotifications($model);
+
             return $this->redirect(['index']);
         }
 
@@ -99,7 +102,9 @@ class TopicController extends Controller
             'users' => $users,
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields,
-            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents
+            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents,
+            'topicNotifications' => [],
+            'selection' => []
         ]);
     }
 
@@ -130,6 +135,8 @@ class TopicController extends Controller
                 'agent_id'
             ], $rows)->execute();
 
+            $this->saveTopicNotifications($model);
+
             return $this->redirect(['index']);
         }
 
@@ -140,13 +147,25 @@ class TopicController extends Controller
             $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
         }
 
+        $topicNotifications = TopicNotification::find()
+            ->select(['medium', 'event'])
+            ->where([
+                'topic_id' => $model->id
+            ])
+            //->indexBy('event')
+            ->asArray()
+            ->all();
+
+        $selection = ArrayHelper::map($topicNotifications, 'medium', 'medium', 'event');
+
         return $this->render('update', [
             'model' => $model,
             'agents' => $agents,
             'users' => $users,
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields,
-            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents
+            'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents,
+            'selection' => $selection
         ]);
     }
 
@@ -179,6 +198,32 @@ class TopicController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Save the notification settings
+     * @param Topic $model
+     * @return void
+     */
+    protected function saveTopicNotifications($model)
+    {
+        TopicNotification::deleteAll([
+            'topic_id' => $model->id
+        ]);
+        foreach (Topic::getEvents() as $event) {
+            $mediums = Yii::$app->request->post($event);
+            if (!$mediums) {
+                continue;
+            }
+            foreach ($mediums as $medium) {
+                $topicNot = new TopicNotification([
+                    'topic_id' => $model->id,
+                    'event' => $event,
+                    'medium' => $medium
+                ]);
+                $topicNot->save();
+            }
+        }
     }
 
     /**

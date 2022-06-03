@@ -2,6 +2,7 @@
 
 use kartik\select2\Select2;
 use marqu3s\summernote\Summernote;
+use simialbi\yii2\ticket\models\Topic;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
@@ -13,6 +14,7 @@ use yii\helpers\ArrayHelper;
 /** @var $statuses array */
 /** @var $richTextFields boolean */
 /** @var $canAssignTicketsToNonAgents boolean */
+/** @var $selection array */
 
 ?>
 
@@ -112,51 +114,28 @@ use yii\helpers\ArrayHelper;
     <?php endif; ?>
 </div>
 <div class="form-row">
-    <?= $form->field($model, 'on_new_ticket', [
-        'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
-        ]
-    ])->radioList([
-        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
-        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
-        '' => Yii::t('simialbi/ticket', 'Do nothing')
-    ]); ?>
-    <?= $form->field($model, 'on_ticket_update', [
-        'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
-        ]
-    ])->radioList([
-        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
-        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
-        '' => Yii::t('simialbi/ticket', 'Do nothing')
-    ]); ?>
-    <?= $form->field($model, 'on_ticket_assignment', [
-        'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
-        ]
-    ])->radioList([
-        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
-        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
-        '' => Yii::t('simialbi/ticket', 'Do nothing')
-    ]); ?>
-    <?= $form->field($model, 'on_ticket_resolution', [
-        'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
-        ]
-    ])->radioList([
-        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
-        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
-        '' => Yii::t('simialbi/ticket', 'Do nothing')
-    ]); ?>
-    <?= $form->field($model, 'on_ticket_comment', [
-        'options' => [
-            'class' => ['form-group', 'col-12', 'col-md-6', 'col-lg']
-        ]
-    ])->radioList([
-        $model::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
-        $model::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
-        '' => Yii::t('simialbi/ticket', 'Do nothing')
-    ]); ?>
+    <?php
+    $items = Topic::getNotificationBehaviors();
+    foreach (Topic::getEvents() as $label => $event) {
+        $thisSelection = ArrayHelper::getValue($selection, $event, []);
+        ?>
+        <div class="form-group col-12 col-md-6 col-lg">
+            <?php
+            echo Html::label(
+                Yii::t(
+                    'simialbi/ticket/model/topic',
+                    'Notification on {event}',
+                    ['event' => Yii::t('simialbi/ticket/model/topic', $label)]
+                ),
+                '',
+                ['class' => ['form-label']]
+            );
+            echo Html::checkboxList($event, $thisSelection, $items);
+            ?>
+        </div>
+        <?php
+    }
+    ?>
 </div>
 
 <?php

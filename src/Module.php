@@ -8,6 +8,8 @@
 namespace simialbi\yii2\ticket;
 
 use simialbi\yii2\models\UserInterface;
+use simialbi\yii2\ticket\behaviors\SendMailBehavior;
+use simialbi\yii2\ticket\behaviors\SendSmsBehavior;
 use simialbi\yii2\ticket\models\Ticket;
 use simialbi\yii2\ticket\models\Topic;
 use Yii;
@@ -149,5 +151,55 @@ class Module extends \simialbi\yii2\base\Module
         }
 
         return ArrayHelper::map($ret, 'id', 'name');
+    }
+
+    /**
+     * Attaches the behaviors to notify the users on specific events
+     * @param string $event One of the EVENT_... const-variables of the Topic
+     * @param Ticket $ticket
+     * @param array $options Provide array to override the behaviors array. Must be a subarray with the behavior-name as key
+     * @return void
+     * @throws \Exception
+     */
+    public function attachNotificationBehaviors($event, &$ticket, $options = [])
+    {
+        if ($ticket->topic->hasNotification($event, Topic::BEHAVIOR_MAIL)) {
+            $behavior = [
+                'class' => SendMailBehavior::class,
+                'isRichText' => $this->richTextFields,
+                'agentsToInform' => function ($ticket) {
+                    /** @var $ticket Ticket */
+                    $recipients = [];
+                    foreach ($ticket->topic->agents as $agent) {
+                        if (!empty($agent->email)) {
+                            $recipients[$agent->email] = $agent->name;
+                        }
+                    }
+
+                    return $recipients;
+                }
+            ];
+            $behavior = ArrayHelper::merge($behavior, ArrayHelper::getValue($options, Topic::BEHAVIOR_MAIL, []));
+            $ticket->attachBehavior('sendMail', $behavior);
+        }
+        if ($ticket->topic->hasNotification($event, Topic::BEHAVIOR_SMS)) {
+            $behavior = [
+                'class' => SendSmsBehavior::class,
+                'agentsToInform' => function ($ticket) {
+                    /** @var $ticket Ticket */
+                    $recipients = [];
+                    foreach ($ticket->topic->agents as $agent) {
+                        if (!empty($agent->mobile)) {
+                            $recipients[] = $agent->mobile;
+                        }
+                    }
+
+                    return $recipients;
+                },
+                'provider' => $this->smsProvider
+            ];
+            $behavior = ArrayHelper::merge($behavior, ArrayHelper::getValue($options, Topic::BEHAVIOR_SMS, []));
+            $ticket->attachBehavior('sendSms', $behavior);
+        }
     }
 }

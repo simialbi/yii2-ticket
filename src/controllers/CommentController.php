@@ -60,39 +60,9 @@ class CommentController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $ticket = $model->ticket;
             $ticket->setScenario(Ticket::SCENARIO_COMMENT);
-            if ($ticket->topic->on_ticket_comment === Topic::BEHAVIOR_MAIL) {
-                $ticket->attachBehavior('sendMail', [
-                    'class' => SendMailBehavior::class,
-                    'isRichText' => $this->module->richTextFields,
-                    'agentsToInform' => function ($model) {
-                        /** @var $model Ticket */
-                        $recipients = [];
-                        foreach ($model->topic->agents as $agent) {
-                            if (!empty($agent->email)) {
-                                $recipients[$agent->email] = $agent->name;
-                            }
-                        }
 
-                        return $recipients;
-                    }
-                ]);
-            } elseif ($ticket->topic->on_ticket_comment === TOPIC::BEHAVIOR_SMS) {
-                $ticket->attachBehavior('sendSms', [
-                    'class' => SendSmsBehavior::class,
-                    'agentsToInform' => function ($model) {
-                        /** @var $model Ticket */
-                        $recipients = [];
-                        foreach ($model->topic->agents as $agent) {
-                            if (!empty($agent->mobile)) {
-                                $recipients[] = $agent->mobile;
-                            }
-                        }
+            $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_COMMENT, $ticket);
 
-                        return $recipients;
-                    },
-                    'provider' => $this->module->smsProvider
-                ]);
-            }
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
 
             $ticket->load(Yii::$app->request->post());

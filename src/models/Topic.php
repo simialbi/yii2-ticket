@@ -19,16 +19,13 @@ use yii\helpers\ArrayHelper;
  * @property integer $new_ticket_status
  * @property string $template
  * @property boolean $status
- * @property string $on_new_ticket
- * @property string $on_ticket_update
- * @property string $on_ticket_assignment
- * @property string $on_ticket_resolution
- * @property string $on_ticket_comment
  * @property string $created_by
  * @property string $updated_by
  * @property integer|string $created_at
  * @property integer|string $updated_at
  *
+ * @property-read string[] $events
+ * @property-read string[] $notificationBehaviors
  * @property-read UserInterface[] $agents
  * @property-read UserInterface $newTicketAgent
  * @property-read Ticket[] $tickets
@@ -37,6 +34,12 @@ class Topic extends ActiveRecord
 {
     const BEHAVIOR_SMS = 'sms';
     const BEHAVIOR_MAIL = 'mail';
+
+    const EVENT_ON_NEW_TICKET = 'on_new_ticket';
+    const EVENT_ON_TICKET_UPDATE = 'on_ticket_update';
+    const EVENT_ON_TICKET_ASSIGNMENT = 'on_ticket_assignment';
+    const EVENT_ON_TICKET_RESOLUTION = 'on_ticket_resolution';
+    const EVENT_ON_TICKET_COMMENT = 'on_ticket_comment';
 
     private $_agents;
 
@@ -62,16 +65,6 @@ class Topic extends ActiveRecord
             [['new_ticket_assign_to', 'template'], 'default'],
             ['status', 'boolean'],
             ['status', 'default', 'value' => true],
-            [
-                ['on_new_ticket', 'on_ticket_assignment', 'on_ticket_update', 'on_ticket_resolution', 'on_ticket_comment'],
-                'in',
-                'range' => [self::BEHAVIOR_MAIL, self::BEHAVIOR_SMS]
-            ],
-            [
-                ['on_new_ticket', 'on_ticket_assignment', 'on_ticket_update', 'on_ticket_resolution', 'on_ticket_comment'],
-                'default'
-            ],
-
             ['name', 'required'],
         ];
     }
@@ -112,35 +105,40 @@ class Topic extends ActiveRecord
             'new_ticket_status' => Yii::t('simialbi/ticket/model/topic', 'New Ticket Status'),
             'template' => Yii::t('simialbi/ticket/model/topic', 'Template'),
             'status' => Yii::t('simialbi/ticket/model/topic', 'Status'),
-            'on_new_ticket' => Yii::t(
-                'simialbi/ticket/model/topic',
-                'Notification on {event}',
-                ['event' => Yii::t('simialbi/ticket/model/topic', 'new ticket')]
-            ),
-            'on_ticket_update' => Yii::t(
-                'simialbi/ticket/model/topic',
-                'Notification on {event}',
-                ['event' => Yii::t('simialbi/ticket/model/topic', 'ticket update')]
-            ),
-            'on_ticket_assignment' => Yii::t(
-                'simialbi/ticket/model/topic',
-                'Notification on {event}',
-                ['event' => Yii::t('simialbi/ticket/model/topic', 'ticket assignment')]
-            ),
-            'on_ticket_resolution' => Yii::t(
-                'simialbi/ticket/model/topic',
-                'Notification on {event}',
-                ['event' => Yii::t('simialbi/ticket/model/topic', 'ticket resolution')]
-            ),
-            'on_ticket_comment' => Yii::t(
-                'simialbi/ticket/model/topic',
-                'Notification on {event}',
-                ['event' => Yii::t('simialbi/ticket/model/topic', 'new comment on ticket')]
-            ),
             'created_by' => Yii::t('simialbi/ticket/model/topic', 'Created By'),
             'updated_by' => Yii::t('simialbi/ticket/model/topic', 'Updated By'),
             'created_at' => Yii::t('simialbi/ticket/model/topic', 'Created At'),
             'updated_at' => Yii::t('simialbi/ticket/model/topic', 'Updated At'),
+        ];
+    }
+
+    /**
+     * Returns a list of all events
+     * The keys are the Yii::t() translation message strings
+     * The values are the event-names saved to DB
+     * The keys
+     * @return string[]
+     */
+    public static function getEvents()
+    {
+        return [
+            'new ticket' => static::EVENT_ON_NEW_TICKET,
+            // 'ticket update' => static::EVENT_ON_TICKET_UPDATE,
+            'ticket assignment' => static::EVENT_ON_TICKET_ASSIGNMENT,
+            'ticket resolution' => static::EVENT_ON_TICKET_RESOLUTION,
+            'new comment on ticket' => static::EVENT_ON_TICKET_COMMENT
+        ];
+    }
+
+    /**
+     * Returns a list of all notification behaviors
+     * @return string[]
+     */
+    public static function getNotificationBehaviors()
+    {
+        return [
+            static::BEHAVIOR_SMS => Yii::t('simialbi/ticket', 'Send SMS'),
+            static::BEHAVIOR_MAIL => Yii::t('simialbi/ticket', 'Send mail'),
         ];
     }
 
@@ -180,5 +178,22 @@ class Topic extends ActiveRecord
     public function getTickets()
     {
         return $this->hasMany(Ticket::class, ['topic_id' => 'id']);
+    }
+
+    /**
+     * Whether the topic should send a notification on the provided event
+     * @param $event
+     * @param $medium
+     * @return boolean
+     */
+    public function hasNotification($event, $medium)
+    {
+        return TopicNotification::find()
+                ->where([
+                    'topic_id' => $this->id,
+                    'event' => $event,
+                    'medium' => $medium
+                ])
+                ->count() > 0;
     }
 }
