@@ -40,7 +40,7 @@ class TopicNotification extends ActiveRecord
             ['event', 'in', 'range' => [
                 Topic::EVENT_ON_NEW_TICKET,
                 Topic::EVENT_ON_TICKET_ASSIGNMENT,
-                Topic::EVENT_ON_TICKET_UPDATE,
+                // Topic::EVENT_ON_TICKET_UPDATE,
                 Topic::EVENT_ON_TICKET_COMMENT,
                 Topic::EVENT_ON_TICKET_RESOLUTION
             ]]

@@ -230,7 +230,7 @@ class TicketController extends Controller
     {
         $model = $this->findModel($id);
 
-        $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_UPDATE, $model);
+        // $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_UPDATE, $model);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->module->trigger(Module::EVENT_TICKET_UPDATED, new TicketEvent([

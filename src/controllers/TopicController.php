@@ -103,7 +103,6 @@ class TopicController extends Controller
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields,
             'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents,
-            'topicNotifications' => [],
             'selection' => []
         ]);
     }
