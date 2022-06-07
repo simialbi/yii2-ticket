@@ -85,9 +85,10 @@ class MyTickets extends Widget
             $query2
                 ->alias('ti')
                 ->innerJoinWith('topic to')
-                ->innerJoin('{{%ticket__topic_agent}} ta', ['ta.agent_id' => Yii::$app->user->id])
+                ->innerJoin('{{%ticket__topic_agent}} ta', '{{ta}}.[[topic_id]] = {{to}}.[[id]]')
                 ->where([
                     'and',
+                    ['ta.agent_id' => Yii::$app->user->id],
                     ['!=', '{{ti}}.[[status]]', Ticket::STATUS_RESOLVED],
                     ['assigned_to' => null]
                 ]);
