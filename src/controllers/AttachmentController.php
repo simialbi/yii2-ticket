@@ -106,20 +106,11 @@ class AttachmentController extends Controller
         $path = Yii::getAlias('@webroot/uploads');
         FileHelper::createDirectory($path);
 
-        $filePath = Yii::$app->session->get('tmp-file', $path . DIRECTORY_SEPARATOR . $fileName);
-        if ($chunkNumber === 1 && file_exists($filePath)) {
-            $i = 1;
-            do {
-                $filePath = $path . DIRECTORY_SEPARATOR . $file->baseName . '_' . $i++ . '.' . $file->extension;
-            } while (file_exists($filePath));
-            Yii::$app->session->set('tmp-file', FileHelper::normalizePath($filePath));
-        }
-        $filePath = FileHelper::normalizePath($filePath);
+        $filePath = FileHelper::normalizePath($path . DIRECTORY_SEPARATOR . $fileName);
         if (false === file_put_contents($filePath, file_get_contents($file->tempName), FILE_APPEND)) {
             throw new ServerErrorHttpException();
         }
         if ($chunkNumber === $totalChunks) {
-            Yii::$app->session->remove('tmp-file');
             $attachment = new Attachment([
                 'unique_id' => $identifier,
                 'name' => $fileName,
