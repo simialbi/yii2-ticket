@@ -119,6 +119,7 @@ class AttachmentController extends Controller
             throw new ServerErrorHttpException();
         }
         if ($chunkNumber === $totalChunks) {
+            Yii::$app->session->remove('tmp-file');
             $attachment = new Attachment([
                 'unique_id' => $identifier,
                 'name' => $fileName,
