@@ -64,6 +64,7 @@ class AttachmentController extends Controller
         if (!file_exists(Yii::getAlias('@simialbi/yii2/ticket/views/attachment/mime/_' . $template . '.php'))) {
             $template = 'application';
         }
+
         return $this->renderAjax('view', [
             'model' => $model,
             'template' => '_' . $template . '.php'
@@ -90,11 +91,14 @@ class AttachmentController extends Controller
      * @param integer $fileSize
      * @param string $fileType
      * @param string $identifier
-     * @return Attachment
+     * @param int $chunkNumber
+     * @param int|null $chunkSize
+     * @param int $totalChunks
+     * @return Attachment|void
      * @throws ServerErrorHttpException
      * @throws \yii\base\Exception
      */
-    public function actionUpload($fileName, $fileSize, $fileType, $identifier)
+    public function actionUpload($fileName, $fileSize, $fileType, $identifier, $chunkNumber = 1, $totalChunks = 1)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $file = UploadedFile::getInstanceByName('file');
@@ -103,19 +107,30 @@ class AttachmentController extends Controller
         FileHelper::createDirectory($path);
 
         $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
-        if (!$file->saveAs($filePath)) {
+        if ($chunkNumber === 1 && file_exists($filePath)) {
+            $i = 1;
+            do {
+                $filePath = $path . DIRECTORY_SEPARATOR . $file->baseName . '_' . $i . '.' . $file->extension;
+            } while (file_exists($filePath));
+        }
+        $filePath = FileHelper::normalizePath($filePath);
+        if (false === file_put_contents($filePath, file_get_contents($file->tempName), FILE_APPEND)) {
             throw new ServerErrorHttpException();
         }
-        $attachment = new Attachment([
-            'unique_id' => $identifier,
-            'name' => $fileName,
-            'mime_type' => $fileType,
-            'size' => $fileSize,
-            'path' => Yii::getAlias('@web/uploads/' . $fileName)
-        ]);
-        $attachment->save();
+        if ($chunkNumber === $totalChunks) {
+            $attachment = new Attachment([
+                'unique_id' => $identifier,
+                'name' => $fileName,
+                'mime_type' => $fileType,
+                'size' => $fileSize,
+                'path' => Yii::getAlias('@web/uploads/' . $fileName)
+            ]);
+            $attachment->save();
 
-        return $attachment;
+            return $attachment;
+        }
+
+        Yii::$app->response->setStatusCode(201);
     }
 
     /**
