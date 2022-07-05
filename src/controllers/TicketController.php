@@ -343,6 +343,10 @@ class TicketController extends Controller
             $model = $this->findModel($id);
             $model->status = Ticket::STATUS_RESOLVED;
 
+            if ($model->assigned_to === null) {
+                $model->assigned_to = Yii::$app->user->id;
+            }
+
             // comment if not empty
             if (ArrayHelper::getValue(Yii::$app->request->post(), 'comment') != null) {
                 $comment = new Comment([
@@ -404,6 +408,11 @@ class TicketController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $ticket = $this->findModel($id);
+
+            if ($ticket->assigned_to === null) {
+                $ticket->assigned_to = Yii::$app->user->id;
+                $ticket->save();
+            }
 
             if ($model->createTask($ticket)) {
                 Yii::$app->session->addFlash('success', Yii::t(

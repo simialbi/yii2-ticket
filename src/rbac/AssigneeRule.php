@@ -25,6 +25,6 @@ class AssigneeRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        return isset($params['ticket']) ? $params['ticket']->assigned_to ==  $user : false;
+        return isset($params['ticket']) && ($params['ticket']->assigned_to == $user || $params['ticket']->assigned_to === null);
     }
 }
