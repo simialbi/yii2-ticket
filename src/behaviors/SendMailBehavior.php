@@ -196,10 +196,13 @@ class SendMailBehavior extends Behavior
             return false;
         }
         if (empty($from)) {
+            $default = Yii::$app->request->hasProperty('hostName')
+                ? ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
+                : null;
             $from = ArrayHelper::getValue(
                 Yii::$app->params,
                 'senderEmail',
-                ['no-reply@' . Yii::$app->request->hostName => Yii::$app->name . ' robot']
+                $default
             );
         }
         $topics = Topic::find()->select(['name', 'id'])->orderBy(['name' => SORT_ASC])->indexBy('id')->column();
