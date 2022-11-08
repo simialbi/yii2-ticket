@@ -124,7 +124,7 @@ $this->params['breadcrumbs'] = [
                              style="height: 50px; width: 50px;">
                     <?php endif; ?>
                     <figcaption class="meta ml-4">
-                        <strong><?= Html::encode($model->agent->name); ?></strong>
+                        <strong><?= Html::encode($model->solution->author->name); ?></strong>
                         <br>
                         <time datetime="<?= Yii::$app->formatter->asDatetime(
                             $model->solution->created_at,
