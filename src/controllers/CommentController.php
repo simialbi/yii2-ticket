@@ -7,6 +7,7 @@
 
 namespace simialbi\yii2\ticket\controllers;
 
+use simialbi\yii2\kanban\models\Link;
 use simialbi\yii2\kanban\models\Task;
 use simialbi\yii2\ticket\behaviors\SendMailBehavior;
 use simialbi\yii2\ticket\behaviors\SendSmsBehavior;
@@ -121,6 +122,18 @@ class CommentController extends Controller
                 foreach ($attachments as $attachmentId) {
                     $attachment = Attachment::findOne(['unique_id' => $attachmentId]);
                     $model->link('attachments', $attachment);
+
+                    if ($this->module->kanbanModule && ($task = $ticket->task)) {
+                        $link = new Link([
+                            'task_id' => $task->id,
+                            'url' => Yii::$app->request->hostInfo . $attachment->path,
+                            'created_by' => $attachment->created_by,
+                            'updated_by' => $attachment->updated_by,
+                            'created_at' => $attachment->created_at,
+                            'updated_at' => $attachment->updated_at,
+                        ]);
+                        $link->save();
+                    }
                 }
             }
 

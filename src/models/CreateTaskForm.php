@@ -8,6 +8,7 @@
 namespace simialbi\yii2\ticket\models;
 
 use simialbi\yii2\kanban\models\Bucket;
+use simialbi\yii2\kanban\models\Link;
 use simialbi\yii2\kanban\models\Task;
 use simialbi\yii2\kanban\models\TaskUserAssignment;
 use Yii;
@@ -94,6 +95,7 @@ class CreateTaskForm extends Model
                 'user_id' => $ticket->assigned_to
             ]);
             $assignment->save();
+
             foreach ($ticket->comments as $comment) {
                 $taskComment = new \simialbi\yii2\kanban\models\Comment([
                     'task_id' => $task->id,
@@ -104,6 +106,18 @@ class CreateTaskForm extends Model
                 $taskComment->detachBehavior('timestamp');
                 $taskComment->detachBehavior('blameable');
                 $taskComment->save();
+            }
+
+            foreach ($ticket->attachments as $attachment) {
+                $link = new Link([
+                    'task_id' => $task->id,
+                    'url' => Yii::$app->request->hostInfo . $attachment->path,
+                    'created_by' => $attachment->created_by,
+                    'updated_by' => $attachment->updated_by,
+                    'created_at' => $attachment->created_at,
+                    'updated_at' => $attachment->updated_at,
+                ]);
+                $link->save();
             }
 
             return true;
