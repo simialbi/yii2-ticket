@@ -202,7 +202,7 @@ $js = <<<JS
 
         // Remove agents
         jQuery.each(elem.find('option[value]'), function() {
-            if (!jQuery(this).attr('value') == '') {
+            if (jQuery(this).attr('value') !== '') {
                 if (_this.find('option[value="' + jQuery(this).attr('value') + '"]:selected').length === 0) {
                     jQuery(this).remove();
                 }
