@@ -188,7 +188,7 @@ class TicketController extends Controller
                 $model->status = $model->topic->new_ticket_status;
             }
 
-            $this->module->attachNotificationBehaviors(Topic::EVENT_ON_NEW_TICKET, $model);
+            $this->module->attachNotificationBehaviors(Module::EVENT_TICKET_CREATED, $model);
 
             $model->save();
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
@@ -267,7 +267,7 @@ class TicketController extends Controller
         }
         $model->scenario = $model::SCENARIO_ASSIGN;
 
-        $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_ASSIGNMENT, $model);
+        $this->module->attachNotificationBehaviors(Module::EVENT_TICKET_ASSIGNED, $model);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($this->module->kanbanModule && ($task = $model->task)) {
@@ -368,7 +368,7 @@ class TicketController extends Controller
                 }
             }
 
-            $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_RESOLUTION, $model);
+            $this->module->attachNotificationBehaviors(Module::EVENT_TICKET_RESOLVED, $model);
 
             if ($model->save()) {
                 if ($this->module->kanbanModule && ($task = $model->task)) {

@@ -14,11 +14,11 @@ class m220602_164100_change_event_notifications extends Migration
     /**
      * {@inheritDoc}
      */
-    public function init()
-    {
-        $this->events = Topic::getEvents();
-        $this->events['ticket update'] = Topic::EVENT_ON_TICKET_UPDATE;
-    }
+//    public function init()
+//    {
+//        $this->events = Topic::getEvents();
+//        $this->events['ticket update'] = Topic::EVENT_ON_TICKET_UPDATE;
+//    }
 
     /**
      * {@inheritDoc}

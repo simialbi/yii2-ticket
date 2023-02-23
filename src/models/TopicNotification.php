@@ -2,6 +2,7 @@
 
 namespace simialbi\yii2\ticket\models;
 
+use simialbi\yii2\ticket\Module;
 use yii\db\ActiveRecord;
 
 /**
@@ -38,11 +39,11 @@ class TopicNotification extends ActiveRecord
             ],
             ['medium', 'in', 'range' => [Topic::BEHAVIOR_MAIL, Topic::BEHAVIOR_SMS]],
             ['event', 'in', 'range' => [
-                Topic::EVENT_ON_NEW_TICKET,
-                Topic::EVENT_ON_TICKET_ASSIGNMENT,
-                // Topic::EVENT_ON_TICKET_UPDATE,
-                Topic::EVENT_ON_TICKET_COMMENT,
-                Topic::EVENT_ON_TICKET_RESOLUTION
+                Module::EVENT_TICKET_CREATED,
+                Module::EVENT_TICKET_ASSIGNED,
+                Module::EVENT_TICKET_UPDATED,
+                Module::EVENT_TICKET_RESOLVED,
+                Module::EVENT_TICKET_COMMENTED
             ]]
         ];
     }

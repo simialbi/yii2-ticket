@@ -13,6 +13,7 @@ use simialbi\yii2\ticket\models\Topic;
 use simialbi\yii2\ticket\models\TopicNotification;
 use simialbi\yii2\ticket\Module;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -65,7 +66,7 @@ class TopicController extends Controller
 
     /**
      * @return string|\yii\web\Response
-     * @throws \yii\db\Exception
+     * @throws \yii\db\Exception|InvalidConfigException
      */
     public function actionCreate()
     {
@@ -103,7 +104,7 @@ class TopicController extends Controller
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields,
             'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents,
-            'selection' => []
+            'notifications' => []
         ]);
     }
 
@@ -111,11 +112,12 @@ class TopicController extends Controller
      * @param integer $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
+     * @throws \yii\db\Exception|InvalidConfigException
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $existingNotifications = ArrayHelper::map($model->notifications, 'id', 'medium', 'event');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $agents = Yii::$app->request->getBodyParam('agents', []);
@@ -146,17 +148,6 @@ class TopicController extends Controller
             $users = ArrayHelper::map(call_user_func([Yii::$app->user->identityClass, 'findIdentities']), 'id', 'name');
         }
 
-        $topicNotifications = TopicNotification::find()
-            ->select(['medium', 'event'])
-            ->where([
-                'topic_id' => $model->id
-            ])
-            //->indexBy('event')
-            ->asArray()
-            ->all();
-
-        $selection = ArrayHelper::map($topicNotifications, 'medium', 'medium', 'event');
-
         return $this->render('update', [
             'model' => $model,
             'agents' => $agents,
@@ -164,7 +155,7 @@ class TopicController extends Controller
             'statuses' => Module::getStatuses(),
             'richTextFields' => $this->module->richTextFields,
             'canAssignTicketsToNonAgents' => $this->module->canAssignTicketsToNonAgents,
-            'selection' => $selection
+            'notifications' => $existingNotifications
         ]);
     }
 
@@ -201,26 +192,25 @@ class TopicController extends Controller
 
     /**
      * Save the notification settings
+     *
      * @param Topic $model
+     *
      * @return void
      */
     protected function saveTopicNotifications($model)
     {
-        TopicNotification::deleteAll([
-            'topic_id' => $model->id
-        ]);
-        foreach (Topic::getEvents() as $event) {
-            $mediums = Yii::$app->request->post($event);
-            if (!$mediums) {
-                continue;
-            }
-            foreach ($mediums as $medium) {
-                $topicNot = new TopicNotification([
-                    'topic_id' => $model->id,
-                    'event' => $event,
-                    'medium' => $medium
-                ]);
-                $topicNot->save();
+        $model->unlinkAll('notifications', true);
+        $post = Yii::$app->request->post('Notification');
+        if (empty($post)) {
+            return;
+        }
+        foreach ($post as $event => $media) {
+            foreach ($media as $medium) {
+                $n = new TopicNotification();
+                $n->topic_id = $model->id;
+                $n->event = $event;
+                $n->medium = $medium;
+                $n->save();
             }
         }
     }

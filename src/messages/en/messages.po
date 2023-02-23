@@ -343,23 +343,23 @@ msgid "Updated By"
 msgstr "Updated By"
 
 msgctxt "simialbi/ticket/model/topic"
-msgid "new comment on ticket"
+msgid "ticketCommented"
 msgstr "new comment on ticket"
 
 msgctxt "simialbi/ticket/model/topic"
-msgid "new ticket"
+msgid "ticketCreated"
 msgstr "new ticket"
 
 msgctxt "simialbi/ticket/model/topic"
-msgid "ticket assignment"
+msgid "ticketAssigned"
 msgstr "ticket assignment"
 
 msgctxt "simialbi/ticket/model/topic"
-msgid "ticket resolution"
+msgid "ticketResolved"
 msgstr "ticket resolution"
 
 msgctxt "simialbi/ticket/model/topic"
-msgid "ticket update"
+msgid "ticketUpdated"
 msgstr "ticket resolution"
 
 msgctxt "simialbi/ticket/notification"

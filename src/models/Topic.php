@@ -6,6 +6,7 @@ use simialbi\yii2\models\UserInterface;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -29,17 +30,12 @@ use yii\helpers\ArrayHelper;
  * @property-read UserInterface[] $agents
  * @property-read UserInterface $newTicketAgent
  * @property-read Ticket[] $tickets
+ * @property-read TopicNotification[] $notifications
  */
 class Topic extends ActiveRecord
 {
     const BEHAVIOR_SMS = 'sms';
     const BEHAVIOR_MAIL = 'mail';
-
-    const EVENT_ON_NEW_TICKET = 'on_new_ticket';
-    const EVENT_ON_TICKET_UPDATE = 'on_ticket_update';
-    const EVENT_ON_TICKET_ASSIGNMENT = 'on_ticket_assignment';
-    const EVENT_ON_TICKET_RESOLUTION = 'on_ticket_resolution';
-    const EVENT_ON_TICKET_COMMENT = 'on_ticket_comment';
 
     private $_agents;
 
@@ -113,24 +109,6 @@ class Topic extends ActiveRecord
     }
 
     /**
-     * Returns a list of all events
-     * The keys are the Yii::t() translation message strings
-     * The values are the event-names saved to DB
-     * The keys
-     * @return string[]
-     */
-    public static function getEvents()
-    {
-        return [
-            'new ticket' => static::EVENT_ON_NEW_TICKET,
-            // 'ticket update' => static::EVENT_ON_TICKET_UPDATE,
-            'ticket assignment' => static::EVENT_ON_TICKET_ASSIGNMENT,
-            'ticket resolution' => static::EVENT_ON_TICKET_RESOLUTION,
-            'new comment on ticket' => static::EVENT_ON_TICKET_COMMENT
-        ];
-    }
-
-    /**
      * Returns a list of all notification behaviors
      * @return string[]
      */
@@ -178,6 +156,15 @@ class Topic extends ActiveRecord
     public function getTickets()
     {
         return $this->hasMany(Ticket::class, ['topic_id' => 'id']);
+    }
+
+    /**
+     * Get associated notifications
+     * @return ActiveQuery
+     */
+    public function getNotifications()
+    {
+        return $this->hasMany(TopicNotification::class, ['topic_id' => 'id']);
     }
 
     /**

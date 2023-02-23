@@ -62,7 +62,7 @@ class CommentController extends Controller
             $ticket = $model->ticket;
             $ticket->setScenario(Ticket::SCENARIO_COMMENT);
 
-            $this->module->attachNotificationBehaviors(Topic::EVENT_ON_TICKET_COMMENT, $ticket);
+            $this->module->attachNotificationBehaviors(Module::EVENT_TICKET_COMMENTED, $ticket);
 
             $attachments = Yii::$app->request->getBodyParam('attachments', []);
 

@@ -11,7 +11,7 @@ use yii\bootstrap4\Html;
 /** @var $statuses array */
 /** @var $richTextFields boolean */
 /** @var $canAssignTicketsToNonAgents boolean */
-/** @var $selection array */
+/** @var $notifications array */
 
 $this->title = Yii::t('simialbi/ticket/topic', 'Create topic');
 $this->params['breadcrumbs'] = [
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'] = [
         'users' => $users,
         'richTextFields' => $richTextFields,
         'canAssignTicketsToNonAgents' => $canAssignTicketsToNonAgents,
-        'selection' => $selection
+        'notifications' => $notifications
     ]); ?>
 
     <div class="form-row">

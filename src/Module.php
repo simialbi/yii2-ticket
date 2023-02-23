@@ -56,7 +56,6 @@ class Module extends \simialbi\yii2\base\Module
 
     /**
      * {@inheritDoc}
-     * @throws \ReflectionException
      * @throws InvalidConfigException
      */
     public function init()
