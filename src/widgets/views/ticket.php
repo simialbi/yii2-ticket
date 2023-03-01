@@ -40,9 +40,6 @@ if ($ticket->agent) {
                     if ($ticket->due_date) {
                         echo ' - ' . Yii::$app->formatter->asDate($ticket->due_date, 'php:d.m.Y');
                     }
-                    if ($ticket->task && $ticket->assigned_to == Yii::$app->user->id) {
-                        echo '&nbsp;&bull;&nbsp;' . FAS::i('list');
-                    }
                     ?>
                 </small>
             </div>
