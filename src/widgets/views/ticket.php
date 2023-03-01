@@ -41,10 +41,7 @@ if ($ticket->agent) {
                         echo ' - ' . Yii::$app->formatter->asDate($ticket->due_date, 'php:d.m.Y');
                     }
                     if ($ticket->task && $ticket->assigned_to == Yii::$app->user->id) {
-                        $users = \yii\helpers\ArrayHelper::getColumn($ticket->task->assignments, 'user_id');
-                        if (in_array(Yii::$app->user->id, $users)) {
-                            echo '&nbsp;&bull;&nbsp;' . FAS::i('list');
-                        }
+                        echo '&nbsp;&bull;&nbsp;' . FAS::i('list');
                     }
                     ?>
                 </small>
