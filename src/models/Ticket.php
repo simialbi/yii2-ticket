@@ -234,7 +234,12 @@ class Ticket extends ActiveRecord
         if (isset($changedAttributes['status']) && (int)$this->status === self::STATUS_RESOLVED) {
             $this->afterClose($changedAttributes);
         }
-        if (isset($changedAttributes['assigned_to'])) {
+        // do not check with isset() or !empty() because the value could be null and therefore the key is not set
+        if (
+            array_key_exists('assigned_to', $changedAttributes) &&
+            !empty($this->assigned_to) &&
+            $this->assigned_to != $changedAttributes['assigned_to']
+        ) {
             $this->afterAssign($changedAttributes);
         }
         parent::afterSave($insert, $changedAttributes);
