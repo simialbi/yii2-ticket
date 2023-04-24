@@ -36,4 +36,4 @@ echo Table::widget([
 ]);
 echo "\r\n\r\n";
 echo strip_tags(Yii::t('simialbi/ticket/mail', 'Link to ticket <b>{id}</b>', ['id' => $model->id])) . "\n";
-echo ' ' . Url::to(['ticket/view', 'id' => $model->id], Yii::$app->request->isSecureConnection ? 'https' : 'http');
+echo ' ' . Url::to(['ticket/view', 'id' => $model->id], 'https');

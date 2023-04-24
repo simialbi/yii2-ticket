@@ -57,6 +57,6 @@ use yii\widgets\DetailView;
 <p>
     <?= Html::a(
         Yii::t('simialbi/ticket/mail', 'Link to ticket <b>{id}</b>', ['id' => $model->id]),
-        Url::to(['ticket/view', 'id' => $model->id], Yii::$app->request->isSecureConnection ? 'https' : 'http')
+        Url::to(['ticket/view', 'id' => $model->id], 'https')
     ); ?>
 </p>
